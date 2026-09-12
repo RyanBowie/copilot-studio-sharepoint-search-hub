@@ -80,8 +80,10 @@ contain document libraries, folders and pages. These are different concepts:
 
 `All` uses the approved inventory and verified hub scope. A departmental
 selection restricts the search to the configured collections for that
-department. Merely linking to a site from a directory does not approve it or
-grant the caller permission.
+department. The native query combines the approved collection IDs with the
+verified hub restriction for both `All` and departmental searches. Merely
+linking to a site from a directory does not approve it or grant the caller
+permission.
 
 The demonstration tenant refused new classic subsites with:
 
@@ -125,9 +127,19 @@ are not an acceptable shortcut.
 5. **Delivery:** the successful email action, distinct from the initial chat
    acknowledgement and from a human confirming receipt.
 
-Stored metadata includes title, business department, tags, document type,
-policy status, review date and source locators where available. Missing values
-stay missing or use an explicit display label; the agent must not infer tags.
+Verified metadata includes title, business department, tags, document type
+and core source/file locators. Missing values stay missing or use an explicit
+display label; the agent must not infer tags.
+
+The fixture also stores `PolicyStatus` and `ReviewDate`, but fixture columns
+are not automatically runtime output columns. **Neither is selected or
+exported.** `PolicyStatus` is not a filter: draft and archived documents can
+be returned, and the current flow must not be described as approved-policy-only.
+
+The export table columns are `Title`, `Department`, `Tags`, `Type`,
+`ModifiedUTC`, `SourceSite`, `URL`, and technical `SourceURL`. `SourceSite`
+and `SourceURL` are hidden in the workbook layout; `URL` provides the
+source-link presentation.
 
 ## Bounded work
 

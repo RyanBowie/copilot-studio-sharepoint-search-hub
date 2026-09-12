@@ -1,0 +1,19 @@
+{
+  "date": "2026-09-12",
+  "testIdentity": "Owner-account draft smoke only",
+  "all": "52/52 expected URLs and metadata verified in Excel readback across ten approved collections: 39 documents and 13 pages.",
+  "hr": "16/16 expected URLs and metadata verified across three HR collections: 12 documents and four pages.",
+  "preview": "Both conversations showed five real links with stored tags in two columns; previews are included in their full export.",
+  "metadata": "No missing/unexpected URLs or title/department/tag/type mismatches. Thirteen nested-folder rows and all three no-tag fixtures verified in All.",
+  "delivery": "Both native runs completed, verified owner-private ACLs and submitted the workbook email to the verified profile mailbox. Connector acceptance is not proof of inbox receipt.",
+  "negative": "Malformed HR query rejected before flow invocation. No-match All query returned zero and skipped all workbook/email actions.",
+  "statusLimitation": "PolicyStatus is neither selected nor exported. Authored Draft/Archived fixtures are included, but current status preservation or filtering is not implemented.",
+  "unproven": [
+    "Search pagination beyond the 100-row page size",
+    "Non-owner ACL tests",
+    "Classic child webs",
+    "150-site scale",
+    "Published channel"
+  ],
+  "screenshot": "images/live-chat-expanded.png"
+}

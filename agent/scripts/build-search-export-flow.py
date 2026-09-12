@@ -175,7 +175,7 @@ def create_runtime_template():
     TARGET.mkdir(parents=True, exist_ok=True)
     book = load_workbook(ROOT / "exports" / "template" / "CorpNetSearchResults.template.xlsx")
     sheet = book["Results"]
-    sheet.freeze_panes = f"A{HEADER_ROW + 1}"
+    sheet.freeze_panes = f"B{HEADER_ROW + 1}"
     sheet.cell(HEADER_ROW + 1, 1, SENTINEL)
     sheet.cell(HEADER_ROW, 8, "SourceURL")
     sheet.cell(HEADER_ROW + 1, 8).number_format = "@"

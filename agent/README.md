@@ -115,9 +115,8 @@ and tag-filter helper settings are **not** the active flow contract. Removed the
 original publication timestamp and remapped a generated feedback node ID.
 The core native search, preview, write, privacy and email action construction is
 preserved. Blank workbooks are rebuilt from their reviewed layout code.
-The reference runtime builder explicitly freezes at `A9` to retain its tested
-layout. This is a deliberate presentation difference: the original runtime and
-base templates freeze at `B9`, keeping the title column visible when scrolling.
+The reference runtime and base templates freeze at `B9`, matching the original
+workbook layout and keeping the title column visible when scrolling horizontally.
 
 No license has been selected. Private review comes first; the owner must decide
 licensing and complete configuration, security, accessibility, performance and

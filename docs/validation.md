@@ -10,6 +10,44 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## Verified expanded owner draft — 12 September 2026
+
+The ten-collection, two-column draft was independently checked, then exercised
+through actual Copilot Studio conversations using the owner's native runtime
+connections. No provisioning flow or fixture row data supplied the runtime
+results.
+
+| Conversation | Verified result |
+|---|---|
+| `All` / `hubspokeverify` | **52/52 exact expected URLs**, ten collections, 39 documents and 13 pages. |
+| `HR` / `hubspokeverify` | **16/16 exact expected URLs**, three HR collections, 12 documents and four pages. |
+| `HR` / `path:secret` | Rejected by the topic before a native search run; no workbook/email. |
+| `All` / `zzznomatchcorpnet999` | Zero matches; workbook creation and every email action skipped. |
+
+Both positive runs returned five linked/tagged rows in two columns and
+completed the same-run export continuation. Excel read-back matched every
+expected URL, title, department, tag value and document type, with no missing
+or unexpected rows. All 13 nested-folder rows and three intentionally empty-tag
+fixtures were verified.
+
+Both runs reported Complete, zero omissions and no processing errors. Final
+ACL checks were owner-private, and the successful email actions targeted the
+verified profile mailbox. HTTP 200 establishes connector acceptance, not inbox
+receipt or independent Outlook sender attestation.
+
+Total native-run durations, including continuation, were approximately
+4 minutes 57 seconds for All and 2 minutes 24 seconds for HR. These are
+point-in-time observations, not initial chat-response times or a performance SLA.
+
+**Metadata gap:** `PolicyStatus` is neither selected nor exported. Two authored
+Draft items and one Archived item were returned, but their statuses were not
+preserved in runtime output or used as filters. Do not describe this as
+approved-only policy retrieval. `ReviewDate` is also not selected/exported;
+the actual date column is `ModifiedUTC`.
+
+[Publication-safe result summary](validation-summary.json) ·
+[Genuine expanded screenshot](screenshots.md#expanded-linked-search-results)
+
 ## Recovered demonstration baseline
 
 The preceding development session recorded an owner-account search returning
@@ -79,8 +117,9 @@ pass**. Both fixture generation commands also ran successfully, and all
 The architecture SVG and editable diagram were structurally checked.
 
 These checks apply to the portable copy. They do not replace the original
-environment's separate draft tests or prove that the latest two-column local
-presentation was deployed.
+environment's separate draft tests. The expanded live results above are
+separate runtime evidence against the deployed ten-collection/two-column
+draft; the portable policy remains four fictional Contoso entries.
 
 ## Required end-to-end checks
 
@@ -104,6 +143,7 @@ presentation was deployed.
 - Production coverage or latency across an estate of 150 or more collections.
 - Multi-user authorization or negative permission trimming from owner-only runs.
 - Classic-subsite traversal in a tenant that refuses classic-subsite creation.
+- Stored policy-status retrieval/export or approval-status filtering.
 - A fully imported portable solution in another environment.
 - Agent publication or SharePoint-hosted channel behavior.
 - A public GitHub release, GitHub Pages site or open-source license grant.

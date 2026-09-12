@@ -163,7 +163,7 @@ class SearchExportFlowTests(unittest.TestCase):
             self.assertTrue(sheet.column_dimensions["H"].hidden)
             self.assertTrue(sheet.column_dimensions["F"].hidden)
             self.assertFalse(sheet["A9"].font.bold)
-            self.assertEqual(sheet.freeze_panes, "A9")
+            self.assertEqual(sheet.freeze_panes, "B9")
         finally:
             book.close()
         for action in ("Replace_placeholder", "Append_result"):

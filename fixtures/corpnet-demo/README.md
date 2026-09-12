@@ -39,7 +39,7 @@ fixture endpoint supplied by this repository.
 | Nested `Runbooks/Quarter One` folders | Exercise actual library-folder depth. |
 | Repeated “Getting started” page titles | Require exact source disambiguation. |
 | Three documents with no tags | Check explicit missing metadata, not inferred labels. |
-| Draft and archived items | Preserve actual policy status rather than invent approval. |
+| Draft and archived items | Expose the current limitation: status is stored in the source but not selected, exported or filtered by the agent. |
 | Metadata-only tag values | Distinguish stored-column retrieval from model inference. |
 | Original restricted HR document definition | Require a real item ACL and a separate non-owner test; a metadata label is not protection. |
 

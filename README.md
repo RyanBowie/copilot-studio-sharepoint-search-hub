@@ -55,14 +55,18 @@ another tenant.
 
 ## Real product screenshots
 
-<img src="docs/images/live-chat-baseline.png" width="480" alt="Genuine cropped Copilot Studio draft showing five linked results and stored tags">
+<img src="docs/images/live-chat-expanded.png" width="480" alt="Genuine expanded draft showing five linked results and stored tags in two columns">
 
-**Historical four-site, owner-account baseline.** The live capture shows the
-older three-column layout; the portable source contains the newer two-column
-presentation. Browser and account identifiers were cropped out.
+**Verified owner-account draft, 12 September 2026.** The `All` /
+`hubspokeverify` conversation exported and read back **52/52 expected rows
+across ten collections**. An HR-only conversation verified **16/16 rows across
+three HR collections**. Both showed five linked results in two columns and
+completed private workbook/email actions. Browser and account identifiers were
+cropped out.
 
-[View the native flow binding and topic-response screenshots](docs/screenshots.md).
-These are genuine captures, not mockups or proof of expanded ten-site coverage.
+[View all screenshots, including the clearly labeled historical baseline](docs/screenshots.md).
+These are genuine captures, not mockups. This is owner-only draft evidence,
+not non-owner permission, published-channel or greater-than-100-row paging proof.
 
 ## Repository guide
 
@@ -86,6 +90,8 @@ These are genuine captures, not mockups or proof of expanded ten-site coverage.
   search fallback.
 - `TopicTags` is a semicolon-delimited text column, not managed taxonomy.
   Displaying stored tags does not mean tag filtering is implemented.
+- `PolicyStatus` is not selected, exported or filtered. Draft and archived
+  documents can be returned; this is not an approved-policy-only search.
 - Search indexing is eventually consistent. Newly published content can be
   present in SharePoint before it appears in search.
 - The implementation has explicit row, candidate, page and site-batch limits.
