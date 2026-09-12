@@ -150,6 +150,26 @@ the same native flow invocation continues after its agent response.
 
 ![Actual response followed by private-export continuation](images/styled-hr/native-response-and-continuation.png)
 
+### Optional contextual banner in the topic
+
+The department-banner enhancement is a separate Adaptive Card 1.5 message
+immediately before the existing guarded result message. Its theme is selected
+from the validated scope. It contains original department artwork and a clearly
+labelled Microsoft SharePoint integration icon, but **no rows, actions, query
+results or success claim**.
+
+The native `query`, `scope` -> `result` flow contract is unchanged. Result rows,
+four separate columns, current source dates/tags, error messages and workbook
+bytes are not rebuilt or parsed by the banner. Keeping the working Markdown
+table outside the card avoids assuming a narrower card will improve readability.
+
+Images use local, hash-checked PNG data URIs; there is no runtime image-hosting
+service or anonymous SharePoint link. Schema support is not host-rendering proof.
+The node's `disabled` property is a source-level feature gate, while card
+`fallbackText` is contextual only and cannot guarantee recovery from content
+filtering. See [banner source, build and host limits](../agent/cards/README.md).
+An owner republish is required for a changed topic to reach published callers.
+
 ## 6. Continue paging and write the full export
 
 `Export_rows` drives bounded continuation. `Next_search_page` advances source

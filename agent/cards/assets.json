@@ -1,0 +1,56 @@
+{
+  "bannerGenerator": "Pillow 12.2.0; original geometric artwork, not Microsoft branding",
+  "themes": {
+    "All": {
+      "file": "assets/All.png",
+      "altText": "All approved areas: Connected knowledge. Original All scope artwork.",
+      "sha256": "5ccfc3dd2ec9fa14b5f54f3268dbfac93244aa5b026782a94c6fa93e5976a034",
+      "width": 640,
+      "height": 96
+    },
+    "CorpNet": {
+      "file": "assets/CorpNet.png",
+      "altText": "CorpNet: Company knowledge. Original CorpNet scope artwork.",
+      "sha256": "5995d454c5f9b1b878eea6e9345db92598e4a8d718a8cad96a28fd092094fde5",
+      "width": 640,
+      "height": 96
+    },
+    "HR": {
+      "file": "assets/HR.png",
+      "altText": "Human Resources: People and workplace. Original HR scope artwork.",
+      "sha256": "84860b9870da49317456b21de4793be7da1f1ad35aacd5cc483e205801b85282",
+      "width": 640,
+      "height": 96
+    },
+    "IT": {
+      "file": "assets/IT.png",
+      "altText": "Information Technology: Services and support. Original IT scope artwork.",
+      "sha256": "c8acab6895152ef399456b1577ea0574f62a69675237a70933c5f1110fe60de9",
+      "width": 640,
+      "height": 96
+    },
+    "Finance": {
+      "file": "assets/Finance.png",
+      "altText": "Finance: Financial guidance. Original Finance scope artwork.",
+      "sha256": "6c0919738246d6db5d671b37fd78f9f1c156203dcaf4b9a6419e0763cc274359",
+      "width": 640,
+      "height": 96
+    }
+  },
+  "thirdParty": {
+    "assets/sharepoint-48.png": {
+      "source": "https://res.cdn.office.net/files/fabric/assets/brand-icons/product/png/sharepoint_48x1.png",
+      "sha256": "57dcf239d66d572e28fac8017903b83b9e2308c80ac09a91e0526316709e0e97"
+    },
+    "schema/adaptive-card-1.5.json": {
+      "source": "https://raw.githubusercontent.com/microsoft/AdaptiveCards/main/schemas/1.5.0/adaptive-card.json",
+      "sha256": "32c91fb285180a266a55b3475dd0396e63fe079311714d3a14963b41f5e17920"
+    },
+    "schema/LICENSE": {
+      "source": "https://raw.githubusercontent.com/microsoft/AdaptiveCards/main/LICENSE",
+      "sha256": "f4537a9a339834394f5242176a4ed19b239a88a600bcb02041205f48b3c07dfc"
+    }
+  },
+  "imageTransport": "PNG data URI; Adaptive Cards 1.2+, host acceptance must be verified",
+  "fabricLicense": "https://aka.ms/fluentui-assets-license"
+}

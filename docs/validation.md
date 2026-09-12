@@ -10,6 +10,28 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## Contextual banner draft - 12 September 2026
+
+The draft topic adds one contextual Adaptive Card before the existing guarded
+Markdown result. Removing that node reproduces the prior topic object. The
+flow, sole `result` output, table formatter, workbook bytes, model and caller
+connections remain unchanged.
+
+Actual Studio card-editor previews rendered HR and IT artwork plus the labelled
+SharePoint icon. The final topic checker reported **zero errors and warnings**.
+Preview-only scope substitutions were discarded; the persisted dynamic topic
+source and unchanged cloud configuration were independently read back.
+This is product-loading/designer evidence, not a published-channel runtime test.
+
+All five scope cards pass schema checks and are below 12,000 UTF-8 bytes.
+Images are hash-checked local PNG data URIs, not externally hosted content.
+The owner reported republishing this topic enhancement at 22:07 UTC on
+12 September 2026. That report is not itself a rendering test. Actual M365
+Copilot/Teams transport, image rendering and client layout require separate proof.
+
+[Designer capture and limits](screenshots.md#department-banner-designer) ·
+[Banner implementation](../agent/cards/README.md)
+
 ## Styled HR runtime and documentation captures - 12 September 2026
 
 The success-formatting revision passed **28/28 runtime/style checks and 13/13
@@ -233,10 +255,12 @@ The actual two-page verification above establishes continuation for this
 
 ## Portable-source checks
 
-The publication-safe agent package builds offline and its **42 focused tests
+The publication-safe agent package builds offline and its **52 focused tests
 pass**, covering ten-row bounds, source dates, workbook formatting/contracts
 and authoring serialization, plus the success-message wrapper, recipient
-escaping, verbatim non-success output and retained caveats. The original and expansion fixture generation
+escaping, verbatim non-success output and retained caveats. Ten banner tests
+cover the scope mapping, image hashes, schema/size bounds and preservation of
+the existing result contract. The original and expansion fixture generation
 commands previously ran successfully, and their **47 generated Word documents**
 passed document-package validation. The separate connected paging fixture
 pipeline validated its additional 60 documents before upload and runtime testing.

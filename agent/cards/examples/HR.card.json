@@ -1,0 +1,62 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "fallbackText": "HR SharePoint search",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "HR SharePoint search",
+      "weight": "bolder",
+      "size": "medium",
+      "wrap": true
+    },
+    {
+      "type": "Image",
+      "url": "data:image/png;base64,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",
+      "altText": "Human Resources: People and workplace. Original HR scope artwork.",
+      "size": "stretch",
+      "spacing": "small"
+    },
+    {
+      "type": "ColumnSet",
+      "spacing": "small",
+      "columns": [
+        {
+          "type": "Column",
+          "width": "auto",
+          "verticalContentAlignment": "center",
+          "items": [
+            {
+              "type": "Image",
+              "url": "data:image/png;base64,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",
+              "altText": "Microsoft SharePoint product icon",
+              "width": "24px",
+              "backgroundColor": "#FFFFFF"
+            }
+          ]
+        },
+        {
+          "type": "Column",
+          "width": "stretch",
+          "items": [
+            {
+              "type": "TextBlock",
+              "text": "Microsoft SharePoint",
+              "wrap": true,
+              "size": "small"
+            },
+            {
+              "type": "TextBlock",
+              "text": "Search uses your selected accounts and approved sites.",
+              "wrap": true,
+              "size": "small",
+              "isSubtle": true,
+              "spacing": "none"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

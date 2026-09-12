@@ -1,0 +1,27 @@
+{
+  "image": "images/table-polish/owner-before.png",
+  "sourceSha256": "37566b56757f39fc21a2e31c1db5bbaaa7a1da7e4705cf3fe11e9e267066d40c",
+  "outputSha256": "45bad2903080f7c33a8feb9b9771bb13c9ef3f36d91339aa8d25fb64b5461953",
+  "providedUtc": "2026-09-12T22:21:56Z",
+  "client": "M365 Copilot, owner-provided visual evidence",
+  "sourceDimensions": [
+    1180,
+    688
+  ],
+  "outputDimensions": [
+    1180,
+    718
+  ],
+  "rescaled": false,
+  "resultPixelsRewritten": false,
+  "addedFooter": "OWNER-PROVIDED M365 EXCERPT - BEFORE TABLE POLISH",
+  "privacy": "The supplied excerpt contains no visible account, browser or tenant identifiers.",
+  "inputSequenceCaptured": false,
+  "bannerCaptured": false,
+  "scopeAndQuery": "Not visible; exact submitted inputs are not inferred.",
+  "notEvidenceOf": [
+    "An independently executed published-channel test",
+    "Banner image delivery",
+    "Workbook, email or permission verification"
+  ]
+}

@@ -10,6 +10,9 @@ a public GitHub Pages site just because documentation and images are present.
 - [ ] Select and add an appropriate license; the private preview does not
       imply an open-source license.
 - [ ] Review third-party notices and retain required attribution.
+- [ ] Review the Microsoft Fabric Assets License and visual guidelines for the
+      separately labelled SharePoint icon. It is not an agent logo and is not
+      covered by any future project license; original banner artwork is separate.
 - [ ] Confirm every example is synthetic and not real company guidance.
 - [ ] Remove internal hostnames, emails, tenant/environment/agent/site/flow/
       connection identifiers, local paths and organization-specific details.

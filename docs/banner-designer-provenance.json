@@ -1,0 +1,35 @@
+{
+  "image": "images/department-banners/topic-message-order.png",
+  "sourceFile": "product-HR-preview.png",
+  "sourceSha256": "f82452a385121375b8273f65ba1e0d616422d8ea1dcd86220a639f9238f63d54",
+  "outputSha256": "c327099b4424706fab0c223e8cc6e069602ec4023b466cb18755970d94e285f6",
+  "observedOn": "2026-09-12",
+  "client": "Copilot Studio Adaptive Card editor",
+  "captureKind": "Genuine designer preview; not a runtime result",
+  "cropPixels": [
+    920,
+    448,
+    1195,
+    930
+  ],
+  "sourceDimensions": [
+    2326,
+    1486
+  ],
+  "outputDimensions": [
+    275,
+    508
+  ],
+  "rescaled": false,
+  "sourcePixelsRewritten": false,
+  "addedFooter": "STUDIO DESIGNER - CROPPED",
+  "privacy": "Browser, account and environment details lie outside the crop.",
+  "previewScope": "HR",
+  "previewScopeSubstitution": "Unsaved designer-only substitution; restored and discarded.",
+  "persistedDynamicSourceRechecked": true,
+  "notEvidenceOf": [
+    "Runtime banner delivery",
+    "Published M365 Copilot or Teams rendering",
+    "Search, workbook or email success"
+  ]
+}

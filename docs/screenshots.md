@@ -10,6 +10,23 @@ provided the published M365 Copilot image; the automation captured the Studio
 and Excel evidence. Published output is not relabelled as an independently
 executed channel test.
 
+## Department banner designer
+
+![Actual Studio designer showing a contextual HR banner before the unchanged SearchResult message](images/department-banners/topic-message-order.png)
+
+This genuine, cropped **designer preview** shows the two-message arrangement:
+contextual Adaptive Card first, existing `SearchResult` Markdown second. HR was
+temporarily selected in the unsaved preview; the substitution was discarded,
+and the persisted dynamic scope binding was rechecked. It is not a runtime
+conversation or proof of M365 Copilot/Teams image delivery.
+
+Both HR and IT artwork and the labelled SharePoint icon rendered in Studio's
+card editor. The final topic checker reported no errors or warnings. The crop
+removes browser/account/environment details; only a labelled footer was added.
+[Capture provenance](banner-designer-provenance.json) records the exact crop.
+The [original artwork gallery](../README.md#department-banners) is separate from
+these product screenshots.
+
 ## Styled run inputs output and flow
 
 These captures belong to the successful **HR / annual leave** Studio run after
@@ -79,6 +96,20 @@ The current four-column, preceding paging and expanded captures show different
 point-in-time owner draft runs. Three further images preserve the historical four-site baseline,
 including its older three-column preview. Captions distinguish the versions
 rather than relabel an old screenshot as a new test.
+
+## Owner-provided table before table polish
+
+![Owner-provided M365 result excerpt before table-specific styling](images/table-polish/owner-before.png)
+
+The owner supplied this excerpt while reviewing the published M365 experience
+on 12 September 2026. It shows four linked rows, separate UTC date columns and
+stored tags in the ordinary client-styled grid. The exact scope/query input
+and any banner above the table are not captured and are not inferred.
+
+This is a visual baseline, not a separately executed channel or delivery test.
+The supplied result pixels are unchanged; the publication copy adds only a
+labelled footer and omits image metadata. [Provenance](owner-table-provenance.json)
+records the source/output hashes and evidence limits.
 
 ## Current four-column chat
 

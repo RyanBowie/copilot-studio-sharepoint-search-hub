@@ -196,6 +196,36 @@ record the crop boundaries.
 | [`docs/validation.md`](docs/validation.md) | What was observed, what remains unproven and how to repeat the checks. |
 | [`docs/public-release-checklist.md`](docs/public-release-checklist.md) | Review gates before changing visibility or enabling a public site. |
 
+## Department banners
+
+The banner enhancement uses a **context-only Adaptive Card** followed by the
+existing native four-column results table. The table is not squeezed into a
+narrower card. HR, IT, Finance, All and CorpNet have different original artwork:
+
+![Original HR banner artwork, not a runtime screenshot](agent/cards/assets/HR.png)
+
+![Original IT banner artwork, not a runtime screenshot](agent/cards/assets/IT.png)
+
+[All](agent/cards/assets/All.png) · [CorpNet](agent/cards/assets/CorpNet.png) ·
+[Finance](agent/cards/assets/Finance.png) · [Banner source and host limits](agent/cards/README.md)
+
+These are source assets, **not proof of published-channel rendering**. The card
+uses a separately labelled, unmodified Microsoft SharePoint product icon to
+identify the integration, not as the agent's logo. The original banners contain
+no Microsoft logos; [asset rights and provenance](agent/cards/NOTICE.md) apply.
+
+Inline PNGs avoid external image hosting or permission changes. Each complete
+context card is below a 12,000-byte budget and contains no result rows or actions.
+The card does not claim search/export success; the unchanged result message
+provides the actual outcome. This enhancement changes the topic's presentation,
+not the flow contract. Owners control when the draft is published.
+
+**Draft status:** the one-node change is deployed and loaded without topic
+errors or warnings. Studio's card editor rendered HR/IT artwork and the icon;
+this is not published-channel proof. The owner reported republishing the draft
+on 12 September 2026; actual channel rendering is checked separately.
+[Actual designer capture and limits](docs/screenshots.md#department-banner-designer).
+
 ## Important boundaries
 
 - A department is a relevance filter, **not an authorization boundary**.

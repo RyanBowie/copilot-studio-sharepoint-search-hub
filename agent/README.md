@@ -110,8 +110,14 @@ an old connected test tab can retain stale content.
   explicitly stating delivery is pending. The four-column table/row values are
   unchanged; two icons appear outside the table only. A separated footer retains
   privacy, preview/export bounds, partial-result and count-semantics caveats.
-  No HTML/CSS or Adaptive Card redesign is used. No-match, failure and
+  The result itself remains Markdown; no HTML/CSS or card-table redesign is used. No-match, failure and
   unavailable-preview responses retain their previous output.
+- Context banner: a separate Adaptive Card 1.5 displays an original fixed
+  department image and a labelled Microsoft SharePoint integration icon after
+  the scope/response guards, immediately before the result. It makes no success claim and contains no
+  results/actions. The existing four-column Markdown and flow output contract
+  remain unchanged. See `cards/README.md` and `cards/NOTICE.md` for generation,
+  payload limits, licensing, feature-gate and actual-host-validation caveats.
 - Export: 100-row search pages; caps of 1,000 written rows, 2,000 checked candidates,
   40 search pages, and 12 batches of 20 approved site collections. These are
   bounds, not a promise that a 240-site estate meets platform timeouts.
