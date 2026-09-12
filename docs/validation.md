@@ -10,7 +10,80 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
-## Verified expanded owner draft — 12 September 2026
+## Current four-column draft - 12 September 2026
+
+**45/45 functional checks passed**, with an explicit narrow-pane readability
+caveat. One actual owner-account GPT-5 Chat conversation produced ten rows in
+four separate columns: **File or page | Created (UTC) | Modified (UTC) | Stored
+tags**. Title cells contained links only; dates were not under the names.
+All ten rows' links, tags and UTC dates matched current caller-checked source
+metadata and the full export. This preview contained four pages and six documents.
+
+The same run retrieved actual **100+12** source candidates at StartRow **0 then
+100**, retaining RowLimit 100, and verified **112 unique Excel rows: 99 documents,
+13 pages**. All 12 second-page items were caller-hydrated. All 224 full timestamps
+and numeric calendar-date values matched; no formula error values, omissions,
+duplicates or processing errors occurred. Owner-private ACL and verified-profile
+email acceptance passed. The actual blank template bytes were unchanged from
+the preceding compact-workbook run.
+
+**Readability limitation:** the narrow Studio pane wraps headers and dates
+severely, including within years. Ten rows require vertical scrolling. The
+requested four-column structure is present, but this is **not** a polished
+narrow/mobile rendering result or Teams verification. No publication occurred.
+
+[Final safe runtime summary](four-column-validation-summary.json) ·
+[Actual four-column captures](screenshots.md#current-four-column-chat)
+
+## Verified source dates and compact workbook - 12 September 2026
+
+A subsequent owner draft run passed **41/41 runtime checks** and again verified
+exactly **112 unique rows**, actual **100+12 paging**, and all ten preview URLs
+in the export. All **224 full canonical timestamp strings** matched current
+source metadata, and all 224 visible calendar-date values read back as matching
+Excel serial dates.
+
+The actual generated workbook was opened in the authorized owner's browser.
+Its scope/query and **112 rows / 99 files / 13 pages / Complete** summary,
+compact top-aligned sample rows, readable UTC dates, hidden raw/technical
+columns, B9 freeze boundaries and date/hyperlink/summary formulas were checked
+without edits. Private ACL and verified-recipient email acceptance passed.
+This resolves the earlier lack of a populated-workbook UI capture without
+changing Graph permissions.
+
+**Chat superseded:** this run placed dates beneath the link in a two-column
+table. The user subsequently required four separate columns; this run is not
+acceptance of that corrected layout. No live missing/fractional timestamp
+fixtures occurred, and sampled workbook rows are not an all-row-height audit.
+
+[Safe workbook verification summary](workbook-validation-summary.json) ·
+[Actual workbook capture](screenshots.md#actual-generated-workbook)
+
+## Verified native paging beyond 100 matches - 12 September 2026
+
+One actual owner-account GPT-5 Chat draft conversation searched `All` /
+`hubspokeverify` across ten approved collections. The unchanged native
+**RowLimit 100** produced actual SharePoint requests at **StartRow 0 and 100**,
+returning **100 + 12 disjoint candidates**. All 12 second-page items received
+caller-authenticated source hydration.
+
+The page union and Excel connector read-back each contained exactly the
+**112 expected unique URLs: 99 documents and 13 pages**. All five linked/tagged
+preview rows were included. All 32 checks passed, with no missing/unexpected
+rows, duplicate hits, metadata mismatches, omissions, processing errors or
+truncation. The final workbook ACL was owner-private and the email action to
+the verified profile was accepted with HTTP 200, not proof of inbox receipt.
+
+This is actual source paging, not the separate 500-row indexing-readiness
+probe or management API `nextLink` pagination. The run completed in about
+7 minutes 9 seconds, including continuation; this is not an initial-response
+latency or performance guarantee. This observation predates the requested
+created/modified-date chat enhancement.
+
+[Publication-safe paging summary](paging-validation-summary.json) ·
+[Genuine paging-run chat capture](screenshots.md#paging-run-linked-results)
+
+## Historical expanded owner draft — 12 September 2026
 
 The ten-collection, two-column draft was independently checked, then exercised
 through actual Copilot Studio conversations using the owner's native runtime
@@ -105,15 +178,21 @@ The portable reference deliberately contains **four fictional Contoso
 collection entries**, not live inventory identifiers. The larger corpus is
 reproducible source data, not an automatic change to that runtime policy.
 
-The 68 authored artifacts are fewer than the current **100-row search page**.
-They do not establish next-page retrieval. That needs more than 100 matching
-indexed items in one batch and evidence of the continuation request.
+The initial 68 authored artifacts did not establish next-page retrieval.
+A further **60 documents**, six per collection, raised the `hubspokeverify`
+matching set from 52 to **112**. Their additional `pagingverify` marker matches
+only those 60 additions and is not itself a greater-than-100 paging test.
+The actual two-page verification above establishes continuation for this
+112-item owner-account case, not the configured 1,000-row maximum.
 
 ## Portable-source checks
 
-The publication-safe agent package builds offline and its **22 focused tests
-pass**. Both fixture generation commands also ran successfully, and all
-**47 generated Word documents** passed document-package validation.
+The publication-safe agent package builds offline and its **37 focused tests
+pass**, covering ten-row bounds, source dates, workbook formatting/contracts
+and authoring serialization. The original and expansion fixture generation
+commands previously ran successfully, and their **47 generated Word documents**
+passed document-package validation. The separate connected paging fixture
+pipeline validated its additional 60 documents before upload and runtime testing.
 The architecture SVG and editable diagram were structurally checked.
 
 These checks apply to the portable copy. They do not replace the original
@@ -131,8 +210,9 @@ draft; the portable policy remains four fictional Contoso entries.
 | Folder coverage | Actual nested-folder files appear with their exact source locations. |
 | Pagination | A run retrieves and verifies beyond its first search page; local batching tests alone do not qualify. |
 | Metadata | Displayed tags equal stored column values; empty tags remain explicit. |
-| Chat | No more than five actual linked rows; no invented titles or metadata. |
+| Chat | No more than ten actual linked/date-bearing rows; no invented titles, dates or tags; verify narrow-client rendering. |
 | Workbook | Genuine populated Excel table, working source links, accurate row count and honest partial/completion status. |
+| Workbook layout | Compact top-aligned rows, readable genuine dates, exact hidden raw timestamps, untruncated tags and correct metadata summary. |
 | Private delivery | Verified destination access and email action to the verified account mailbox. |
 | Identity | All runtime connections are caller-provided and the effective accounts align. |
 | Negative permissions | Separate non-owner account cannot receive restricted titles, snippets, tags, links or facts. |

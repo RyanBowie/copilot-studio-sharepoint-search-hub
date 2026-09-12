@@ -5,7 +5,8 @@
   "description": "Synthetic SharePoint pages and Word documents for the CorpNet search proof of concept.",
   "scripts": {
     "generate": "node generate-documents.cjs",
-    "generate:expansion": "node build-expansion.cjs && node generate-documents.cjs --content expansion-content.json --manifest expansion-documents-manifest.json --documents expansion-documents"
+    "generate:expansion": "node build-expansion.cjs && node generate-documents.cjs --content expansion-content.json --manifest expansion-documents-manifest.json --documents expansion-documents",
+    "generate:paging": "node build-paging.cjs && node generate-documents.cjs --content paging-content.json --manifest paging-documents-manifest.json --documents paging-documents"
   },
   "dependencies": {
     "docx": "9.7.1"

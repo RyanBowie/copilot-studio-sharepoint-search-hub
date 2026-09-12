@@ -41,10 +41,14 @@ those conditions for another environment.
    registration experience and preserve the resulting binding. Merely putting
    a workflow GUID into topic YAML was insufficient in the demonstration.
 7. **Rebind and load the topic in Studio.** Preserve native YAML sequence
-   indentation. Generic YAML validity does not prove that Studio loaded a
-   topic or resolved its flow.
+   indentation and avoid serializer-inserted soft wrapping of activity text.
+   A generic YAML-valid payload loaded as a truncated one-message dialog in
+   the demonstration. An unwrapped correction plus a fresh authoring/test tab
+   in the same authorized browser restored the actual scope question; an
+   older tab retained its stale compiled dialog. Generic validity alone does
+   not prove Studio loaded every topic action or resolved its flow.
 8. **Test the draft through the actual conversation.** Verify the linked
-   preview, continuation run, populated workbook and verified-recipient email.
+   ten-row/date-bearing preview, continuation run, populated workbook and verified-recipient email.
    Repeat with no matches, invalid input and connector failure.
 9. **Test permissions and scale separately.** Exercise a non-owner allowed/
    denied account, changing source permissions, larger inventories, paging,
@@ -52,6 +56,26 @@ those conditions for another environment.
 10. **Publish only after an explicit release decision.** Agent publication,
     SharePoint-channel embedding, repository visibility and GitHub Pages are
     separate operations.
+
+## Agent model
+
+The verified paging draft used **GPT-5 Chat** (`GPT5Chat`), upgraded from an
+actual UI-confirmed GPT-4.1/default configuration. A local model hint alone
+had not established the live setting. GPT-5 Reasoning was offered as Preview
+with cross-geo requirements in that environment and was not selected; no
+preview or cross-geo opt-in was enabled. Availability can differ by tenant.
+Classic controlled orchestration and caller-provided connections remained
+unchanged. Verify the effective model in the connected product, and treat
+publication as a separate release decision.
+
+## Teams publication is a separate check
+
+The owner plans to publish the agent to Teams themselves. No Teams publication
+or successful Teams rendering is established by Studio draft screenshots.
+After publication, check desktop and mobile rendering, all ten source links,
+date/tag readability, caller connector sign-in and the private workbook/email
+path. Markdown table support can differ by channel; do not assume the Studio
+table transfers unchanged or enable preview settings merely to force it.
 
 ## Do not copy these from a demonstration tenant
 

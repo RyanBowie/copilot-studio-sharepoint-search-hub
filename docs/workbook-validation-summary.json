@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-12",
+  "scope": "Owner-account GPT-5 Chat Studio draft; ten approved collections",
+  "result": "41/41 backend/date/workbook runtime checks passed",
+  "chatBoundary": "This run used ten rows with dates under links in two columns. That chat layout is superseded and does not establish acceptance of the user's four-column requirement.",
+  "sourcePageSize": 100,
+  "actualStartRows": [0, 100],
+  "actualPageCounts": [100, 12],
+  "exactUniqueExcelRows": 112,
+  "documents": 99,
+  "pages": 13,
+  "previewRowsIncludedInExport": 10,
+  "exactCanonicalSourceTimestamps": 224,
+  "matchingExcelSerialCalendarValues": 224,
+  "actualWorkbookInspected": true,
+  "workbookChecks": [
+    "Live scope/query and 112/99/13/Complete summary",
+    "Compact top-aligned sampled rows",
+    "Readable UTC calendar dates",
+    "Hidden raw timestamp and technical columns",
+    "B9 freeze boundaries",
+    "Date, hyperlink and summary formulas inspected without editing"
+  ],
+  "delivery": "Owner-private ACL and verified-profile recipient email acceptance checked; not inbox receipt.",
+  "limits": [
+    "Four-column chat not validated by this historical run",
+    "Sampled workbook rows, not an all-row-height audit",
+    "Missing/fractional timestamps exercised offline, not in live fixtures",
+    "No Teams publication/rendering or non-owner negative permission claim"
+  ]
+}

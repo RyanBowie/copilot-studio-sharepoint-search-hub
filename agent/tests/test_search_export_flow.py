@@ -114,9 +114,9 @@ class SearchExportFlowTests(unittest.TestCase):
         self.assertNotIn("FieldValuesAsText", json.dumps(self.definition))
 
     def test_preview_is_bounded_and_uses_current_permission_checked_metadata(self):
-        self.assertEqual((FLOW.PREVIEW_ROWS, FLOW.PREVIEW_CANDIDATES), (5, 20))
+        self.assertEqual((FLOW.PREVIEW_ROWS, FLOW.PREVIEW_CANDIDATES), (10, 20))
         budget = self.actions["Preview_candidate_budget"]["expression"]
-        self.assertIn("length(variables('PreviewRows')),5", budget)
+        self.assertIn("length(variables('PreviewRows')),10", budget)
         self.assertIn("variables('PreviewChecked'),20", budget)
         self.assertEqual(self.actions["Read_preview_item"]["runAfter"], {"Preview_field_names": ["Succeeded"]})
         self.assertEqual(self.actions["Preview_item_verified"]["runAfter"], {"Read_preview_item": ["Succeeded"]})
@@ -128,13 +128,16 @@ class SearchExportFlowTests(unittest.TestCase):
         self.assertEqual(self.actions["Remember_preview_line"]["runAfter"], {"Remember_preview_url": ["Succeeded"]})
         self.assertEqual(self.actions["Format_chat_result"]["runAfter"]["Build_chat_preview"], FLOW.ALL_STATES)
 
-    def test_chat_has_two_columns_links_stored_tags_and_escaped_text(self):
+    def test_chat_has_four_columns_link_only_title_dates_and_escaped_tags(self):
         message = self.actions["Format_chat_result"]["inputs"]
-        self.assertIn("| File or page | Stored tags |", message)
-        self.assertIn("| --- | --- |", message)
+        self.assertIn("| File or page | Created (UTC) | Modified (UTC) | Stored tags |", message)
+        self.assertIn("| --- | --- | --- | --- |", message)
         self.assertNotIn("| Type |", message)
         line = self.actions["Remember_preview_line"]["inputs"]["value"]
-        self.assertIn("'](',outputs('Preview_row')?['URL'],') | '", line)
+        self.assertIn("'](',outputs('Preview_row')?['URL'],') | '," + FLOW.preview_date("CreatedUTC")
+                      + ",' | '," + FLOW.preview_date("ModifiedUTC") + ",' | ',", line)
+        self.assertNotIn("— Created:", line)
+        self.assertNotIn("; Modified:", line)
         self.assertIn("Not supplied", line)
         self.assertIn("full tags in Excel", line)
         self.assertNotIn("['Type']", line)
@@ -154,13 +157,16 @@ class SearchExportFlowTests(unittest.TestCase):
         try:
             sheet = book["Results"]
             table = sheet.tables["SearchResults"]
-            self.assertEqual(table.ref, "A8:H9")
+            self.assertEqual(table.ref, "A8:K9")
             self.assertEqual(sheet["A9"].value, FLOW.SENTINEL)
             self.assertEqual(sheet["G9"].value, FLOW.LINK_FORMULA)
             self.assertEqual(table.tableColumns[6].calculatedColumnFormula.attr_text, FLOW.LINK_FORMULA[1:])
             self.assertIn("SearchResults[[#This Row],[SourceURL]]", FLOW.LINK_FORMULA)
             self.assertNotIn("[@SourceURL]", FLOW.LINK_FORMULA)
+            self.assertTrue(sheet.column_dimensions["K"].hidden)
             self.assertTrue(sheet.column_dimensions["H"].hidden)
+            self.assertFalse(sheet.column_dimensions["I"].hidden)
+            self.assertEqual(sheet["H8"].value, "CreatedUTC")
             self.assertTrue(sheet.column_dimensions["F"].hidden)
             self.assertFalse(sheet["A9"].font.bold)
             self.assertEqual(sheet.freeze_panes, "B9")

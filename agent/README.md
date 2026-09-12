@@ -5,8 +5,9 @@ not a solution ZIP, supported turnkey import package, or proof of production rea
 `contoso.sharepoint.com`, every `00000000-...` GUID and every
 `REPLACE_WITH_CALLER_...` connection name are **fictional placeholders**.
 No connected workspace, credentials, live resource identifiers or populated workbooks
-are included. The latest local source uses a two-column chat table; that does not
-prove this version is deployed.
+are included. The source previews up to ten verified linked results with UTC source
+dates and stored tags, and generates a compact private workbook. This reference
+tree and its offline tests do not establish a deployment or live runtime outcome.
 
 ## Local build and tests
 
@@ -65,6 +66,15 @@ or workbook-formula-engine validation.
    Studio. Validate the native flow with the platform, verify run-only behavior
    under multiple users, and inspect actual source, destination and email results
    before any release. No cloud deployment scripts are supplied.
+   The model hint is `GPT5Chat`; independently confirm supported availability in
+   the target environment. Keep classic orchestration and existing security
+   settings rather than enabling preview exceptions to match a reference.
+
+Preserve long single-line topic values without soft wrapping. The included
+`scripts/authoring_yaml.py` emits actual multiline strings as literal blocks and
+does not soft-wrap single-line activity text. Validate the complete product-loaded
+topic and scope prompt in a fresh authoring/test context after applying changes;
+an old connected test tab can retain stale content.
 
 ## Current source contract
 
@@ -78,8 +88,21 @@ or workbook-formula-engine validation.
   Optional stored fields are `Department`, `TopicTags`, `DocumentType`; metadata
   is discovered on each source list. `TopicTags` is semicolon-delimited text, not
   managed taxonomy. Missing tags display as `Not supplied`.
-- Chat: up to 5 verified title links plus stored tags, scanning at most 20 preview
-  candidates; ordering follows bounded batches, not a globally ranked top five.
+- Dates: both preview and export read canonical `File.TimeCreated` and
+  `File.TimeLastModified` through the permission-checked current-item endpoint.
+  These are source file/page dates, not crawl, export, library-item Modified or
+  site-collection creation dates. Existing ModifiedUTC semantics are unchanged.
+  PolicyStatus and ReviewDate are not selected/exported.
+- Chat: up to 10 verified title links with source Created/Modified UTC calendar
+  dates and stored tags, scanning at most 20 preview candidates. Ordering follows
+  bounded batches, not a globally ranked top ten. The twenty-candidate budget can
+  yield fewer than ten verified rows; the agent must not invent rows or imply that
+  no other matches exist. Dates use `YYYY-MM-DD` with an explicit UTC legend;
+  missing dates say `Not supplied`. Use four separate columns in this order:
+  **File or page | Created (UTC) | Modified (UTC) | Stored tags**. The first cell
+  contains only the working title link; dates must never appear beneath or beside
+  the name. Retain the explicit four-column layout even in narrow panes; validate
+  actual product readability without silently moving dates back into the title cell.
   Title/tag text is escaped for chat; tags exceeding 200 characters are shortened
   with a "full tags in Excel" notice. Excel retains full values.
 - Export: 100-row search pages; caps of 1,000 written rows, 2,000 checked candidates,
@@ -91,11 +114,10 @@ or workbook-formula-engine validation.
   only, not completion or delivery. Changed access, errors and caps can yield
   partial output. Zero index matches produce no workbook/email.
 - Private workbook: `Results` filterable table and `ExportInfo` status/omission
-  details. Columns are Title, Department, Tags, Type, ModifiedUTC, SourceSite and
-  URL, plus a hidden technical SourceURL column in the native runtime template.
-  SourceSite is hidden by the existing layout. The runtime sentinel row and
-  controlled row-relative HYPERLINK formula are intentional, not sample results.
-  Source text is written literally. Only this controlled link formula is used.
+  details. Source text is written literally; controlled hyperlink, date and
+  metadata-summary formulas are the only calculated presentation fields. The
+  sentinel row is intentional, not a sample result. Readback verifies full source
+  values and normalized display dates before the link email.
 - Identity: selected connector account is the effective identity, not proven equal
   to channel sign-in. Profile, SharePoint source and OneDrive destination ownership
   are checked; recipient is the verified profile's nonempty directory mail.
@@ -103,6 +125,40 @@ or workbook-formula-engine validation.
   the Excel or Outlook connection's principal or email sender. No user-entered
   recipient is accepted. Workbook ACLs and written rows are verified before the
   successful link email; no anonymous/organization sharing link is created.
+
+## Compact workbook and date contract
+
+The base template has eight canonical source columns. The native runtime template
+has eleven columns, initially `A8:K9`, with the **B9** freeze retaining the title
+column and top rows:
+
+| Column | Field | Presentation |
+|---|---|---|
+| A | Title | Verified title or filename fallback; wraps |
+| B | Department | Stored value or approved-inventory fallback |
+| C | Tags | Full stored value; wraps, never shortened in Excel |
+| D | Type | Verified file/page type |
+| E | ModifiedUTC | Hidden full `File.TimeLastModified` source string |
+| F | SourceSite | Hidden approved collection root |
+| G | URL | Controlled row-relative hyperlink displayed as Open file |
+| H | CreatedUTC | Hidden full `File.TimeCreated` source string |
+| I | Created (UTC) | Real numeric Excel calendar date, `yyyy-mm-dd` |
+| J | Modified (UTC) | Real numeric Excel calendar date, `yyyy-mm-dd` |
+| K | SourceURL | Hidden technical URL backing the hyperlink |
+
+Hidden raw timestamps retain source precision, including fractional seconds.
+Missing raw timestamps remain blank; visible date columns display `Not supplied`.
+DATE formulas derive the UTC calendar date from those canonical values, without
+changing them. The flow normalizes ISO-8601 or Excel-serial readback values before
+comparing the displayed date with its expected source calendar date.
+
+Body content is compact, top-aligned 10-point text. Only visible titles and tags
+wrap; hidden raw/technical fields never wrap or contribute to intended row-height
+calculations. Long visible tag content can legitimately require taller rows.
+The smaller navy masthead preserves the existing style and filters. Scope/query
+and row/file/page/status summaries look up actual ExportMetadata values, rather
+than merely directing the reader elsewhere. This changes future generation only,
+not already-delivered workbooks.
 
 ## Deliberate publication adaptations
 
@@ -118,21 +174,40 @@ preserved. Blank workbooks are rebuilt from their reviewed layout code.
 The reference runtime and base templates freeze at `B9`, matching the original
 workbook layout and keeping the title column visible when scrolling horizontally.
 
+The base and runtime templates remain blank: the only runtime row is the sentinel,
+with controlled formulas and no source data. This package contains no run records,
+populated layout examples, screenshots, connected deployment manifests or deployment
+scripts. Native flow registration and connection rebinding remain product tasks.
+
 No license has been selected. Private review comes first; the owner must decide
 licensing and complete configuration, security, accessibility, performance and
 deployment validation before public release.
 
 ## Packaging validation record
 
-Offline reference build succeeded and all **22 tests passed** on Python 3.14.3,
-openpyxl 3.1.5 and PyYAML 6.0.3. A source/XML inspection covered all 34 packaged
-files (62 expanded text/XML parts): no original tenant/connection/resource
-identifiers, personal owner strings or local user paths were found; all GUID
-literals are the documented fictional placeholders. The embedded workbook bytes
-match the included runtime template. This is not an exhaustive secret audit.
+The local reference build and **37 offline tests** pass. Tests cover the four
+fictional sites, fail-closed configuration, all five Invoker bindings, ten/twenty
+preview bounds, 100-row source pages, canonical source-date selection, full raw
+timestamp roundtrips, controlled date/display/readback expressions, hidden wrapping,
+B9, summary formulas, hyperlinks and safe topic serialization. The embedded
+workbook bytes match the included runtime template. No archived count-only test or
+its connected-environment mismatch is included.
 
-LibreOffice was unavailable on the packaging host. The blank base workbook has no
-formulas, hyperlinks or source rows; the runtime template's intentional controlled
-HYPERLINK formula was inspected by the contract tests, not recalculated with an
-Excel-compatible engine. Platform execution, rendering, deployment and selected-user
-isolation remain separate validation tasks.
+The blank base workbook has no formulas, hyperlinks or source rows. The runtime
+template contains intentional controlled formulas, with full automatic calculation
+enabled. These portable tests check structure/contracts and literal-data roundtrips;
+they do not execute Power Automate expressions or calculate Excel formula caches.
+Platform execution, native rendering, deployment and selected-user isolation remain
+separate validation tasks. Neither historical live evidence nor the reference
+inventory should be relabelled as proof of this feature revision.
+
+## Teams publication boundary
+
+Publication belongs to the owner after validation; this source makes no channel,
+authentication, tenant-policy or developer-preview changes. Do not assume that
+Studio's four-column table will render identically in Teams desktop/mobile.
+[Microsoft's Teams formatting documentation](https://learn.microsoft.com/en-us/microsoftteams/platform/bots/how-to/format-your-bot-messages)
+documents richer pipe-table support under `extendedmarkdown`, currently public
+developer preview. This reference does not enable it. Ordinary links, UTC labels
+and escaped text are retained, but actual Teams rendering and caller connections
+must be verified separately before release.

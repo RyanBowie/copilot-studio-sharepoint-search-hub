@@ -34,6 +34,8 @@ a public GitHub Pages site just because documentation and images are present.
 - [ ] Test real response latency and explicit limits at the intended scale.
 - [ ] Document exact supported channels and verify SharePoint embedding before
       advertising it.
+- [ ] After an explicit Teams publication decision, verify desktop/mobile
+      ten-row/date/link rendering, connector authentication and private delivery.
 - [ ] Refresh screenshots and observed-output captions against the final
       release candidate.
 

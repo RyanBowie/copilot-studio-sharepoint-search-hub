@@ -1,0 +1,50 @@
+{
+  "date": "2026-09-12",
+  "result": "PASS",
+  "model": "GPT-5 Chat",
+  "scope": "Owner-account draft conversation across ten approved site collections.",
+  "nativeSearchPageSize": 100,
+  "actualStartRows": [
+    0,
+    100
+  ],
+  "actualPageRowCounts": [
+    100,
+    12
+  ],
+  "actualUniquePageUnion": 112,
+  "expectedRows": 112,
+  "secondPageCallerHydratedRows": 12,
+  "actualExcelRows": 112,
+  "files": 99,
+  "pages": 13,
+  "missingPageOrExcelRows": 0,
+  "crossPageOverlap": 0,
+  "metadataMismatches": 0,
+  "preview": "Five real linked results with stored tags in two columns, included in the full export.",
+  "completion": {
+    "CompletionStatus": "Complete",
+    "ExportedRowCount": 112,
+    "FileCount": 99,
+    "PageCount": 13,
+    "OmittedRowCount": 0,
+    "ProcessingErrors": false,
+    "DuplicateIndexHits": 0,
+    "TruncatedUpstream": false,
+    "UpstreamComplete": true,
+    "CountSemantics": "112 actual verified workbook rows. Index estimate: 112. These counts are not interchangeable.",
+    "CompletionDetail": "Files: 99. Pages: 13. Unverified/omitted: 0. Processing errors: False. Export cap: 1000; candidate cap: 2000; search-page cap: 40. Truncated: False."
+  },
+  "checksPassed": 32,
+  "checksTotal": 32,
+  "failedChecks": [],
+  "delivery": "Final owner-only ACL and email-to-verified-profile are checked; HTTP 200 is connector acceptance, not inbox receipt.",
+  "notClaimed": [
+    "Published-channel behavior",
+    "Non-owner negative ACLs",
+    "Classic child webs",
+    "150-site production scale",
+    "PolicyStatus retrieval/export"
+  ],
+  "proofBoundary": "Actual source-search paging, not the parent's readiness probe or management API nextLink pagination."
+}

@@ -6,3 +6,8 @@ expansion-documents-manifest.json
 expansion-content.json
 deployment.json
 expansion-deployment.json
+paging-documents/
+paging-content.json
+paging-documents-manifest.json
+paging-deployment.json
+paging-expected-results.json

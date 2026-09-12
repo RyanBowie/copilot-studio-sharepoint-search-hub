@@ -1,4 +1,4 @@
-"""Shared presentation for the stable seven-column search export contract."""
+"""Shared presentation for source-date exports and historical seven-column workbooks."""
 
 import argparse
 import math
@@ -14,10 +14,10 @@ from openpyxl.worksheet.filters import AutoFilter
 from openpyxl.worksheet.table import TableStyleInfo
 
 
-HEADERS = ("Title", "Department", "Tags", "Type", "ModifiedUTC", "SourceSite", "URL")
+HEADERS = ("Title", "Department", "Tags", "Type", "ModifiedUTC", "SourceSite", "URL", "CreatedUTC")
 HEADER_ROW = 8
 LINK_FORMAT = ';;;"Open file"'
-WIDTHS = (40, 16, 32, 14, 20, 38, 14)
+WIDTHS = (36, 14, 32, 12, 24, 38, 12, 24)
 NAVY = "17365D"
 INK = "25364B"
 BLUE = "0563C1"
@@ -31,13 +31,13 @@ def table_bounds(book):
 def records(book):
     sheet = book["Results"]
     first_column, header, last_column, last = table_bounds(book)
-    if (first_column, last_column) != (1, 7):
-        raise ValueError("Expected the seven-column SearchResults table")
-    if tuple(sheet.cell(header, column).value for column in range(1, 8)) != HEADERS:
+    if first_column != 1 or last_column not in (7, len(HEADERS)):
+        raise ValueError("Expected the source-date or historical seven-column SearchResults table")
+    if tuple(sheet.cell(header, column).value for column in range(1, last_column + 1)) != HEADERS[:last_column]:
         raise ValueError("The search export columns changed")
     rows = []
     for index in range(header + 1, last + 1):
-        values = [sheet.cell(index, column).value or "" for column in range(1, 8)]
+        values = [sheet.cell(index, column).value or "" for column in range(1, last_column + 1)]
         if not any(values):
             continue
         url_cell = sheet.cell(index, 7)
@@ -52,7 +52,8 @@ def records(book):
                 or site.netloc.lower() != target.netloc.lower() or site.username or site.password
                 or not target.path.lower().startswith(site.path.rstrip("/").lower() + "/")):
             raise ValueError("A source hyperlink is outside its SharePoint site")
-        if any(sheet.cell(index, column).data_type in {"f", "e"} for column in range(1, 7)):
+        if any(sheet.cell(index, column).data_type in {"f", "e"}
+               for column in range(1, last_column + 1) if column != 7):
             raise ValueError("Source fields must remain literal, error-free values")
         rows.append((index, values))
     return rows
@@ -65,7 +66,8 @@ def _text(cell, value):
 
 def apply_layout(book):
     sheet = book["Results"]
-    _, old_header, _, old_last = table_bounds(book)
+    _, old_header, columns, old_last = table_bounds(book)
+    last_column = chr(ord("A") + columns - 1)
     if old_header not in (1, HEADER_ROW):
         raise ValueError("Unexpected table position; refusing to move unrelated worksheet content")
     records(book)
@@ -73,7 +75,7 @@ def apply_layout(book):
         sheet.insert_rows(1, HEADER_ROW - 1)
     last = old_last + HEADER_ROW - old_header
     table = sheet.tables["SearchResults"]
-    table.ref = f"A{HEADER_ROW}:G{last}"
+    table.ref = f"A{HEADER_ROW}:{last_column}{last}"
     table.autoFilter = AutoFilter(ref=table.ref)
     table.tableStyleInfo = TableStyleInfo(
         name="TableStyleMedium2", showFirstColumn=False, showLastColumn=False,
@@ -83,7 +85,8 @@ def apply_layout(book):
     metadata = {row[0].value: row[1].value for row in info if row[0].value}
     mode = str(metadata.get("Mode", ""))
     badge = "OWNER-ONLY SAMPLE | NOT A FULL SEARCH" if mode.startswith("OWNER_ONLY") else "SEARCH EXPORT"
-    for area in ("A1:G2", "A3:G3", "B4:G4", "B5:G5", "A6:G6"):
+    for area in (f"A1:{last_column}2", f"A3:{last_column}3", f"B4:{last_column}4",
+                 f"B5:{last_column}5", f"A6:{last_column}6"):
         if area not in sheet.merged_cells:
             sheet.merge_cells(area)
     _text(sheet["A1"], "CorpNet Search Results")
@@ -98,15 +101,15 @@ def apply_layout(book):
             shown = shown[:180] + "... (full details in ExportInfo)"
         _text(sheet.cell(row, 2), shown)
     _text(sheet["A6"], "Use the header filters to narrow results. Select Open file to view the original. Full export details: ExportInfo tab.")
-    for row in sheet.iter_rows(min_row=1, max_row=HEADER_ROW, max_col=7):
+    for row in sheet.iter_rows(min_row=1, max_row=HEADER_ROW, max_col=columns):
         for cell in row:
             cell.font = Font(name="Arial", size=10, color=INK)
             cell.alignment = Alignment(vertical="center", wrap_text=True)
             cell.fill = PatternFill("solid", fgColor="FFFFFF")
-    for row in sheet.iter_rows(min_row=1, max_row=2, max_col=7):
+    for row in sheet.iter_rows(min_row=1, max_row=2, max_col=columns):
         for cell in row:
             cell.fill = PatternFill("solid", fgColor=NAVY)
-    sheet["A1"].font = Font(name="Arial", size=23, bold=True, color="FFFFFF")
+    sheet["A1"].font = Font(name="Arial", size=16, bold=True, color="FFFFFF")
     sheet["A1"].alignment = Alignment(vertical="center", indent=1)
     for cell in sheet[3]:
         cell.fill = PatternFill("solid", fgColor=PALE)
@@ -117,9 +120,9 @@ def apply_layout(book):
         sheet.cell(row, 1).alignment = Alignment(vertical="center", indent=1)
     sheet["A6"].font = Font(name="Arial", size=10, color="61758C")
     sheet["A6"].alignment = Alignment(vertical="center", indent=1, wrap_text=True)
-    for row, height in {1: 18, 2: 34, 3: 26, 4: 34, 5: 30, 6: 32, 7: 9, 8: 28}.items():
+    for row, height in {1: 24, 2: 2, 3: 16, 4: 28, 5: 20, 6: 16, 7: 3, 8: 24}.items():
         sheet.row_dimensions[row].height = height
-    for column, width in zip("ABCDEFG", WIDTHS):
+    for column, width in zip("ABCDEFGH"[:columns], WIDTHS):
         sheet.column_dimensions[column].width = width
     sheet.column_dimensions["F"].hidden = True
     sheet.column_dimensions["G"].hidden = False
@@ -130,23 +133,25 @@ def apply_layout(book):
         cell.alignment = Alignment(vertical="center", wrap_text=True, indent=1)
     sheet.cell(HEADER_ROW, 5).comment = Comment("Last modified time in UTC. Blank means the source did not supply it.", "CorpNet Search Hub")
     sheet.cell(HEADER_ROW, 7).comment = Comment("Open file links to the original. The full URL remains in the cell value; SourceSite is preserved in hidden column F.", "CorpNet Search Hub")
+    if columns == len(HEADERS):
+        sheet.cell(HEADER_ROW, 8).comment = Comment("Source File.TimeCreated in UTC, not export or site-collection creation time. Blank means the source did not supply it.", "CorpNet Search Hub")
     bottom = Border(bottom=Side(style="hair", color="DCE5EF"))
     for index in range(HEADER_ROW + 1, last + 1):
-        for column in range(1, 8):
+        for column in range(1, columns + 1):
             cell = sheet.cell(index, column)
-            cell.font = Font(name="Arial", size=11, bold=False, color=INK)
+            cell.font = Font(name="Arial", size=10, bold=False, color=INK)
             cell.fill = PatternFill()
             cell.border = bottom
-            cell.alignment = Alignment(vertical="center", wrap_text=True, indent=1)
+            cell.alignment = Alignment(vertical="top", wrap_text=column in (1, 3), indent=1)
             cell.number_format = "@"
         sheet.cell(index, 7).number_format = LINK_FORMAT
-        sheet.cell(index, 7).font = Font(name="Arial", size=11, color=BLUE, underline="single")
-        sheet.cell(index, 7).alignment = Alignment(vertical="center", indent=1)
+        sheet.cell(index, 7).font = Font(name="Arial", size=10, color=BLUE, underline="single")
+        sheet.cell(index, 7).alignment = Alignment(vertical="top", wrap_text=False, indent=1)
         lines = max(
             math.ceil(len(str(sheet.cell(index, column).value or "")) / (WIDTHS[column - 1] * .9))
-            for column in range(1, 6)
+            for column in (1, 3)
         )
-        sheet.row_dimensions[index].height = min(96, max(40, 14 * lines + 10))
+        sheet.row_dimensions[index].height = min(72, max(28, 12 * lines + 4))
     for index, values in records(book):
         link = sheet.cell(index, 7)
         _text(link, values[6])
@@ -163,7 +168,7 @@ def apply_layout(book):
     sheet.page_setup.fitToHeight = 0
     sheet.print_options.horizontalCentered = True
     sheet.print_title_rows = f"1:{HEADER_ROW}"
-    sheet.print_area = f"A1:G{last}"
+    sheet.print_area = f"A1:{last_column}{last}"
     sheet.oddFooter.center.text = "CorpNet Search Hub | Source permissions still apply"
     sheet.oddFooter.right.text = "Page &P of &N"
     for side in ("left", "right", "top", "bottom"):

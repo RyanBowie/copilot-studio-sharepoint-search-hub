@@ -9,6 +9,10 @@ import uuid
 from urllib.parse import quote
 
 from openpyxl import load_workbook
+from openpyxl.comments import Comment
+from openpyxl.styles import Alignment
+from openpyxl.utils import get_column_letter
+from openpyxl.workbook.properties import CalcProperties
 from openpyxl.worksheet.table import Table, TableColumn, TableFormula, TableStyleInfo
 from openpyxl.worksheet.filters import AutoFilter
 
@@ -18,7 +22,7 @@ from search_contract import CONTENT_SCOPE, load_policy, validate_policy
 ROOT = Path(__file__).resolve().parents[1]
 TARGET = ROOT / "flows" / "search-export"
 sys.path.insert(0, str(ROOT / "exports" / "template"))
-from workbook_layout import HEADER_ROW, LINK_FORMAT
+from workbook_layout import HEADERS as EXPORT_HEADERS, HEADER_ROW, LINK_FORMAT
 
 MAX_ROWS = 1000
 MAX_CANDIDATES = 2000
@@ -26,11 +30,13 @@ PAGE_SIZE = 100
 SITES_PER_BATCH = 20
 MAX_BATCHES = 12
 MAX_SEARCH_PAGES = 40
-PREVIEW_ROWS = 5
+PREVIEW_ROWS = 10
 PREVIEW_CANDIDATES = 20
 SENTINEL = "__CORPNET_EMPTY_EXPORT__"
 LINK_FORMULA = '=IF(SearchResults[[#This Row],[SourceURL]]="","",HYPERLINK(SearchResults[[#This Row],[SourceURL]],SearchResults[[#This Row],[SourceURL]]))'
-HEADERS = ["Title", "Department", "Tags", "Type", "ModifiedUTC", "SourceSite", "URL"]
+HEADERS = list(EXPORT_HEADERS)
+DATE_FIELDS = {"Created (UTC)": "CreatedUTC", "Modified (UTC)": "ModifiedUTC"}
+DATE_FORMAT = "yyyy-mm-dd"
 ALL_STATES = ["Succeeded", "Failed", "TimedOut", "Skipped"]
 METADATA_KEYS = [
     "Query", "Scope", "RequestedBy", "GeneratedUTC", "CompletionStatus",
@@ -171,26 +177,78 @@ def compile_scopes(policy):
     return scopes
 
 
+def excel_date_formula(field):
+    if field not in DATE_FIELDS.values():
+        raise ValueError("Only canonical source timestamps can back display dates")
+    source = f"SearchResults[[#This Row],[{field}]]"
+    return (f'=IF({source}="","Not supplied",DATE(VALUE(LEFT({source},4)),'
+            f'VALUE(MID({source},6,2)),VALUE(MID({source},9,2))))')
+
+
+def metadata_formula(field):
+    if field not in METADATA_KEYS:
+        raise ValueError("Unknown export metadata field")
+    lookup = f'INDEX(ExportMetadata[Value],MATCH("{field}",ExportMetadata[Field],0))'
+    return f'IFERROR(IF({lookup}="","",{lookup}),"")'
+
+
 def create_runtime_template():
     TARGET.mkdir(parents=True, exist_ok=True)
     book = load_workbook(ROOT / "exports" / "template" / "CorpNetSearchResults.template.xlsx")
     sheet = book["Results"]
-    sheet.freeze_panes = f"B{HEADER_ROW + 1}"
     sheet.cell(HEADER_ROW + 1, 1, SENTINEL)
-    sheet.cell(HEADER_ROW, 8, "SourceURL")
-    sheet.cell(HEADER_ROW + 1, 8).number_format = "@"
-    sheet.cell(HEADER_ROW + 1, 8)._style = copy.copy(sheet.cell(HEADER_ROW + 1, 6)._style)
-    sheet.column_dimensions["H"].hidden = True
     table = sheet.tables["SearchResults"]
-    table.ref = f"A{HEADER_ROW}:H{HEADER_ROW + 1}"
+    for column, (label, field) in enumerate(DATE_FIELDS.items(), len(HEADERS) + 1):
+        formula = excel_date_formula(field)
+        sheet.cell(HEADER_ROW, column, label)._style = copy.copy(sheet.cell(HEADER_ROW, 5)._style)
+        body = sheet.cell(HEADER_ROW + 1, column, formula)
+        body._style = copy.copy(sheet.cell(HEADER_ROW + 1, 5)._style)
+        body.number_format = DATE_FORMAT
+        body.alignment = Alignment(vertical="top", wrap_text=False, indent=1)
+        sheet.column_dimensions[get_column_letter(column)].width = 16
+        sheet.cell(HEADER_ROW, column).comment = Comment(
+            f"Real Excel UTC calendar date derived from hidden {field}. The full source timestamp remains unchanged there.",
+            "CorpNet Search Hub",
+        )
+        table.tableColumns.append(TableColumn(
+            id=column, name=label, calculatedColumnFormula=TableFormula(attr_text=formula[1:]),
+        ))
+    source_column = len(HEADERS) + len(DATE_FIELDS) + 1
+    source_letter = get_column_letter(source_column)
+    sheet.cell(HEADER_ROW, source_column, "SourceURL")
+    sheet.cell(HEADER_ROW + 1, source_column)._style = copy.copy(sheet.cell(HEADER_ROW + 1, 6)._style)
+    sheet.cell(HEADER_ROW + 1, source_column).number_format = "@"
+    sheet.cell(HEADER_ROW + 1, source_column).alignment = Alignment(vertical="top", wrap_text=False)
+    sheet.column_dimensions[source_letter].width = 80
+    sheet.column_dimensions[source_letter].hidden = True
+    for column in ("E", "H"):
+        sheet.column_dimensions[column].hidden = True
+    table.ref = f"A{HEADER_ROW}:{source_letter}{HEADER_ROW + 1}"
     table.autoFilter = AutoFilter(ref=table.ref)
-    table.tableColumns.append(TableColumn(id=8, name="SourceURL"))
+    table.tableColumns.append(TableColumn(id=source_column, name="SourceURL"))
     table.tableColumns[6].calculatedColumnFormula = TableFormula(attr_text=LINK_FORMULA[1:])
     sheet.cell(HEADER_ROW + 1, 7, LINK_FORMULA)
     sheet.cell(HEADER_ROW + 1, 7).number_format = LINK_FORMAT
+    visible_last = get_column_letter(source_column - 1)
+    for area in list(sheet.merged_cells.ranges):
+        if area.max_row <= 6:
+            first = f"{get_column_letter(area.min_col)}{area.min_row}"
+            last_row = area.max_row
+            sheet.unmerge_cells(str(area))
+            sheet.merge_cells(f"{first}:{visible_last}{last_row}")
+    for row in (1, 2, 3):
+        for column in range(len(HEADERS) + 1, source_column):
+            sheet.cell(row, column)._style = copy.copy(sheet.cell(row, len(HEADERS))._style)
     sheet["A3"] = "PRIVATE SEARCH EXPORT | FILES AND PAGES"
-    sheet["B4"] = "Full query and scope: ExportInfo tab"
-    sheet["B5"] = "Exact row count and completion details: ExportInfo tab"
+    sheet["A4"], sheet["A5"] = "SEARCH", "RESULTS"
+    sheet["B4"] = '="Scope: "&' + metadata_formula("Scope") + '&" | Query: "&' + metadata_formula("Query")
+    sheet["B5"] = ('="Rows: "&' + metadata_formula("ExportedRowCount") + '&" | Files: "&'
+                   + metadata_formula("FileCount") + '&" | Pages: "&' + metadata_formula("PageCount")
+                   + '&" | Status: "&' + metadata_formula("CompletionStatus"))
+    sheet["B4"].number_format = sheet["B5"].number_format = "General"
+    sheet["A6"] = "Filter any column. Open file checks current access. Full timestamps are retained in hidden columns; details: ExportInfo."
+    sheet.print_area = f"A1:{visible_last}{HEADER_ROW + 1}"
+    book.calculation = CalcProperties(calcMode="auto", fullCalcOnLoad=True, forceFullCalc=True)
     info = book["ExportInfo"]
     for row in info:
         for cell in row:
@@ -236,6 +294,7 @@ def row_export_actions(policy):
     item = {name: "@concat(decodeUriComponent('%27'),string(" + row + "?['" + name + "']))" for name in HEADERS}
     item["URL"] = LINK_FORMULA
     item["SourceURL"] = "@concat(decodeUriComponent('%27')," + row + "?['URL'])"
+    item.update({label: excel_date_formula(field) for label, field in DATE_FIELDS.items()})
     write = condition("@equals(variables('Exported'),0)", {
         "Replace_placeholder": excel("PatchItem", {"idColumn": "Title", "id": SENTINEL, "item": item}),
     }, {
@@ -298,11 +357,14 @@ def export_batches(policy):
         "ModifiedUTC": f"@coalesce({file}?['TimeLastModified'],'')",
         "SourceSite": f"@{group_site}?['url']",
         "URL": "@concat('" + policy["tenantOrigin"] + "',replace(replace(uriComponent(item()?['File']?['ServerRelativeUrl']),'%2F','/'),'%2f','/'))",
+        "CreatedUTC": f"@coalesce({file}?['TimeCreated'],'')",
     }
+    projection.update({label: "@" + display_date(f"{file}?['{source}']")
+                       for label, source in (("Created (UTC)", "TimeCreated"), ("Modified (UTC)", "TimeLastModified"))})
     uri = (
         "@concat('_api/web/lists(guid',decodeUriComponent('%27'),items('Each_metadata_group')?['ListId'],decodeUriComponent('%27'),"
         f"')/items?$top={PAGE_SIZE}&$filter=',uriComponent(join(body('Group_filter_parts'),' or ')),"
-        "'&$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified',"
+        "'&$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated',"
         "if(empty(body('Metadata_field_names')),'',concat(',',join(body('Metadata_field_names'),','))),'&$expand=File')"
     )
     field_filter = quote("InternalName eq 'Department' or InternalName eq 'TopicTags' or InternalName eq 'DocumentType'", safe="")
@@ -411,6 +473,26 @@ def markdown_text(expression):
     return f"replace(replace({text},'<','&lt;'),'>','&gt;')"
 
 
+def display_date(value):
+    return f"if(empty({value}),'Not supplied',formatDateTime({value},'yyyy-MM-dd'))"
+
+
+def written_date(label):
+    if label not in DATE_FIELDS:
+        raise ValueError("Unknown display date")
+    value = f"string(coalesce(item()?['{label}'],''))"
+    serial = f"addDays('1899-12-30T00:00:00Z',int(first(split({value},'.'))),'yyyy-MM-dd')"
+    return (f"if(or(empty({value}),equals({value},'Not supplied')),{value},"
+            f"if(isFloat({value}),{serial},formatDateTime({value},'yyyy-MM-dd')))")
+
+
+def preview_date(field):
+    if field not in ("CreatedUTC", "ModifiedUTC"):
+        raise ValueError("Only verified source dates can be formatted")
+    value = f"outputs('Preview_row')?['{field}']"
+    return display_date(value)
+
+
 def preview_actions(policy):
     retrieval = export_batches(policy)["actions"]
     locators = copy.deepcopy(retrieval["Select_locators"])
@@ -433,19 +515,23 @@ def preview_actions(policy):
         "Title": f"@if(empty({current}?['Title']),{file}?['Name'],{current}?['Title'])",
         "Tags": f"@coalesce({current}?['TopicTags'],'')",
         "Type": f"@if(endsWith(toLower({file}?['Name']),'.aspx'),'Page',if(empty({current}?['DocumentType']),toUpper(last(split({file}?['Name'],'.'))),{current}?['DocumentType']))",
+        "ModifiedUTC": f"@coalesce({file}?['TimeLastModified'],'')",
+        "CreatedUTC": f"@coalesce({file}?['TimeCreated'],'')",
         "URL": "@" + url,
     }
     fields = quote("InternalName eq 'Department' or InternalName eq 'TopicTags' or InternalName eq 'DocumentType'", safe="")
     fields_uri = "@concat('_api/web/lists(guid',decodeUriComponent('%27')," + candidate + "?['ListId'],decodeUriComponent('%27'),')/fields?$select=InternalName&$filter=" + fields + "')"
     item_uri = (
         "@concat('_api/web/lists(guid',decodeUriComponent('%27')," + candidate + "?['ListId'],decodeUriComponent('%27'),')/items(',string(int("
-        + candidate + "?['ItemId'])),')?$select=Id,Title,File/Name,File/ServerRelativeUrl',"
+        + candidate + "?['ItemId'])),')?$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated',"
         "if(empty(body('Preview_field_names')),'',concat(',',join(body('Preview_field_names'),','))),'&$expand=File')"
     )
     title = markdown_text("outputs('Preview_row')?['Title']")
     tags = "if(empty(outputs('Preview_row')?['Tags']),'Not supplied',replace(string(outputs('Preview_row')?['Tags']),';','; '))"
     short_tags = f"if(greater(length({tags}),200),concat(take({tags},200),'... (full tags in Excel)'),{tags})"
-    line = "@concat('| ['," + title + ",'](',outputs('Preview_row')?['URL'],') | '," + markdown_text(short_tags) + ",' |')"
+    line = ("@concat('| ['," + title + ",'](',outputs('Preview_row')?['URL'],') | ',"
+            + preview_date("CreatedUTC") + ",' | '," + preview_date("ModifiedUTC")
+            + ",' | '," + markdown_text(short_tags) + ",' |')")
     read = {
         "Count_preview_checked": increment("PreviewChecked"),
         "Preview_metadata_fields": sp("@" + candidate + "?['WebUrl']", "GET", fields_uri, "Count_preview_checked"),
@@ -523,7 +609,8 @@ def finalize_actions():
         },
         "Written_projection": {"type": "Select", "inputs": {
             "from": "@variables('ActualRows')",
-            "select": {key: "@coalesce(item()?['" + key + "'],'')" for key in HEADERS},
+            "select": {**{key: "@coalesce(item()?['" + key + "'],'')" for key in HEADERS},
+                       **{label: "@" + written_date(label) for label in DATE_FIELDS}},
         }, "runAfter": after("Read_back_written_rows")},
         "Written_urls": {"type": "Select", "inputs": {"from": "@variables('ActualRows')", "select": "@toLower(item()?['URL'])"},
                          "runAfter": after("Written_projection")},
@@ -686,9 +773,11 @@ def build_definition(policy, template_bytes):
     actions["Format_chat_result"] = compose(
         "@concat(variables('Result'),if(equals(variables('Started'),true),"
         "if(greater(length(variables('PreviewRows')),0),concat(decodeUriComponent('%0A%0A'),"
-        "'**Top verified matches**',decodeUriComponent('%0A%0A'),'| File or page | Stored tags |',decodeUriComponent('%0A'),"
-        "'| --- | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),"
-        f"decodeUriComponent('%0A%0A'),'Click a title to open it. Excel includes these matches and the remaining verified results, up to {MAX_ROWS}. Exports may be partial; the index estimate can differ from the final row count.'),"
+        "'**Top verified matches**',decodeUriComponent('%0A%0A'),"
+        "'Created and last modified dates are UTC (YYYY-MM-DD).',decodeUriComponent('%0A%0A'),"
+        "'| File or page | Created (UTC) | Modified (UTC) | Stored tags |',decodeUriComponent('%0A'),"
+        "'| --- | --- | --- | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),"
+        f"decodeUriComponent('%0A%0A'),'Click a title to open it. Preview: up to {PREVIEW_ROWS} results from at most {PREVIEW_CANDIDATES} checked candidates. Excel includes these matches and the remaining verified results, up to {MAX_ROWS}. Exports may be partial; the index estimate can differ from the final row count.'),"
         "concat(decodeUriComponent('%0A%0A'),'A verified chat preview is unavailable. The private export will still verify its results before delivery.')),''))"
     )
     actions["Format_chat_result"]["runAfter"] = after("Build_chat_preview", statuses=ALL_STATES)

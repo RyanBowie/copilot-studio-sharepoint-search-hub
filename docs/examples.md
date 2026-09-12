@@ -20,7 +20,31 @@ populate every input or that the agent is a free-form policy-answering system.
 `hubspokeverify` is a deliberately fictional fixture marker, not a product
 keyword. New content may need time to appear in SharePoint's index.
 
-## Observed expanded output
+## Current observed four-column output
+
+The final owner-account `All` / `hubspokeverify` run returned **ten rows** in
+separate File or page, Created (UTC), Modified (UTC) and Stored tags columns.
+Its preview contained four pages and six documents, all included in the
+**112-row export**. Dates and tags matched the current source, and actual
+100+12 paging was reverified.
+
+The narrow Studio pane wraps date values and headers heavily. See the
+[genuine captures](screenshots.md#current-four-column-chat), not an illustrative
+table, for actual rendering. Teams remains an owner-operated separate check.
+
+## Historical paging output
+
+After 60 further indexed fixtures were added, the owner-account `All` /
+`hubspokeverify` conversation retrieved actual pages of **100 and 12** at
+StartRow **0 and 100**, without reducing the native 100-row page size.
+Excel read-back verified **112 unique rows: 99 documents and 13 pages**,
+including all five preview links. This run used GPT-5 Chat and predates the
+created/modified-date chat enhancement.
+
+See the [paging evidence](validation.md#verified-native-paging-beyond-100-matches---12-september-2026).
+These are snapshot counts, not expected totals for every future query.
+
+## Historical expanded output
 
 On 12 September 2026, the actual guided `All` / `hubspokeverify` request
 produced **52 verified Excel rows across ten collections: 39 documents and
@@ -59,18 +83,21 @@ fresh run against the prepared ten-collection policy.
 
 ## Chat output shape
 
-The following is an **illustrative rendering of the intended two-column
+The following is an **illustrative rendering of the intended four-column
 preview**, not a transcript or a promise that these exact rows will appear for
 every query. Links use an example tenant.
 
-| File or page | Stored tags |
-|---|---|
-| [Leave and working time policy](https://contoso.sharepoint.com/sites/HR/Shared%20Documents/Leave-and-Working-Time-Policy.docx) | leave; wellbeing; meadow-27 |
-| [Annual leave guidance](https://contoso.sharepoint.com/sites/HR/SitePages/Annual-Leave.aspx) | hr; leave; people-policy |
+| File or page | Created (UTC) | Modified (UTC) | Stored tags |
+|---|---|---|---|
+| [Leave and working time policy](https://contoso.sharepoint.com/sites/HR/Shared%20Documents/Leave-and-Working-Time-Policy.docx) | 2026-01-05 | 2026-09-10 | leave; wellbeing; meadow-27 |
+| [Annual leave guidance](https://contoso.sharepoint.com/sites/HR/SitePages/Annual-Leave.aspx) | 2026-02-12 | 2026-09-11 | hr; leave; people-policy |
 
 An initial status should communicate **export started**, not “email sent.”
 The actual response also qualifies the index estimate, effective account and
-any applicable limitations. At most five verified rows are displayed.
+any applicable limitations. At most ten verified rows are displayed, with
+dates from the current file/page, not its containing site's creation date.
+These fictional dates illustrate content only, not exact client rendering.
+Created and modified dates occupy their own columns, not the name/link cell.
 
 There is no result row when no accessible source was verified. The agent must
 not fill an empty result table with plausible company policies.
@@ -80,16 +107,24 @@ not fill an empty result table with plausible company policies.
 The deliverable is a genuine `.xlsx` file with a filterable Excel table,
 readable source hyperlinks and the verified exported metadata. It includes
 the preview rows and remaining verified matches within the declared bounds;
-it is not merely the “remaining results after the first five.”
+it is not merely the remaining results after the first ten.
 
 Columns include source title/link, department, stored tags, document type and
-modified time. `SourceSite` and technical `SourceURL` are retained as hidden
-columns. Neither `PolicyStatus` nor `ReviewDate` is selected or exported;
+created and modified dates. Visible `Created (UTC)` and `Modified (UTC)`
+columns use genuine Excel dates with `yyyy-mm-dd` formatting; full raw
+timestamps remain in hidden `CreatedUTC` and `ModifiedUTC` columns.
+`SourceSite` and technical `SourceURL` are also hidden.
+Neither `PolicyStatus` nor `ReviewDate` is selected or exported;
 draft/archived content is not filtered out. Completion information must distinguish
 the index estimate from rows actually exported and disclose omissions or caps.
 
 The compact chat preview omits the separate document-type column to preserve
 space. Document type remains useful in Excel.
+
+The workbook uses compact top-aligned rows, wraps only visible titles/tags,
+and shows actual scope/query and completion summary values above the table.
+Long tags remain complete; they can legitimately make individual rows taller.
+These template changes apply to new exports, not previously delivered files.
 
 ## Email output
 
@@ -107,6 +142,7 @@ other address” must not replace the verified recipient.
 | No indexed matches | A qualified no-match response, not fabricated rows. |
 | Index candidate is no longer accessible | Omit it from disclosed/exported rows and account for the omission. |
 | Stored tags are absent | Chat uses `Not supplied`; the workbook retains an empty value. Do not infer tags from the title. |
+| Source timestamp is absent | Chat and visible date cells use `Not supplied`; hidden raw timestamps remain empty. |
 | Query includes raw KQL or a URL | Reject unsupported input before scoped retrieval. |
 | Selected connector accounts do not align | Explicit failure; no maker-account fallback. |
 | Row, candidate, page or batch limit is reached | Identify partial/capped work; do not call it exhaustive. |

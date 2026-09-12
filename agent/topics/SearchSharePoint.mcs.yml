@@ -1,6 +1,6 @@
 mcs.metadata:
   componentName: Search approved SharePoint sites
-  description: Show up to five permission-checked file/page links and stored tags, then email a private Excel workbook of the full verified results.
+  description: Show up to ten permission-checked rows with separate File or page, Created (UTC), Modified (UTC), and Stored tags columns, then email a private Excel workbook of the full verified results and source timestamps.
 kind: AdaptiveDialog
 beginDialog:
   kind: OnRecognizedIntent
@@ -18,7 +18,7 @@ beginDialog:
   actions:
     - kind: SendActivity
       id: searchReady
-      activity: I can search approved CorpNet and departmental sites using your selected accounts. I will show up to five verified file/page links with stored tags, then email a private Excel workbook containing the full verified results, including those shown here. Export limits and partial results will be reported.
+      activity: I can search approved CorpNet and departmental sites using your selected accounts. I will show up to ten verified file/page links with stored tags and source created/last modified dates in UTC, using separate File or page, Created (UTC), Modified (UTC), and Stored tags columns. I will then email a private Excel workbook containing the full verified results, including those shown here and their source timestamps. Missing preview dates say Not supplied. Export limits and partial results will be reported.
     - kind: Question
       id: chooseDepartment
       variable: Topic.DepartmentInput

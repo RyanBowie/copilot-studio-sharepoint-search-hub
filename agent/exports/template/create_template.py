@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.filters import AutoFilter
 from openpyxl.worksheet.table import Table
 from workbook_layout import HEADERS, HEADER_ROW, apply_layout
@@ -21,8 +22,8 @@ def create_template(path: Path) -> None:
 
     table = Table(
         displayName="SearchResults",
-        ref="A1:G2",
-        autoFilter=AutoFilter(ref="A1:G2"),
+        ref=f"A1:{get_column_letter(len(HEADERS))}2",
+        autoFilter=AutoFilter(ref=f"A1:{get_column_letter(len(HEADERS))}2"),
     )
     results.add_table(table)
 
@@ -79,7 +80,7 @@ def validate_template(path: Path) -> None:
     results = workbook["Results"]
     assert tuple(cell.value for cell in results[HEADER_ROW]) == HEADERS
     assert results.freeze_panes == f"B{HEADER_ROW + 1}"
-    assert results.tables["SearchResults"].autoFilter.ref == f"A{HEADER_ROW}:G{HEADER_ROW + 1}"
+    assert results.tables["SearchResults"].autoFilter.ref == f"A{HEADER_ROW}:{get_column_letter(len(HEADERS))}{HEADER_ROW + 1}"
     assert all(cell.value is None for cell in results[HEADER_ROW + 1])
     assert workbook["ExportInfo"]["B6"].value.startswith("TEMPLATE")
     assert not any(cell.data_type in {"f", "e"} for sheet in workbook for row in sheet for cell in row)

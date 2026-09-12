@@ -22,6 +22,27 @@ npm run generate
 npm run generate:expansion
 ```
 
+For the separate greater-than-100 paging fixture, generate the expansion
+first, then run:
+
+```powershell
+npm run generate:paging
+```
+
+This adds definitions for 60 distinct Word documents, six per existing
+collection, taking the shared `hubspokeverify` set from 52 to **112 expected
+matches**. The unchanged native search page size is 100. Generation and an
+index count do not prove paging: verify a real next-page request and exact
+unique exported URL coverage through the agent. The additional `pagingverify`
+marker identifies only the 60 new documents.
+
+The owner-account demonstration subsequently verified actual native pages of
+**100 + 12**, StartRow **0 then 100**, and exactly **112 unique Excel rows**.
+See [paging evidence](../../docs/validation.md). That observed run does not
+mean generating these files locally has provisioned or tested your tenant.
+All three corpora together define 128 authored artifacts; only 112 share the
+`hubspokeverify` marker.
+
 The commands generate real `.docx` packages and local upload manifests. They
 do **not** create sites, upload files, publish pages, change permissions, update
 the agent inventory or prove search indexing.

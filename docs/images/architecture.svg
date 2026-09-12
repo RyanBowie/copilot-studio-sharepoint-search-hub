@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1030" viewBox="0 0 1420 1030" role="img" aria-labelledby="title description">
 <title id="title">SharePoint Search Hub architecture</title>
-<desc id="description">A guided Copilot Studio topic calls a native caller-authenticated flow. The flow aligns identities, searches approved SharePoint collections, rechecks source access and metadata, returns up to five linked rows, then continues to a verified private workbook and email.</desc>
+<desc id="description">A guided Copilot Studio topic calls a native caller-authenticated flow. The flow aligns identities, searches approved SharePoint collections, rechecks source access and metadata, returns up to ten linked rows with source dates and tags, then continues to a verified private workbook and email.</desc>
 <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#605E5C"/></marker></defs>
 <rect width="1420" height="1030" fill="#ffffff"/>
 <text x="40" y="58" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">SharePoint Search Hub</text>
@@ -45,7 +45,7 @@
 <text x="405" y="479" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Read actual stored metadata</text>
 <rect x="40" y="660" width="290" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="1.5"/>
 <text x="55" y="696" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Chat preview</text>
-<text x="55" y="734" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Up to 5 real links + stored tags</text>
+<text x="55" y="734" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Up to 10 links, dates and tags</text>
 <text x="55" y="759" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Initial status is not completion</text>
 <rect x="740" y="660" width="290" height="140" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="1.5"/>
 <text x="755" y="696" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Same-run continuation</text>

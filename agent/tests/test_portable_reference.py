@@ -26,6 +26,8 @@ class PortableReferenceTests(unittest.TestCase):
     def test_reference_is_explicitly_fictional_not_verified(self):
         self.assertEqual(self.policy["configurationMode"], "fictional-reference")
         self.assertEqual(self.policy["tenantOrigin"], "https://contoso.sharepoint.com")
+        self.assertEqual(len(self.policy["sites"]), 4)
+        self.assertEqual({site["department"] for site in self.policy["sites"]}, {"CorpNet", "HR", "Finance", "IT"})
         for key in ("hubRegistrationVerified", "hubSearchVerified", "metadataFieldsVerified", "searchLocatorFieldsVerified"):
             self.assertIs(self.policy[key], False)
 
@@ -90,6 +92,9 @@ class PortableReferenceTests(unittest.TestCase):
         call = next(node for node in topic["beginDialog"]["actions"] if node["kind"] == "InvokeFlowAction")
         self.assertEqual(call["flowId"], action["action"]["flowId"])
         self.assertEqual(action["action"]["connectionProperties"]["mode"], "Invoker")
+        self.assertIn("up to ten", action["modelDescription"])
+        self.assertIn("Created/Modified UTC", action["modelDescription"])
+        self.assertIn("up to ten", topic["beginDialog"]["actions"][0]["activity"])
         self.assertEqual(set(call["input"]["binding"]), {"query", "scope"})
         source = yaml.safe_load((ROOT / "connectionreferences.mcs.yml").read_text())
         expected = {ref["connection"]["connectionReferenceLogicalName"] for ref in FLOW.connection_references().values()}

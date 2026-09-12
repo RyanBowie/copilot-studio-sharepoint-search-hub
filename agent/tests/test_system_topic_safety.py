@@ -65,7 +65,7 @@ class SystemTopicSafetyTests(unittest.TestCase):
         dialog = load("topics", "SearchSharePoint.mcs.yml")["beginDialog"]
         self.assertIn("Search for SharePoint content", dialog["intent"]["triggerQueries"])
         self.assertEqual(dialog["actions"][0]["kind"], "SendActivity")
-        self.assertIn("up to five verified file/page links with stored tags", dialog["actions"][0]["activity"])
+        self.assertIn("up to ten verified file/page links with stored tags", dialog["actions"][0]["activity"])
         self.assertEqual(dialog["actions"][1]["kind"], "Question")
         self.assertEqual(dialog["actions"][1]["variable"], "Topic.DepartmentInput")
 

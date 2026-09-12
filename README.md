@@ -5,7 +5,7 @@
 SharePoint Search Hub is a reference implementation for searching a corporate
 hub-and-spoke estate without creating a separate agent for every department.
 The agent guides the user through a scope and keyword search, shows a compact
-preview with real source links and stored tags, and continues the same request
+preview with real source links, source dates and stored tags, and continues the same request
 into a filterable workbook delivered through the selected account's mailbox.
 
 > **Private preview, prepared for future public review.**
@@ -21,10 +21,17 @@ into a filterable workbook delivered through the selected account's mailbox.
 | Guided search | Select `All`, `CorpNet`, `HR`, `Finance`, or `IT`, then supply plain search words or `*`. |
 | Hub-and-spoke coverage | Search an explicit inventory of approved site collections, including multiple sites in one department. A hub URL alone is not automatic discovery. |
 | Files and pages | Retrieve matching documents and SharePoint pages, subject to indexing, current access and configured bounds. |
-| Useful chat preview | Show up to five verified links with their actual stored `TopicTags`. Missing tags are not invented. |
+| Useful chat preview | Show up to ten verified rows in four separate columns: linked file/page, Created (UTC), Modified (UTC), and stored tags. Missing metadata is not invented. |
 | Private workbook | Continue into a genuine Excel table containing verified exported rows, source links and metadata, including the previewed rows when they remain accessible. |
 | Verified-account delivery | Use caller-provided connectors and the verified profile's mailbox, not an email address supplied in chat. |
 | Honest outcomes | Distinguish an index estimate, displayed results, export started, completed rows, partial completion and the email action. |
+
+The current source adds a compact workbook with top-aligned rows, readable
+calendar dates, full timestamps retained in hidden columns, and an actual
+scope/query/completion summary. Ten preview rows are selected through bounded
+retrieval, not a guarantee of a globally ranked top ten across the estate.
+Historical screenshots retain their original five-row presentation; current
+four-column captures explicitly show the narrow-pane wrapping limitation.
 
 This is a **controlled search-and-export experience**, not a general-purpose
 policy-answering bot. It does not synthesize company policy from the model's
@@ -55,18 +62,22 @@ another tenant.
 
 ## Real product screenshots
 
-<img src="docs/images/live-chat-expanded.png" width="480" alt="Genuine expanded draft showing five linked results and stored tags in two columns">
+<img src="docs/images/live-workbook-compact.png" width="900" alt="Actual compact 112-row workbook with separate created and modified date columns">
 
-**Verified owner-account draft, 12 September 2026.** The `All` /
-`hubspokeverify` conversation exported and read back **52/52 expected rows
-across ten collections**. An HR-only conversation verified **16/16 rows across
-three HR collections**. Both showed five linked results in two columns and
-completed private workbook/email actions. Browser and account identifiers were
-cropped out.
+**Verified owner-account draft, 12 September 2026.** The final four-column
+`All` / `hubspokeverify` conversation passed **45 functional checks**, including
+ten linked/date-bearing rows, actual **100 + 12 search pages**, and **112 exact
+Excel rows across ten collections**. All ten preview links were included;
+224 source timestamps/calendar values, private ACL and email acceptance matched.
+
+The actual workbook capture above comes from the preceding run using the
+identical template. **Current four-column chat headers and dates wrap severely
+in the narrow Studio pane**; this is not polished narrow-client or Teams proof.
+Browser and account identifiers are cropped out.
 
 [View all screenshots, including the clearly labeled historical baseline](docs/screenshots.md).
 These are genuine captures, not mockups. This is owner-only draft evidence,
-not non-owner permission, published-channel or greater-than-100-row paging proof.
+not non-owner permission, published-channel or production-scale proof.
 
 ## Repository guide
 

@@ -1,0 +1,69 @@
+{
+  "date": "2026-09-12",
+  "result": "FUNCTIONAL_PASS_WITH_NARROW_PANE_READABILITY_CAVEAT",
+  "model": "GPT-5 Chat",
+  "scope": "One owner-account draft conversation across ten approved collections.",
+  "checksPassed": 45,
+  "checksTotal": 45,
+  "chat": {
+    "rows": 10,
+    "columns": [
+      "File or page",
+      "Created (UTC)",
+      "Modified (UTC)",
+      "Stored tags"
+    ],
+    "linkOnlyTitleCells": true,
+    "allLinksTagsAndUtcDatesMatchCallerSourceAndFullExport": true,
+    "previewContentTypes": {
+      "Page": 4,
+      "Document": 6
+    },
+    "readability": {
+      "fourColumnsVisuallyPresent": true,
+      "titleCellsLinkOnly": true,
+      "narrowPane": "Heavily wrapped/crowded. Created and Modified headers break within words; YYYY-MM-DD values can split even within the year. Titles and tags also wrap over many lines, requiring vertical scrolling.",
+      "boundary": "The requested four-column structure is retained. No polished narrow/mobile rendering or Teams-client validation is claimed."
+    }
+  },
+  "paging": {
+    "nativeRowLimit": 100,
+    "actualStartRows": [
+      0,
+      100
+    ],
+    "actualPageCounts": [
+      100,
+      12
+    ],
+    "uniqueExpectedRows": 112,
+    "secondPageCallerHydratedRows": 12,
+    "overlapOmissionsDuplicatesErrors": 0
+  },
+  "workbook": {
+    "rows": 112,
+    "files": 99,
+    "pages": 13,
+    "completion": "Complete",
+    "fullSourceTimestampMatches": 224,
+    "numericDateResults": 224,
+    "formulaErrorValues": 0,
+    "unchangedActualBlankTemplate": true,
+    "presentationBoundary": "Compactness was visually verified on the prior actual export with the identical template. This run rechecks actual payload bytes, rows and date/formula results; no repeated deep workbook UI audit."
+  },
+  "delivery": "Owner-only final ACL; email to verified own profile accepted with HTTP 200. Inbox receipt is not claimed.",
+  "screenshots": [
+    "four-column-headers-public-safe.png",
+    "four-column-middle-public-safe.png",
+    "four-column-last-public-safe.png"
+  ],
+  "noExtraDeliveriesOrPublication": true,
+  "notClaimed": [
+    "Owner-only smoke is not non-owner negative ACL/revocation proof.",
+    "HTTP 200 email action is connector acceptance, not inbox receipt.",
+    "No Teams rendering, authentication or publication validation.",
+    "No live missing/fractional timestamp edge-case claim.",
+    "No PolicyStatus/ReviewDate/stored-tag filtering or classic child-web claim."
+  ],
+  "proofBoundary": "Actual native SharePoint paging, not readiness-probe or management API pagination."
+}

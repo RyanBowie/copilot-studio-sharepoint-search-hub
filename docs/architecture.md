@@ -25,7 +25,7 @@ search index as sufficient evidence to disclose or export a result.
 | Approved-site inventory | Map each approved collection ID and URL to a department; retain multiple collections per department. |
 | SharePoint Search | Retrieve index candidates using the approved scope, literal query terms and bounded paging. |
 | Source verification | Check current access to the real source and read stored columns before disclosing or writing the row. |
-| Chat preview | Return a compact table of up to five verified source links and tags, plus accurately qualified status. |
+| Chat preview | Return up to ten verified rows in four separate columns: file/page link, Created (UTC), Modified (UTC), and stored tags; include accurately qualified status. |
 | Export continuation | Continue bounded retrieval and write verified rows into a private Excel workbook after the initial agent response. |
 | Workbook and email checks | Check actual written rows and private destination access, then email the verified profile mailbox. |
 
@@ -57,7 +57,7 @@ sequenceDiagram
     SP-->>Flow: Candidate locators and index estimate
     Flow->>SP: Current access and stored-metadata checks
     SP-->>Flow: Verified rows or explicit failures
-    Flow-->>Topic: Up to five linked rows and initial status
+    Flow-->>Topic: Up to ten linked/date-bearing rows and initial status
     Topic-->>User: Controlled preview; export started, not completed
     Flow->>SP: Continue bounded search and verification
     Flow->>Excel: Write verified rows into private workbook
@@ -116,20 +116,28 @@ are not an acceptable shortcut.
 
 ## Retrieval semantics
 
+Free-text search can match indexed text inside supported documents and pages,
+not only titles. The current flow combines plain search words with `AND`; it
+does not rewrite natural-language questions or retrieve passages to synthesize
+an answer. Its output is verified source links and metadata, not policy advice.
+Content must be indexed and remain accessible to the caller.
+
 1. **Index estimate:** a search-index observation, not a live inventory or an
    exported-row count.
 2. **Verified result:** a candidate whose current source access and metadata
    passed the controlled flow's checks.
-3. **Preview:** at most five verified rows, ordered by the bounded retrieval
-   path; not a promise of a globally ranked top five across a large estate.
+3. **Preview:** at most ten verified rows, ordered by the bounded retrieval
+   path; not a promise of a globally ranked top ten across a large estate.
 4. **Export:** the rows actually written and verified, subject to changing
    permissions, explicit bounds and connector failures.
 5. **Delivery:** the successful email action, distinct from the initial chat
    acknowledgement and from a human confirming receipt.
 
 Verified metadata includes title, business department, tags, document type
-and core source/file locators. Missing values stay missing or use an explicit
-display label; the agent must not infer tags.
+and core source/file locators. Created and modified dates come from current
+permission-checked `File.TimeCreated` and `File.TimeLastModified` reads, not
+index crawl time, export time or site-collection dates. Missing values stay
+missing or use an explicit display label; the agent must not infer metadata.
 
 The fixture also stores `PolicyStatus` and `ReviewDate`, but fixture columns
 are not automatically runtime output columns. **Neither is selected or
@@ -137,9 +145,19 @@ exported.** `PolicyStatus` is not a filter: draft and archived documents can
 be returned, and the current flow must not be described as approved-policy-only.
 
 The export table columns are `Title`, `Department`, `Tags`, `Type`,
-`ModifiedUTC`, `SourceSite`, `URL`, and technical `SourceURL`. `SourceSite`
-and `SourceURL` are hidden in the workbook layout; `URL` provides the
-source-link presentation.
+`ModifiedUTC`, `SourceSite`, `URL`, `CreatedUTC`, `Created (UTC)`,
+`Modified (UTC)` and technical `SourceURL`. Raw `ModifiedUTC`/`CreatedUTC`
+retain full source timestamp precision in hidden columns, alongside hidden
+`SourceSite` and `SourceURL`. Visible date columns contain genuine numeric
+Excel calendar dates formatted `yyyy-mm-dd`; missing dates show `Not supplied`.
+`URL` provides the source-link presentation.
+
+The table starts on row 8 and freezes at B9 to retain headers and titles.
+Only visible titles and tags wrap; hidden URL/timestamp cells never wrap.
+This prevents hidden content from inflating AutoFit row heights. Full tags
+remain in Excel, so genuinely long visible values can still require taller
+rows. The compact masthead looks up actual scope/query and completion values
+from `ExportMetadata`, rather than directing users elsewhere for every detail.
 
 ## Bounded work
 
@@ -149,7 +167,7 @@ collections**. Query input is bounded to **160 characters and 12 plain words**,
 or standalone `*`.
 
 Each search page requests **100 rows**. The preview checks at most **20
-candidates** to produce up to five verified rows; displayed tags over **200
+candidates** to produce up to ten verified rows; displayed tags over **200
 characters** are shortened. The export loop's **45-minute** and read-back's
 **5-minute** timeouts are ceilings, not measured completion times.
 
@@ -157,7 +175,8 @@ These limits are not evidence that the demonstration exercised every
 ceiling or that every combination fits connector latency constraints. The
 initial response must remain within the native agent-flow response window.
 More than 100 matching indexed items in one batch are needed to demonstrate
-actual next-page retrieval; a 50-item corpus does not establish it.
+actual next-page retrieval; the historical 112-item owner run did establish
+100+12 paging, while a 50-item corpus alone would not.
 
 ## Failure behavior
 

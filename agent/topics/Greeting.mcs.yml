@@ -20,9 +20,9 @@ beginDialog:
       id: sendMessage_abmysR
       activity:
         text:
-          - Hello. Say Search SharePoint to search files and pages in All, CorpNet, HR, Finance, or IT. See up to five links with stored tags, then receive a private Excel workbook of the verified results by email. Use your own connector accounts; department selection never grants permission.
+          - Hello. Say Search SharePoint to search files and pages in All, CorpNet, HR, Finance, or IT. See up to ten links with stored tags and UTC source dates, then receive a private Excel workbook of the verified results by email. Use your own connector accounts; department selection never grants permission.
         speak:
-          - Hello. Say Search SharePoint to search files and pages. See up to five links with stored tags, then receive the verified results in private Excel by email.
+          - Hello. Say Search SharePoint to search files and pages. See up to ten links with stored tags and UTC source dates, then receive the verified results in private Excel by email.
 
     - kind: CancelAllDialogs
       id: cancelAllDialogs_01At22
