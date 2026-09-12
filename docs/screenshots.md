@@ -10,6 +10,64 @@ provided the published M365 Copilot image; the automation captured the Studio
 and Excel evidence. Published output is not relabelled as an independently
 executed channel test.
 
+## Published M365 table polish
+
+![Actual published IT selection and prepared devices query](images/table-polish/published-m365-it-devices-inputs.png)
+
+![Actual polished table and full footer at verified 100 percent zoom](images/table-polish/published-m365-polished-table-100.png)
+
+This single actual **IT / devices** request returned four source-verified rows:
+one page and three documents. The bold linked glyphs and short monospace tags
+rendered correctly; long plain tags wrapped without losing text. All four rows,
+four distinct columns and the complete footer fit in this genuine 100% capture.
+The same request verified the four-row private Excel export and email acceptance.
+
+**Date centering did not render.** M365 retains the left inset even though the
+returned Markdown includes centering markers. This is a recorded host limit,
+not an offline-parser result presented as visual success. Tag labels are
+monospace text, not custom-colored pills. No full new banner/header composite
+was made; the earlier banner proof remains separate.
+
+The [owner's earlier table excerpt](#owner-provided-table-before-table-polish)
+provides a visual baseline, not a matched-input experiment. Its input sequence
+was not captured. An additional owner-provided view of the updated icons is
+not counted as another test invocation.
+
+[Runtime summary](table-polish-validation-summary.json) ·
+[Crops and provenance](table-polish-capture-provenance.json)
+
+## Published M365 banner runtime
+
+These are actual published-channel captures after the owner's republish,
+not Studio previews. The banner-validation run still used the ordinary
+four-column Markdown table, before table-specific polish.
+
+![Actual published M365 entrypoint, HR selection and prepared query](images/published-m365/published-m365-inputs.png)
+
+![Actual complete HR response at 67 percent browser zoom](images/published-m365/published-m365-hr-full-output-67.png)
+
+The full response is one genuine viewport capture, not stitched output.
+The recipient was irreversibly masked in the raster image. Browser/account
+details were cropped out. The HR result contains one page and one document;
+both source-linked rows and the private export were verified.
+
+![Actual HR table and complete footer at 100 percent zoom](images/published-m365/published-m365-hr-table-100.png)
+
+![Actual published IT query, blue banner and SharePoint icon](images/published-m365/published-m365-it-banner.png)
+
+The explicit IT no-match message is below this banner crop. It was checked in
+the actual M365 transcript and native run, with workbook/email writes skipped.
+An attempted later full-output view showed different content and was excluded;
+it was not relabelled as the IT result. Zoom was restored to 100%.
+
+The actual linked-title rendering and returned message matched the native
+response. Target URLs matched caller-hydrated source and Excel; links were not
+navigated. These two-row/no-match tests do not re-exercise paging or establish
+Teams, non-owner permissions or inbox receipt.
+
+[Runtime summary](m365-validation-summary.json) ·
+[Exact crops, masks and provenance](m365-capture-provenance.json)
+
 ## Department banner designer
 
 ![Actual Studio designer showing a contextual HR banner before the unchanged SearchResult message](images/department-banners/topic-message-order.png)

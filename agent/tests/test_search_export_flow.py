@@ -125,21 +125,22 @@ class SearchExportFlowTests(unittest.TestCase):
         row = self.actions["Preview_row"]["inputs"]
         self.assertIn("body('Read_preview_item')?['TopicTags']", row["Tags"])
         self.assertIn("ServerRelativeUrl", row["URL"])
-        self.assertEqual(self.actions["Remember_preview_line"]["runAfter"], {"Remember_preview_url": ["Succeeded"]})
+        self.assertEqual(self.actions["Select_preview_tag_labels"]["runAfter"], {"Remember_preview_url": ["Succeeded"]})
+        self.assertEqual(self.actions["Remember_preview_line"]["runAfter"], {"Select_preview_tag_labels": ["Succeeded"]})
         self.assertEqual(self.actions["Format_chat_result"]["runAfter"]["Build_chat_preview"], FLOW.ALL_STATES)
 
     def test_chat_has_four_columns_link_only_title_dates_and_escaped_tags(self):
         message = self.actions["Format_chat_result"]["inputs"]
         self.assertIn("| File or page | Created (UTC) | Modified (UTC) | Stored tags |", message)
-        self.assertIn("| --- | --- | --- | --- |", message)
+        self.assertIn("| --- | :---: | :---: | --- |", message)
         self.assertNotIn("| Type |", message)
         line = self.actions["Remember_preview_line"]["inputs"]["value"]
-        self.assertIn("'](',outputs('Preview_row')?['URL'],') | '," + FLOW.preview_date("CreatedUTC")
+        self.assertIn("'](',outputs('Preview_row')?['URL'],')** | '," + FLOW.preview_date("CreatedUTC")
                       + ",' | '," + FLOW.preview_date("ModifiedUTC") + ",' | ',", line)
         self.assertNotIn("— Created:", line)
         self.assertNotIn("; Modified:", line)
         self.assertIn("Not supplied", line)
-        self.assertIn("full tags in Excel", line)
+        self.assertIn("full tags in Excel", self.actions["Select_preview_tag_labels"]["inputs"]["from"])
         self.assertNotIn("['Type']", line)
         escaped = FLOW.markdown_text("item()")
         for escape in ("%0D", "%0A", "%5C", "'|'", "'['", "']'", "&lt;", "&gt;"):

@@ -10,6 +10,69 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## Published M365 table polish - 12 September 2026
+
+One actual **Search SharePoint -> IT -> devices** request against flow revision
+`3a4b9ca0...` passed **23/23 runtime checks and 15/15 source-date/parsed-markup
+checks**. It returned four source-verified results: one page and three documents.
+All four private Excel rows, eight source timestamps and their corresponding
+calendar-date values matched. Owner-private ACL and one verified-profile email
+acceptance were checked; there was no retry or additional test query.
+
+**Actual visual result:** bold source-linked titles, file/page glyphs inside
+the links, four distinct columns and monospace short tags rendered. Long plain
+tags wrapped with all text visible and no table clipping at verified 100% zoom.
+
+**Visual limitation, not a pass:** M365 did not honor date-centering markers.
+The source and offline parser request centered alignment, but the actual host
+keeps date values left-aligned. The current layout was retained with this limit
+explicit, rather than adding HTML/CSS, spacing hacks or a replacement card table.
+The code-styled tags are not custom-colored pills.
+
+The verified change has only four approved definition deltas: one bounded tag
+Select in the already verified preview branch, the row expression and its
+dependency, and header alignment markers. Reversing those deltas reproduces
+the prior complete definition. Topic/banner, caller connections, model, policy,
+workbook bytes and the owner's existing publication were unchanged.
+
+Genuine inputs and the complete table/footer were captured at 100% zoom. An
+optional zoom attempt was bounded and restored; intermediate images are not
+mislabelled as 100%. This run does not repeat 112-row paging, prove inbox receipt,
+test non-owner restrictions or establish Teams rendering.
+
+[Runtime summary including the failed alignment check](table-polish-validation-summary.json) ·
+[Actual input/output gallery](screenshots.md#published-m365-table-polish)
+
+## Published M365 banner runtime - 12 September 2026
+
+After the owner republished the topic, two actual M365 Copilot conversations
+passed **25/25 runtime checks and 13/13 source-date checks** against flow
+revision `ebfc9aa...`. The topic's dynamic scope binding remained intact.
+
+**HR / annual leave:** the purple banner and labelled SharePoint icon rendered,
+followed by two genuine rows in four separate columns. Both source records,
+four full timestamps and four numeric calendar-date values matched the complete
+two-row private Excel export. Final ACL was owner-private and one email to the
+verified profile was accepted, not independently confirmed in the inbox.
+
+**IT / unique no-match token:** the blue banner and icon rendered; the actual
+transcript/native result explicitly reported no matches. All workbook/email
+writes were skipped. The banner is contextual, not a success claim.
+
+The complete HR response was captured at 67% browser zoom; a separate 100%
+crop shows readable rows with dates on one line. The IT banner crop does not
+include the no-match message, which has separate transcript/run evidence.
+Zoom was restored to 100%. No source, authentication, connection or publication
+change was made by Test. Separate owner activity is not counted as Test retries;
+the two attributed M365 tests produced one export/accepted-email path.
+
+These captures predate table-specific polish. They establish M365 image
+transport and this two-row/no-match behavior, not Teams, negative ACLs,
+revocation, inbox receipt, ten-row client layout or another 100+12 paging run.
+
+[Safe runtime summary](m365-validation-summary.json) ·
+[Published capture gallery](screenshots.md#published-m365-banner-runtime)
+
 ## Contextual banner draft - 12 September 2026
 
 The draft topic adds one contextual Adaptive Card before the existing guarded
@@ -26,8 +89,9 @@ This is product-loading/designer evidence, not a published-channel runtime test.
 All five scope cards pass schema checks and are below 12,000 UTF-8 bytes.
 Images are hash-checked local PNG data URIs, not externally hosted content.
 The owner reported republishing this topic enhancement at 22:07 UTC on
-12 September 2026. That report is not itself a rendering test. Actual M365
-Copilot/Teams transport, image rendering and client layout require separate proof.
+12 September 2026. The separate M365 runtime evidence above subsequently
+verified HR/IT image transport and the two-row result layout. Teams remains
+unverified; designer success alone never established either channel.
 
 [Designer capture and limits](screenshots.md#department-banner-designer) ·
 [Banner implementation](../agent/cards/README.md)
@@ -255,12 +319,16 @@ The actual two-page verification above establishes continuation for this
 
 ## Portable-source checks
 
-The publication-safe agent package builds offline and its **52 focused tests
+The publication-safe agent package builds offline and its **63 focused tests
 pass**, covering ten-row bounds, source dates, workbook formatting/contracts
 and authoring serialization, plus the success-message wrapper, recipient
 escaping, verbatim non-success output and retained caveats. Ten banner tests
 cover the scope mapping, image hashes, schema/size bounds and preservation of
-the existing result contract. The original and expansion fixture generation
+the existing result contract. Eleven table-formatting tests cover verified
+glyphs, bold source links, separate date alignment, safe/unsafe tag labels,
+length limits and metadata fidelity, including 100 deterministic injection-fuzz
+cases parsed with Markdown-it. These are offline checks, not client screenshots.
+The original and expansion fixture generation
 commands previously ran successfully, and their **47 generated Word documents**
 passed document-package validation. The separate connected paging fixture
 pipeline validated its additional 60 documents before upload and runtime testing.
@@ -296,9 +364,9 @@ draft; the portable policy remains four fictional Contoso entries.
 - Classic-subsite traversal in a tenant that refuses classic-subsite creation.
 - Stored policy-status retrieval/export or approval-status filtering.
 - A fully imported portable solution in another environment.
-- Independent published-channel runtime/authentication verification or
-  SharePoint-hosted/Teams behaviour. The owner-provided M365 visual has the
-  narrower evidence scope described above.
+- Multi-user channel/connector identity equivalence or SharePoint-hosted/Teams
+  behaviour. The actual owner-account M365 run has the narrower evidence scope
+  described above; it does not independently attest every connector principal.
 - A public GitHub release, GitHub Pages site or open-source license grant.
 
 The release checklist deliberately keeps these boundaries visible instead of

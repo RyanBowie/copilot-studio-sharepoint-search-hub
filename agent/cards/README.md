@@ -13,7 +13,7 @@ unmodified Microsoft SharePoint icon illustrates the integration; see
 
 ## Why the table stays native Markdown
 
-The working M365 Copilot four-column Markdown table is retained verbatim:
+The results remain a native Markdown table with four separate columns:
 **File or page | Created (UTC) | Modified (UTC) | Stored tags**. Moving these
 columns into a potentially narrower Adaptive Card has not demonstrated better
 readability. The only ColumnSet in the banner has two columns, for the small
@@ -23,9 +23,9 @@ CSS, remote image URLs, public hosting changes, or new connectors.
 The `query`, `scope` → `result` flow contract, ten-row/twenty-candidate preview,
 100-row paging, private Excel bytes, canonical dates, full stored Excel tags,
 Invoker connections and all existing safety/error behavior are unchanged.
-Already-published callers continue using their existing topic and Markdown.
-Applying this new topic is a draft change; the owner decides whether and when
-to republish after host validation.
+The originating agent's owner republished the banner topic and verified it in
+published M365 Copilot, as scoped below. Applying these topic sources in another
+environment still requires that environment's owner-controlled publication.
 
 ## Rebuild
 
@@ -66,6 +66,51 @@ the native Copilot Studio Message card editor rendered HR and IT banners and the
 SharePoint icon, with the formula evaluated as a Record and no topic errors.
 Those checks used reversible, unsaved scope literals in the designer; the dynamic
 binding was restored and the local preview edits discarded. They were not
-conversations, live searches, exports, or M365/Teams delivery tests. A target
-environment must still validate its own card transport/rendering after an
-owner-approved release. No portable import or channel-wide success is implied.
+conversations, live searches, exports, or M365/Teams delivery tests. That dated
+designer evidence remains historical and separate from the later runtime proof.
+
+## Published M365 owner-account proof
+
+The owner-published agent passed **25/25 runtime checks and 13/13 source-date
+checks** on 2026-09-12, using banner-only flow revision
+`ebfc9aa634c835c8ee7ac93c74d10048647457b3d55c8e2cbbddb318fdea8019`.
+
+- **HR / annual leave:** the purple banner and labelled SharePoint icon rendered
+  with two genuine results, one page and one document, in four separate columns.
+  Two private Excel rows and the canonical source dates were verified; one
+  verified-profile email was accepted by the connector.
+- **IT / deliberate no-match:** the blue banner and SharePoint icon rendered.
+  The exact no-match response was verified in the M365 transcript and native
+  run; workbook and email actions were skipped.
+- The complete HR banner/header/pending callout/table/footer was captured at
+  67% zoom, and the table was legible at 100%. IT's approved public crop proves
+  its banner/icon; an unrelated later full-output crop was excluded.
+
+These are owner-account M365 results, not Teams desktop/mobile, non-owner,
+revocation/negative-ACL, other-host or other-theme runtime proof. Connector email
+acceptance is not inbox receipt. The two-row run does not repeat the historical
+112-result paging test or establish 150-site scale.
+
+## Later table-polish result and host limitation
+
+The separate published-M365 **IT / devices** run on `3a4b9ca0...` passed
+**23/23 functional runtime checks and 15/15 source-date/parsed-markup checks**.
+It returned four rows (one page and three documents), verified four private
+Excel rows and eight exact source timestamp/calendar comparisons, and obtained
+one verified-profile email acceptance.
+
+At verified 100% zoom, bold linked titles and inside-link file/page glyphs were
+visible. Short tags rendered as **monospace inline code, not colored pills**;
+long plain tags wrapped, with all four rows and tag text visible without clipping.
+**`HOST_ALIGNMENT_NOT_HONORED`: M365 left-aligns date values despite the source
+`:---:` markers.** This is functional verification with a recorded host limitation,
+not a blanket visual pass. The owner approved keeping this layout and the portable
+markers; no CSS, padding workaround or redeployment is required.
+
+This newer test captured its inputs and table/full footer, not a new full-banner
+composite. The earlier HR/IT banner proof remains scoped to `ebfc9aa...`.
+Teams, non-owner/negative-ACL/revocation and other-host behavior remain unverified;
+email acceptance is not inbox receipt, and four rows do not repeat the historical
+112-result paging run or the earlier deep workbook-UI audit. Other environments
+must validate their own rendering and caller connections. No turnkey import or
+channel-wide success is implied.

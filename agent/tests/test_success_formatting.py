@@ -72,9 +72,9 @@ def evaluate_format(expression, context):
 
 def fictional_context():
     lines = [
-        f"| [Example {'page' if i % 2 == 0 else 'document'} {i:02}](https://contoso.sharepoint.com/sites/Fictional/"
-        f"{'SitePages' if i % 2 == 0 else 'Documents'}/example-{i:02}.{'aspx' if i % 2 == 0 else 'docx'})"
-        " | 2026-09-01 | 2026-09-10 | example; synthetic |"
+        f"| **[{'🌐' if i % 2 == 0 else '📄'} Example {'page' if i % 2 == 0 else 'document'} {i:02}](https://contoso.sharepoint.com/sites/Fictional/"
+        f"{'SitePages' if i % 2 == 0 else 'Documents'}/example-{i:02}.{'aspx' if i % 2 == 0 else 'docx'})**"
+        " | 2026-09-01 | 2026-09-10 | `example`; `synthetic` |"
         for i in range(1, 11)
     ]
     return {"variables": {"Started": True, "PreviewRows": [{}] * 10, "PreviewLines": lines,
@@ -95,21 +95,22 @@ class SuccessFormattingTests(unittest.TestCase):
         self.assertIn("> 📄 **Private Excel export started**\n> **Verified recipient:** example.user@example.invalid", text)
         self.assertIn("> Delivery is pending.", text)
         self.assertIn("only after row and access verification", text)
-        self.assertEqual(text.count("🔎") + text.count("📄"), 2)
+        summary = text.split("### Verified matches")[0]
+        self.assertEqual(summary.count("🔎") + summary.count("📄"), 2)
         self.assertNotIn("<", text)
 
-    def test_ten_table_rows_and_all_values_are_reused_without_decoration(self):
+    def test_ten_table_rows_and_all_values_are_reused_without_rewriting(self):
         context = fictional_context()
         text = evaluate_format(self.expression, context)
         table = "\n".join([
             "| File or page | Created (UTC) | Modified (UTC) | Stored tags |",
-            "| --- | --- | --- | --- |",
+            "| --- | :---: | :---: | --- |",
             *context["variables"]["PreviewLines"],
         ])
         self.assertIn(table, text)
-        self.assertEqual(text.count("| [Example "), 10)
+        self.assertEqual(text.count("| **["), 10)
         self.assertNotIn("🔎", self.actions["Remember_preview_line"]["inputs"]["value"])
-        self.assertNotIn("📄", self.actions["Remember_preview_line"]["inputs"]["value"])
+        self.assertIn("📄", self.actions["Remember_preview_line"]["inputs"]["value"])
 
     def test_nonstarted_results_are_verbatim_without_profile_access(self):
         for result in ("No matches. No workbook or email was created.", "No search was run.", "Authentication failed."):

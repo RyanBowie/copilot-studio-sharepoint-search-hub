@@ -477,6 +477,25 @@ def display_date(value):
     return f"if(empty({value}),'Not supplied',formatDateTime({value},'yyyy-MM-dd'))"
 
 
+def table_text(expression):
+    return markdown_text(f"replace(string(coalesce({expression},'')),'&','&amp;')")
+
+
+def preview_tag_labels():
+    raw = "string(coalesce(outputs('Preview_row')?['Tags'],''))"
+    spaced = f"replace({raw},';','; ')"
+    shortened = f"concat(take({spaced},200),'... (full tags in Excel)')"
+    parts = f"@if(greater(length({spaced}),200),createArray({shortened}),split({raw},';'))"
+    normalized = "replace(item(),' ','-')"
+    eligible = (f"and(greater(length(item()),0),lessOrEquals(length(item()),16),"
+                f"equals(item(),trim(item())),equals(uriComponent({normalized}),{normalized}))")
+    label = (f"@if(empty({raw}),'Not supplied',if({eligible},"
+             "concat(decodeUriComponent('%60'),item(),decodeUriComponent('%60')),"
+             + table_text("item()") + "))")
+    return {"type": "Select", "inputs": {"from": parts, "select": label},
+            "runAfter": after("Remember_preview_url")}
+
+
 def written_date(label):
     if label not in DATE_FIELDS:
         raise ValueError("Unknown display date")
@@ -526,12 +545,11 @@ def preview_actions(policy):
         + candidate + "?['ItemId'])),')?$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated',"
         "if(empty(body('Preview_field_names')),'',concat(',',join(body('Preview_field_names'),','))),'&$expand=File')"
     )
-    title = markdown_text("outputs('Preview_row')?['Title']")
-    tags = "if(empty(outputs('Preview_row')?['Tags']),'Not supplied',replace(string(outputs('Preview_row')?['Tags']),';','; '))"
-    short_tags = f"if(greater(length({tags}),200),concat(take({tags},200),'... (full tags in Excel)'),{tags})"
-    line = ("@concat('| ['," + title + ",'](',outputs('Preview_row')?['URL'],') | ',"
+    title = table_text("outputs('Preview_row')?['Title']")
+    glyph = f"if(empty({file}?['Name']),'',if(endsWith(toLower({file}?['Name']),'.aspx'),'🌐 ','📄 '))"
+    line = ("@concat('| **['," + glyph + "," + title + ",'](',outputs('Preview_row')?['URL'],')** | ',"
             + preview_date("CreatedUTC") + ",' | '," + preview_date("ModifiedUTC")
-            + ",' | '," + markdown_text(short_tags) + ",' |')")
+            + ",' | ',join(body('Select_preview_tag_labels'),'; '),' |')")
     read = {
         "Count_preview_checked": increment("PreviewChecked"),
         "Preview_metadata_fields": sp("@" + candidate + "?['WebUrl']", "GET", fields_uri, "Count_preview_checked"),
@@ -547,7 +565,8 @@ def preview_actions(policy):
                 "Preview_row": compose(row),
                 "Remember_preview_row": append("PreviewRows", "@outputs('Preview_row')", "Preview_row"),
                 "Remember_preview_url": append("PreviewUrls", "@toLower(outputs('Preview_row')?['URL'])", "Remember_preview_row"),
-                "Remember_preview_line": append("PreviewLines", line, "Remember_preview_url"),
+                "Select_preview_tag_labels": preview_tag_labels(),
+                "Remember_preview_line": append("PreviewLines", line, "Select_preview_tag_labels"),
             },
             dependencies=("Read_preview_item",),
         ),
@@ -780,7 +799,7 @@ def build_definition(policy, template_bytes):
         "'### Verified matches',decodeUriComponent('%0A%0A'),"
         "'Created and last modified dates are UTC (YYYY-MM-DD).',decodeUriComponent('%0A%0A'),"
         "'| File or page | Created (UTC) | Modified (UTC) | Stored tags |',decodeUriComponent('%0A'),"
-        "'| --- | --- | --- | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),"
+        "'| --- | :---: | :---: | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),"
         "decodeUriComponent('%0A%0A'),'---',decodeUriComponent('%0A%0A'),"
         f"'**Preview:** up to {PREVIEW_ROWS} results from at most {PREVIEW_CANDIDATES} checked candidates.',decodeUriComponent('%0A'),"
         f"'**Export bounds:** {MAX_ROWS} rows · {MAX_CANDIDATES} candidates · {MAX_SEARCH_PAGES} search pages · {MAX_BATCHES} batches of {SITES_PER_BATCH} sites.',decodeUriComponent('%0A%0A'),"

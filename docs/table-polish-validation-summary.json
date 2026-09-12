@@ -1,0 +1,53 @@
+{
+  "result": "HOST_ALIGNMENT_NOT_HONORED",
+  "channel": "Published Microsoft365 Copilot",
+  "inputs": {
+    "entrypoint": "Search SharePoint",
+    "area": "IT",
+    "query": "devices"
+  },
+  "actualResults": 4,
+  "actualFiles": 3,
+  "actualPages": 1,
+  "privateExcelRows": 4,
+  "exactSourceTimestampAndCalendarComparisons": 8,
+  "nativeChecksPassed": 23,
+  "nativeChecksTotal": 23,
+  "sourceDateAndMarkupChecksPassed": 15,
+  "focusedOfflineTestsPassed": 11,
+  "hostVisualChecks": {
+    "boldSourceLinkedTitlesVisible": true,
+    "verifiedPageAndDocumentGlyphsInsideLinksVisible": true,
+    "fourDistinctColumnsVisible": true,
+    "shortLabelsMonospaceAndLongLabelsPlainWrappingVisible": true,
+    "allFourRowsAndAllTagTextVisibleWithoutTableClipping": true,
+    "datesVisiblyCenteredWithinTheirCells": false
+  },
+  "finding": "At 100% zoom, title glyphs and title text are visibly bold and linked, eligible short tags are monospace and long plain tags wrap without losing text. Created/Modified values visibly retain the left inset of their cells rather than centering. The returned Markdown contains :---: and the offline parser produces text-align:center, but this host rendering does not honor that alignment.",
+  "captureLimitations": "Initial background view remained visually stale until focusing the same empty editor. Direct SetForegroundWindow was blocked. An optional67% zoom attempt progressed to75% before a native-menu read failed. A bounded restoration explicitly read75% and restored100%; zoom-100.json records this. Intermediate75% captures are private, not presented as100%. Final table/four rows/full footer were captured at verified100%. No new full-banner/header/footer composite or screenshot was fabricated.",
+  "boundaries": [
+    "Email200 is connector acceptance, not inbox receipt.",
+    "Owner-only positive ACL evidence, not negative ACL/revocation testing.",
+    "No new112 paging or deep workbook-UI audit.",
+    "No Teams validation.",
+    "Prior ebfc9aa published proof remains revision-scoped. The new centering acceptance requirement did not pass."
+  ],
+  "delivery": "One owner-private workbook; one email to the verified profile accepted withHTTP200, not independently received.",
+  "publicationSafety": "Use reviewed public-images only; raw evidence contains private identity and tenant information.",
+  "noRetriesOrAdditionalQueries": true,
+  "publicImages": [
+    {
+      "file": "images/table-polish/published-m365-it-devices-inputs.png",
+      "sha256": "9f7149f50c335422f9ce06777252e6390de4fbeb470dcdc7e5f3ea32291fcced"
+    },
+    {
+      "file": "images/table-polish/published-m365-polished-table-100.png",
+      "sha256": "07f518d3d325ed4e1c07af9e26c67632952aeb7585663b98c1f0645addf12062"
+    }
+  ],
+  "uiLeaseReleased": true,
+  "zoomRestoredTo100": true,
+  "testedFlowRevisionSha256": "3a4b9ca0d8e8781d258a54c9239cc021ba87cdbd3f3aa87ccf6d47b0a7f11460",
+  "tablePresentationBoundary": "Table polish verified; M365 date-centering markers are not honored.",
+  "observedDateUtc": "2026-09-12"
+}

@@ -1,0 +1,69 @@
+{
+  "result": "PASS",
+  "date": "2026-09-12",
+  "channel": "Published Microsoft 365 Copilot",
+  "inputs": [
+    {
+      "entrypoint": "Search SharePoint",
+      "area": "HR",
+      "query": "annual leave"
+    },
+    {
+      "entrypoint": "Search SharePoint",
+      "area": "IT",
+      "query": "banneritnomatch20260913b8e0"
+    }
+  ],
+  "checksPassed": 25,
+  "checksTotal": 25,
+  "sourceDateChecksPassed": 13,
+  "HR": "Two genuine results (one page, one document), two complete private Excel rows, four exact source timestamp/calendar comparisons; one verified-profile email accepted.",
+  "IT": "Zero matches; explicit no-match response; workbook/email actions skipped.",
+  "rendering": {
+    "HR": "Actual purple banner and labelled SharePoint icon, complete heading/pending callout/four-column two-row table/footer captured together at 67%; zoom restored to 100%.",
+    "IT": "Actual blue banner and labelled SharePoint icon captured at 100%. Exact no-match response verified in actual M365 accessibility transcript and native run. Later view-only full-output capture showed different Annual leave content, so it is excluded from publication and no further UI work was attempted.",
+    "linkEvidence": "Actual M365 linked-title rendering and complete returned activity matched the native message; native target URLs match caller-hydrated source and Excel. Links were not navigated.",
+    "excludedRaw": [
+      "HR-results.png (different active Studio tab)",
+      "HR-returned.png and HR-stable.png (unpainted body)",
+      "IT-final100.png (different Annual leave content)"
+    ],
+    "readability": "Four distinct columns are legible in M365 at 100%; the longer title and tags wrap to two lines, while date cells remain on one line. The genuine 67% capture fits banner, heading, pending callout, table and complete footer."
+  },
+  "boundaries": [
+    "Owner-only positive evidence, not negative ACL/revocation proof.",
+    "Email HTTP200 proves connector acceptance, not inbox receipt.",
+    "Two-row run does not re-exercise 100+12 paging; prior 112-row evidence remains historical.",
+    "Current Excel connector readback/template hash verified; earlier actual compact-workbook UI evidence remains scoped to its original run.",
+    "No Teams runtime validation.",
+    "No new classic-child-web, 150-site, or stored-tag-filter claim."
+  ],
+  "zoom": "HR full-output capture at 67%; all input and IT captures at 100%; original 100% restored.",
+  "publicationSafety": "Use only reviewed public-images crops. Raw screenshots/reports contain private account and tenant data.",
+  "publicImages": [
+    {
+      "file": "images/published-m365/published-m365-inputs.png",
+      "sha256": "fada3bd4f1c34002014ceef5b7b1408dbdb63ff98f833cc849f7968dba604331",
+      "reviewedUtc": "2026-09-12T22:46:41.021620+00:00"
+    },
+    {
+      "file": "images/published-m365/published-m365-hr-full-output-67.png",
+      "sha256": "6a8b94b147718f963ab883a10f3adcd8cb5cae02c4e6f45b237b950e99097e0d",
+      "reviewedUtc": "2026-09-12T22:46:41.021620+00:00"
+    },
+    {
+      "file": "images/published-m365/published-m365-hr-table-100.png",
+      "sha256": "15f19b2f9411477c1efb7b2cfb7a5bfde1d3734da93514a39398751c0e4630cc",
+      "reviewedUtc": "2026-09-12T22:46:41.021620+00:00"
+    },
+    {
+      "file": "images/published-m365/published-m365-it-banner.png",
+      "sha256": "e115ba6284961fbd9ee277d8fffaf17dab93c4c2459fa21d41e32af8d017b5f1",
+      "reviewedUtc": "2026-09-12T22:46:41.021620+00:00"
+    }
+  ],
+  "testAccounting": "Exactly two attributed M365 Test runs: one HR positive export/email and one IT no-match. Separate owner activity is not a Test retry.",
+  "testedFlowRevisionSha256": "ebfc9aa634c835c8ee7ac93c74d10048647457b3d55c8e2cbbddb318fdea8019",
+  "tablePresentationBoundary": "Banner baseline, before table-specific polish.",
+  "observedDateUtc": "2026-09-12"
+}

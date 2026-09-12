@@ -31,6 +31,12 @@ calendar dates, full timestamps retained in hidden columns, and an actual
 scope/query/completion summary. The chat now uses a clearer heading, compact
 scope/index summary and a distinct **export started / delivery pending**
 callout while retaining the four-column table and honest completion caveats.
+The table formatter adds **bold source links with file/page glyphs**, centered
+date-column markers and compact code-styled labels for short, safe tags.
+Long or unsafe labels remain escaped wrapping text; tags are not discarded.
+M365/Teams controls the grid's colors, fonts and borders.
+The actual M365 host renders the new bold glyph links and monospace tag labels,
+but **ignores the centering markers: dates remain left-aligned**.
 Ten preview rows are selected through bounded
 retrieval, not a guarantee of a globally ranked top ten across the estate.
 Historical screenshots retain their original five-row presentation; current
@@ -68,6 +74,53 @@ another tenant.
 The [flow walkthrough](docs/flow-walkthrough.md) follows the actual named actions
 from `Valid_input` and `Initial_search` through `Respond_to_agent`, `Export_rows`
 and `Send_private_workbook`, including the source checks and completion gates.
+
+## Updated table in published M365
+
+<img src="docs/images/table-polish/published-m365-polished-table-100.png" width="900" alt="Actual M365 table at 100 percent zoom with bold linked page/file icons, styled tags and four readable rows; dates remain left-aligned">
+
+The actual **IT / devices** conversation returned **four verified results:
+one SharePoint page and three documents**. All four rows and their stored tags
+are visible. The page/file glyph stays inside the bold source link; short safe
+tags use monospace styling, while long tags remain normal wrapping text.
+They are not custom-colored tag pills.
+
+The same request verified four private Excel rows, their source dates and one
+accepted verified-recipient email. **M365 keeps dates left-aligned despite the
+Markdown centering markers.** That host limitation is documented, not counted
+as a passed visual check. No additional agent republish was needed.
+
+[Actual input](docs/images/table-polish/published-m365-it-devices-inputs.png) ·
+[Owner-provided earlier table](docs/images/table-polish/owner-before.png) ·
+[Runtime evidence and limits](docs/table-polish-validation-summary.json) ·
+[Capture provenance](docs/table-polish-capture-provenance.json)
+
+## Published M365 banners and results
+
+After the owner republished the draft, actual M365 Copilot conversations
+rendered the **purple HR and blue IT banners with the SharePoint icon**.
+HR / `annual leave` returned one page and one document, verified both private
+Excel rows and accepted one verified-recipient email. IT's unique no-match
+query returned no results and skipped workbook/email writes.
+
+<img src="docs/images/published-m365/published-m365-hr-full-output-67.png" width="750" alt="Actual published M365 HR banner, result table and full footer at 67 percent zoom, recipient irreversibly masked">
+
+This genuine full-output capture uses **67% browser zoom** to fit the banner,
+heading, pending-delivery callout, two-row table and footer. It is not a
+composite. The [100% table crop](docs/images/published-m365/published-m365-hr-table-100.png)
+shows readable separate dates. These captures precede table-specific polish;
+the table here still uses ordinary native Markdown styling.
+
+<img src="docs/images/published-m365/published-m365-it-banner.png" width="750" alt="Actual published M365 IT query and blue banner with labelled SharePoint icon">
+
+IT's no-match message is below this crop and was verified separately in the
+actual transcript and native run. Browser zoom was restored to 100%.
+[Actual inputs and capture gallery](docs/screenshots.md#published-m365-banner-runtime) ·
+[Runtime summary](docs/m365-validation-summary.json) ·
+[Capture provenance](docs/m365-capture-provenance.json)
+
+This is owner-account M365 evidence, not Teams, non-owner permissions,
+inbox receipt or a new greater-than-100 paging test.
 
 ## Real product screenshots
 
@@ -188,6 +241,7 @@ record the crop boundaries.
 | [`agent/actions/SearchAndExport.mcs.yml`](agent/actions/SearchAndExport.mcs.yml) | Portable native-tool binding and caller-authentication contract. |
 | [`agent/flows/search-export/definition.json`](agent/flows/search-export/definition.json) | Complete generated native agent-flow definition. |
 | [`agent/scripts/build-search-export-flow.py`](agent/scripts/build-search-export-flow.py) | Maintainable builder for the search, preview, paging, private export and delivery flow. |
+| [`agent/flows/search-export/formatting.md`](agent/flows/search-export/formatting.md) | Native table styling, verified glyph source, bounded tag labels and rendering limits. |
 | [`docs/flow-walkthrough.md`](docs/flow-walkthrough.md) | Inputs, named flow stages, current-source checks, workbook schema, limits and delivery behaviour. |
 | [`docs/architecture.md`](docs/architecture.md) | Components, request lifecycle, identity boundaries and search semantics. |
 | [`docs/examples.md`](docs/examples.md) | Guided prompts, output shapes and negative-path examples. |
@@ -222,8 +276,8 @@ not the flow contract. Owners control when the draft is published.
 
 **Draft status:** the one-node change is deployed and loaded without topic
 errors or warnings. Studio's card editor rendered HR/IT artwork and the icon;
-this is not published-channel proof. The owner reported republishing the draft
-on 12 September 2026; actual channel rendering is checked separately.
+the owner then republished it, and separate M365 runtime checks verified both
+themes and the icon. Teams remains untested.
 [Actual designer capture and limits](docs/screenshots.md#department-banner-designer).
 
 ## Important boundaries

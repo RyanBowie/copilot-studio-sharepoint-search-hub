@@ -132,14 +132,34 @@ that string through the existing `result` output; the topic sends it as the
 controlled response. The success message uses a search heading, compact
 Scope/Index estimate summary, a **delivery-pending** private-export callout and
 separated bounds/completeness notes. It is Markdown, not a new card contract.
-The styling revision changes only this formatter leaf, leaving errors/no-match
-responses, verified rows and the workbook unchanged.
+The earlier wrapper-styling revision changed only this formatter leaf, leaving
+errors/no-match responses, verified rows and the workbook unchanged.
 
 The table has exactly four columns:
 
 **File or page | Created (UTC) | Modified (UTC) | Stored tags**
 
-Title cells contain only links. Dates use UTC calendar values. Long preview
+Title cells contain only links. The table-specific polish makes those links
+bold and adds a small file/page glyph inside the link, derived from the already
+verified `File.Name`: `.aspx` means page, another supplied filename means file,
+and a missing filename receives no guessed glyph. The arbitrary stored
+`DocumentType` is not used as a binary file/page classifier.
+
+`Select_preview_tag_labels` is one bounded data operation inside the verified
+preview branch. It projects the existing, capped tag text into compact inline
+code labels only for safe ASCII values of at most 16 characters without edge
+whitespace. Long, wide, unsafe or whitespace-sensitive values remain escaped
+wrapping text. Empty segments, delimiters, source characters and the existing
+display-spacing rules are preserved. Full raw tags are still written to Excel.
+`Remember_preview_line` consumes these labels; no Markdown is parsed to recover
+source data and no new connector or flow output is introduced.
+
+Date columns use Markdown center-alignment markers. The client still owns
+table colors, borders, fonts and how these styles render. The actual M365
+test left-aligns dates despite those markers; centering did not pass there.
+Bold glyph links and short monospace tags did render. See the
+[formatter contract and limits](../agent/flows/search-export/formatting.md).
+Dates use UTC calendar values. Long preview
 tags can be shortened at 200 characters with a notice that Excel retains the
 full value. Preview ordering follows bounded retrieval, not a guarantee of a
 globally ranked top ten across a large estate.

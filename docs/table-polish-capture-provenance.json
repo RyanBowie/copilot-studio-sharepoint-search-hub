@@ -1,0 +1,40 @@
+[
+  {
+    "image": "images/table-polish/published-m365-it-devices-inputs.png",
+    "sha256": "9f7149f50c335422f9ce06777252e6390de4fbeb470dcdc7e5f3ea32291fcced",
+    "sourceFile": "query-input.png",
+    "sourceSha256": "e3ce514234d855363db72581f8a339d52c01de7dbebad1acfd4d919c91b67aa7",
+    "cropInSourcePixels": [
+      735,
+      235,
+      1990,
+      1415
+    ],
+    "irreversibleMasksInSourcePixels": [],
+    "captionsOutsidePixels": [
+      "Actual published M365: Search SharePoint / IT / devices (100%).",
+      "Browser and account details cropped out."
+    ],
+    "reviewedUtc": "2026-09-12T23:32:08.705510+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  },
+  {
+    "image": "images/table-polish/published-m365-polished-table-100.png",
+    "sha256": "07f518d3d325ed4e1c07af9e26c67632952aeb7585663b98c1f0645addf12062",
+    "sourceFile": "table-complete100.png",
+    "sourceSha256": "067a0d2a4e6cf4a47c6409241649ced3fa507dd0980b3ed5ca6e0d225b39508b",
+    "cropInSourcePixels": [
+      800,
+      195,
+      1895,
+      1190
+    ],
+    "irreversibleMasksInSourcePixels": [],
+    "captionsOutsidePixels": [
+      "Actual M365 at100%: bold linked glyphs, compact tags and four rows.",
+      "Dates remain left-aligned; centered Markdown delimiters are not honored."
+    ],
+    "reviewedUtc": "2026-09-12T23:32:08.705510+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  }
+]

@@ -105,10 +105,20 @@ an old connected test tab can retain stale content.
   actual product readability without silently moving dates back into the title cell.
   Title/tag text is escaped for chat; tags exceeding 200 characters are shortened
   with a "full tags in Excel" notice. Excel retains full values.
+  Titles are bold links with a small verified file/page glyph inside each link,
+  and date columns use Markdown center-alignment markers. Short safe tag labels
+  use inline code; long, wide or unsafe values retain escaped wrapping text.
+  The source predicates, 16-character label bound and dependency setup are
+  described in `flows/search-export/formatting.md`. Published M365 validation
+  confirmed bold linked glyphs and monospace/wrapped tags, **not colored pills**,
+  but date values remain **left-aligned**: `HOST_ALIGNMENT_NOT_HONORED`.
+  The owner approved retaining the layout and portable markers. Other clients
+  still require their own rendering validation.
 - Success formatting: a restrained search heading, bold Scope/Index estimate
   summary and private-export-started callout identify the verified recipient while
   explicitly stating delivery is pending. The four-column table/row values are
-  unchanged; two icons appear outside the table only. A separated footer retains
+  unchanged; the two summary icons appear outside the table, separately from
+  the verified glyph inside each title link. A separated footer retains
   privacy, preview/export bounds, partial-result and count-semantics caveats.
   The result itself remains Markdown; no HTML/CSS or card-table redesign is used. No-match, failure and
   unavailable-preview responses retain their previous output.
@@ -216,6 +226,39 @@ they do not execute Power Automate expressions or calculate Excel formula caches
 Platform execution, native rendering, deployment and selected-user isolation remain
 separate validation tasks. Neither historical live evidence nor the reference
 inventory should be relabelled as proof of this feature revision.
+
+## Published M365 reference validation
+
+The originating owner-published agent passed **25/25 runtime checks and 13/13
+source-date checks** for the banner-only `ebfc9aa...` flow revision: HR rendered
+the purple banner/icon and two linked four-column rows, wrote two private Excel
+rows and obtained one email-connector acceptance; IT rendered the blue
+banner/icon with a verified no-match outcome and no workbook/email.
+The full HR output was captured at 67%, with its table separately legible at
+100%. See the [curated M365 summary](../docs/m365-validation-summary.json) and
+[capture provenance](../docs/m365-capture-provenance.json).
+
+This is owner-account evidence, not negative-ACL/revocation, Teams or other-host
+proof. Email acceptance is not inbox receipt, and two rows do not re-exercise
+112-result paging. The portable placeholder inventory is not itself a deployed
+or validated environment.
+
+The separate `3a4b9ca0...` **IT / devices** run passed **23/23 functional runtime
+checks and 15/15 source-date/parsed-markup checks**. Four genuine results (one
+page and three documents), four private Excel rows and eight exact
+timestamp/calendar comparisons were verified; one verified-profile email was
+accepted. At 100% zoom, bold linked titles, inside-link glyphs, monospace short
+tags and plain wrapped long tags were visible without row/tag clipping.
+
+**`HOST_ALIGNMENT_NOT_HONORED`: M365 leaves date values left-aligned despite
+the source centering markers.** This is functional verification with an explicit
+host limitation, not a blanket visual pass. The owner approved the current
+layout; keep its portable markers without CSS or padding workarounds. See the
+[table-polish summary](../docs/table-polish-validation-summary.json) and
+[capture provenance](../docs/table-polish-capture-provenance.json).
+Those captures cover the input and table/full footer, not a new full-banner
+composite. Teams, non-owner/negative-ACL/revocation, inbox receipt and a new
+112-result paging/deep-workbook-UI check remain unverified or historical.
 
 ## Teams publication boundary
 

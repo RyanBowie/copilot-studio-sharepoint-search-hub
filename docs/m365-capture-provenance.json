@@ -1,0 +1,85 @@
+[
+  {
+    "image": "images/published-m365/published-m365-inputs.png",
+    "sha256": "fada3bd4f1c34002014ceef5b7b1408dbdb63ff98f833cc849f7968dba604331",
+    "sourceFile": "HR-query-input.png",
+    "sourceSha256": "c259f9d863402ad3e663823eb5a62684ac662d91f8b296e242dcfac35a0be89c",
+    "cropInSourcePixels": [
+      735,
+      235,
+      1990,
+      1415
+    ],
+    "irreversibleMasksInSourcePixels": [],
+    "captionsOutsidePixels": [
+      "Published M365: actual entrypoint, HR scope and prepared query (100%).",
+      "Browser, sidebar and account details cropped out."
+    ],
+    "reviewedUtc": "2026-09-12T22:46:41.021620+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  },
+  {
+    "image": "images/published-m365/published-m365-hr-full-output-67.png",
+    "sha256": "6a8b94b147718f963ab883a10f3adcd8cb5cae02c4e6f45b237b950e99097e0d",
+    "sourceFile": "HR-final67.png",
+    "sourceSha256": "e0f629e646777881bd862a2fde34ecfca212f3afc0a7775036078982fb7f56a4",
+    "cropInSourcePixels": [
+      910,
+      315,
+      1660,
+      1275
+    ],
+    "irreversibleMasksInSourcePixels": [
+      [
+        952,
+        725,
+        1310,
+        751
+      ]
+    ],
+    "captionsOutsidePixels": [
+      "Published M365 HR: genuine full response at 67% zoom.",
+      "Recipient irreversibly masked; browser/account details cropped."
+    ],
+    "reviewedUtc": "2026-09-12T22:46:41.021620+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  },
+  {
+    "image": "images/published-m365/published-m365-hr-table-100.png",
+    "sha256": "15f19b2f9411477c1efb7b2cfb7a5bfde1d3734da93514a39398751c0e4630cc",
+    "sourceFile": "HR-foreground100.png",
+    "sourceSha256": "7bbce8d35b5d8f2a30d7dfa02eff7cb7b756f39abc2864f682e130ab793c61ed",
+    "cropInSourcePixels": [
+      800,
+      475,
+      1900,
+      1180
+    ],
+    "irreversibleMasksInSourcePixels": [],
+    "captionsOutsidePixels": [
+      "Published M365 HR: actual four-column rows and footer (100%).",
+      "Recipient, browser and account details excluded by crop."
+    ],
+    "reviewedUtc": "2026-09-12T22:46:41.021620+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  },
+  {
+    "image": "images/published-m365/published-m365-it-banner.png",
+    "sha256": "e115ba6284961fbd9ee277d8fffaf17dab93c4c2459fa21d41e32af8d017b5f1",
+    "sourceFile": "IT-query-output.png",
+    "sourceSha256": "9aed0280e159e644f95f88c6c56b9c82afa617c07cceafef3353a22f50d88d01",
+    "cropInSourcePixels": [
+      805,
+      550,
+      1895,
+      1200
+    ],
+    "irreversibleMasksInSourcePixels": [],
+    "captionsOutsidePixels": [
+      "Published M365 IT: actual query and blue banner/icon (100%).",
+      "No-match response verified separately in transcript/native run; below this crop."
+    ],
+    "reviewedUtc": "2026-09-12T22:46:41.021620+00:00",
+    "parentPixelReview": "Reviewed; no account, recipient, tenant URL or identifier visible."
+  }
+]
