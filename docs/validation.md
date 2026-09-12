@@ -26,6 +26,25 @@ This is a recovered point-in-time observation, not a fresh claim that the
 current draft returns those exact counts. Subsequent content additions and
 indexing can change them.
 
+The historical native run was independently re-read through authenticated
+management APIs on 12 September 2026. It ran on 11 September from approximately
+23:48 to 23:50 UTC and reported:
+
+| Observation | Verified historical result |
+|---|---|
+| Native run | Succeeded. |
+| Chat preview | Five current-item reads supplied five linked rows with stored tags. |
+| Workbook | Excel connector read-back contained 17 rows: nine files and eight pages. |
+| Completion | Complete, zero omitted rows and no recorded processing errors. |
+| Account alignment | Selected profile, source directory profile and personal-drive owner IDs matched. |
+| Private output | Final ACL contained a single matching owner principal. |
+| Email action | Succeeded with HTTP 200 and the verified profile mailbox as recipient; this establishes connector acceptance, not human inbox receipt. |
+| Runtime connections | All five caller-provided (`Invoker`); embedded fallback disabled. |
+
+The [screenshots](screenshots.md) show that existing draft conversation and
+native binding. No fresh agent invocation was used to manufacture a new
+baseline, and no populated workbook UI screenshot is claimed.
+
 ## Synthetic expansion
 
 The expanded fixture adds **39 Word documents and 13 published pages** to the

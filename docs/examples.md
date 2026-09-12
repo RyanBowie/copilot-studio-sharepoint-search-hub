@@ -20,6 +20,24 @@ populate every input or that the agent is a free-form policy-answering system.
 `hubspokeverify` is a deliberately fictional fixture marker, not a product
 keyword. New content may need time to appear in SharePoint's index.
 
+## Observed baseline output
+
+The historical owner-account `All` / `*` run returned 17 exported/read-back
+rows. Its visible five-row preview contained:
+
+| File or page | Type | Stored tags |
+|---|---|---|
+| Annual leave guidance | Page | hr; leave; people-policy |
+| Expenses and purchasing | Page | finance; expenses; procurement |
+| Department directory | Page | directory; departments; navigation |
+| Devices and access | Page | it; devices; access |
+| Corporate working guide | Guide | corporate; working-guide; cobalt-directory |
+
+The original rows were clickable. Live tenant URLs are intentionally omitted
+from this transcription. See the [genuine screenshot](screenshots.md#linked-search-results).
+This is a historical four-collection observation, not the larger fixture or a
+fresh run against the prepared ten-collection policy.
+
 ## Chat output shape
 
 The following is an **illustrative rendering of the intended two-column

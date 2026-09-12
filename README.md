@@ -53,6 +53,17 @@ The [examples guide](docs/examples.md) separates observed demonstration
 behavior from illustrative output. Counts are snapshots, not fixed values for
 another tenant.
 
+## Real product screenshots
+
+<img src="docs/images/live-chat-baseline.png" width="480" alt="Genuine cropped Copilot Studio draft showing five linked results and stored tags">
+
+**Historical four-site, owner-account baseline.** The live capture shows the
+older three-column layout; the portable source contains the newer two-column
+presentation. Browser and account identifiers were cropped out.
+
+[View the native flow binding and topic-response screenshots](docs/screenshots.md).
+These are genuine captures, not mockups or proof of expanded ten-site coverage.
+
 ## Repository guide
 
 | Area | Purpose |
@@ -60,6 +71,7 @@ another tenant.
 | [`agent/`](agent/) | Portable agent/source reference and component-specific instructions. |
 | [`docs/architecture.md`](docs/architecture.md) | Components, request lifecycle, identity boundaries and search semantics. |
 | [`docs/examples.md`](docs/examples.md) | Guided prompts, output shapes and negative-path examples. |
+| [`docs/screenshots.md`](docs/screenshots.md) | Genuine cropped chat, native-tool binding and topic-response captures, with their evidence limits. |
 | [`docs/setup.md`](docs/setup.md) | Environment preparation and safe adaptation to a different tenant. |
 | [`docs/validation.md`](docs/validation.md) | What was observed, what remains unproven and how to repeat the checks. |
 | [`docs/public-release-checklist.md`](docs/public-release-checklist.md) | Review gates before changing visibility or enabling a public site. |
