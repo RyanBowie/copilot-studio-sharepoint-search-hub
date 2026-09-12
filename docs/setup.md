@@ -70,8 +70,10 @@ publication as a separate release decision.
 
 ## Teams publication is a separate check
 
-The owner plans to publish the agent to Teams themselves. No Teams publication
-or successful Teams rendering is established by Studio draft screenshots.
+The owner subsequently published the agent and supplied an M365 Copilot
+screenshot. That two-row visual is documented in [screenshots](screenshots.md);
+it is not a Teams rendering test. No Teams publication or successful Teams
+rendering is established by Studio draft screenshots.
 After publication, check desktop and mobile rendering, all ten source links,
 date/tag readability, caller connector sign-in and the private workbook/email
 path. Markdown table support can differ by channel; do not assume the Studio

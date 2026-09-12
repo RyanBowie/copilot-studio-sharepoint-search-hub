@@ -1,0 +1,197 @@
+[
+  {
+    "file": "images/styled-hr/entrypoint-and-trigger.png",
+    "caption": "Actual Studio entrypoint and topic trigger",
+    "note": "The user entered Search SharePoint; the real introduction and area question are shown.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      665,
+      505,
+      2270,
+      1160
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "873cd5638497a9564c8810630bb244c5f1299bda70b3acb4f59e07d32ade2da0"
+  },
+  {
+    "file": "images/styled-hr/area-and-query-inputs.png",
+    "caption": "Actual inputs: HR / annual leave",
+    "note": "Captured immediately before submitting the query.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      1595,
+      665,
+      2285,
+      1320
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "9aed90343dd0bbc76c4551883fa591c96c12b5bdf3f8ac1379731bafadc29b04"
+  },
+  {
+    "file": "images/styled-hr/styled-result-rows-and-footer.png",
+    "caption": "Actual styled Studio rows and footer",
+    "note": "Heading/callout above viewport; narrow columns wrap.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      1595,
+      478,
+      2285,
+      1105
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "7673ae9a91d2e0eced767e2242a8d673cb87b3a38d926074f1d9674a8216f7f7"
+  },
+  {
+    "file": "images/styled-hr/topic-native-flow-binding.png",
+    "caption": "Actual topic / native-flow binding",
+    "note": "Two inputs; one result mapped to SearchResult.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      670,
+      450,
+      1230,
+      1130
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "62a6f66bbb7dafeeabd160ef672d38ae094df7d03e182ff5976566fd079da750"
+  },
+  {
+    "file": "images/styled-hr/native-flow-overview.png",
+    "caption": "Native flow overview and run history",
+    "note": "Genuine read-only Studio view; dates/times are browser-local.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      175,
+      430,
+      1540,
+      1450
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "a659729148fe4867aaad7e212dc83a9f4ad3e420334db165a2f6843383cf9add"
+  },
+  {
+    "file": "images/styled-hr/native-flow-entry.png",
+    "caption": "Native designer entry \u2014 excerpt",
+    "note": "Actual trigger and initialization; not a full-flow diagram.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      750,
+      440,
+      1680,
+      1450
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "bf633326e339bd2fe4ef4c24a1fc57f8cf2553883e5f2a950bca4abeb64af9ef"
+  },
+  {
+    "file": "images/styled-hr/native-initial-search.png",
+    "caption": "Native initial-search definition",
+    "note": "Genuine designer: RowLimit 100, StartRow 0, locator properties and SharePoint search.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      135,
+      515,
+      2300,
+      1450
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "c3dfde0a7b31e6b8e3b354c3a1d258e90f33c49a0610da41bc9d402c719fa3f1"
+  },
+  {
+    "file": "images/styled-hr/native-paging-request.png",
+    "caption": "Native next-page definition",
+    "note": "RowLimit stays 100; StartRow uses PageStart. This is a definition view, not a new paging execution.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      135,
+      515,
+      2300,
+      1450
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "04fd7e40c48392b1ceffbbc1d2013b42909c672666aaa600c20efa572f2fc78f"
+  },
+  {
+    "file": "images/styled-hr/native-response-and-continuation.png",
+    "caption": "Native response and private-export continuation",
+    "note": "Graph-only excerpt: format results, respond, then continue the private export.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      1100,
+      500,
+      2250,
+      1240
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "1ee79510f630ad79ce5f879db0c40c7ea9f07e704f9ddb8a8256aad58a5cad33"
+  },
+  {
+    "file": "images/styled-hr/native-source-metadata-read.png",
+    "caption": "Native current-source metadata read",
+    "note": "Genuine designer: dynamic source site, GET request and metadata-field handling.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      135,
+      515,
+      2300,
+      1230
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "cf9ce1d582bf79403e3de68f5c1cd224111db7d852a5d8249f6e1ae465faf8fb"
+  },
+  {
+    "file": "images/styled-hr/native-excel-append.png",
+    "caption": "Native Excel append action \u2014 excerpt",
+    "note": "Dynamic private workbook, SearchResults table, metadata fields and source-link formula.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      135,
+      515,
+      2300,
+      1460
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "e23e3f7ba5bbcfba2867abbfc4e7be70ae2fbacb0b786b3b3b178dbef36f52af"
+  },
+  {
+    "file": "images/styled-hr/native-delivery-guard.png",
+    "caption": "Native final-permission gate",
+    "note": "Graph-only excerpt: complete metadata, read final file ACL, verify delivery access.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      1195,
+      440,
+      2250,
+      1250
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "83b117f9acc4f27eebe5fb3f1513b568caebb992239860fade3a8527d77a6f94"
+  },
+  {
+    "file": "images/styled-hr/native-verified-recipient-email.png",
+    "caption": "Native email action after the ACL gate",
+    "note": "Genuine designer: dynamic profile-mail recipient, subject and workbook-link body.",
+    "captureSource": "Actual authorized Studio conversation or read-only native designer",
+    "cropPixels": [
+      135,
+      515,
+      2300,
+      1230
+    ],
+    "captionPixelsAddedAbove": 86,
+    "sourcePixelsUnchanged": true,
+    "sha256": "d17513a97f2521d621dbba8c6f6f3cba824819906aa89406b0b858daca5de4ee"
+  }
+]

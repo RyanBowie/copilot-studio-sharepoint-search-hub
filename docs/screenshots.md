@@ -1,9 +1,79 @@
 # Genuine product screenshots
 
-These are **real Copilot Studio draft captures**, cropped to remove browser
+These are **real product captures**, cropped to remove browser
 addresses, environment identifiers, account names/email and avatars. They are
 not mockups. Cropping is visibly marked in each image; the displayed result
 pixels were not fabricated or rewritten.
+
+Each section identifies the client, source and revision boundary. The owner
+provided the published M365 Copilot image; the automation captured the Studio
+and Excel evidence. Published output is not relabelled as an independently
+executed channel test.
+
+## Styled run inputs output and flow
+
+These captures belong to the successful **HR / annual leave** Studio run after
+the success-message styling change. It returned one page and one Word document,
+verified two private Excel rows and accepted one verified-recipient email.
+M365 required account selection, so the already-authorized Studio fallback
+was used; no new authentication or published-channel test was performed.
+
+![Actual entrypoint and trigger](images/styled-hr/entrypoint-and-trigger.png)
+
+![Actual area and query inputs](images/styled-hr/area-and-query-inputs.png)
+
+![Actual styled result rows and footer](images/styled-hr/styled-result-rows-and-footer.png)
+
+The input image is immediately before submission; actual native trigger inputs
+were separately verified. The output image shows the real rows and footer,
+including narrow-pane wrapping. The heading/pending-delivery callout is above
+that viewport; its actual bot activity was checked, not fabricated into the image.
+
+![Actual topic-to-native-flow binding](images/styled-hr/topic-native-flow-binding.png)
+
+### Native-flow capture index
+
+| View | What it shows |
+|---|---|
+| [Overview and run history](images/styled-hr/native-flow-overview.png) | Active native flow and observed run history; displayed times are browser-local. |
+| [Agent trigger and initialization](images/styled-hr/native-flow-entry.png) | Actual native entry and variable initialization excerpt. |
+| [Initial search](images/styled-hr/native-initial-search.png) | RowLimit 100, StartRow 0, source-locator properties and SharePoint search action. |
+| [Paging request](images/styled-hr/native-paging-request.png) | RowLimit remains 100 while StartRow uses PageStart; definition, not another live paging run. |
+| [Current metadata read](images/styled-hr/native-source-metadata-read.png) | Dynamic source site, current-item GET and metadata-field handling. |
+| [Response and continuation](images/styled-hr/native-response-and-continuation.png) | Format response, respond to agent, then continue private export. |
+| [Excel append](images/styled-hr/native-excel-append.png) | Private workbook/table selection, source values and hyperlink formula. |
+| [Final access gate](images/styled-hr/native-delivery-guard.png) | Final file ACL and delivery-access decision graph. |
+| [Verified-recipient email](images/styled-hr/native-verified-recipient-email.png) | Dynamic profile-mail recipient and workbook-link delivery after the access gate. |
+
+These are genuine read-only designer excerpts, not one full-flow diagram.
+Some expression-backed conditions and response controls displayed blank/default
+forms despite an unchanged authoritative definition and successful runtime.
+Nothing was edited or saved; graph-only crops are used for those nodes. Do not
+copy placeholder UI controls as if they described missing runtime guards.
+
+[Full flow JSON](../agent/flows/search-export/definition.json) ·
+[Walkthrough](flow-walkthrough.md) ·
+[Safe provenance](styled-capture-provenance.json) ·
+[Runtime summary](styled-validation-summary.json)
+
+## Owner-provided published M365 Copilot output
+
+![Owner-provided published M365 Copilot result before message styling](images/published-m365-owner-before-style.png)
+
+The owner reported searching **HR / annual leave** and supplied this published
+M365 Copilot screenshot on 12 September 2026. Unlike the narrow Studio pane,
+this view renders the four columns and UTC dates clearly. It predates the
+subsequent message-styling refinement.
+
+The input sequence is owner-reported, not an input screenshot. The result
+contains **Annual leave guidance**, a SharePoint page, and **Leave and working
+time policy**, a Word document. Both titles remain source links; no separate
+Type column is shown in chat.
+
+The recipient email and surrounding account details were removed by cropping
+above the result section. Original result pixels are unchanged. This is
+two-result published-channel visual evidence, not proof of a ten-row published
+layout, completed export, inbox receipt, another user's access or Teams rendering.
 
 The current four-column, preceding paging and expanded captures show different
 point-in-time owner draft runs. Three further images preserve the historical four-site baseline,

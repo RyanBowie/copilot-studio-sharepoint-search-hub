@@ -771,14 +771,22 @@ def build_definition(policy, template_bytes):
     actions["Build_chat_preview"] = preview_actions(policy)
     actions["Build_chat_preview"]["runAfter"] = {"Start_search_export": ALL_STATES, "Startup_failure": ["Succeeded", "Skipped"]}
     actions["Format_chat_result"] = compose(
-        "@concat(variables('Result'),if(equals(variables('Started'),true),"
-        "if(greater(length(variables('PreviewRows')),0),concat(decodeUriComponent('%0A%0A'),"
-        "'**Top verified matches**',decodeUriComponent('%0A%0A'),"
+        "@if(and(equals(variables('Started'),true),greater(length(variables('PreviewRows')),0)),"
+        "concat('## 🔎 SharePoint results',decodeUriComponent('%0A%0A'),"
+        "'**Scope:** ',triggerBody()?['scope'],' · **Index estimate:** ',string(variables('IndexTotal')),decodeUriComponent('%0A%0A'),"
+        "'> 📄 **Private Excel export started**',decodeUriComponent('%0A'),"
+        "'> **Verified recipient:** '," + markdown_text("body('Selected_profile')?['mail']") + ",decodeUriComponent('%0A'),"
+        "'> Delivery is pending. A private workbook link will be emailed only after row and access verification.',decodeUriComponent('%0A%0A'),"
+        "'### Verified matches',decodeUriComponent('%0A%0A'),"
         "'Created and last modified dates are UTC (YYYY-MM-DD).',decodeUriComponent('%0A%0A'),"
         "'| File or page | Created (UTC) | Modified (UTC) | Stored tags |',decodeUriComponent('%0A'),"
         "'| --- | --- | --- | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),"
-        f"decodeUriComponent('%0A%0A'),'Click a title to open it. Preview: up to {PREVIEW_ROWS} results from at most {PREVIEW_CANDIDATES} checked candidates. Excel includes these matches and the remaining verified results, up to {MAX_ROWS}. Exports may be partial; the index estimate can differ from the final row count.'),"
-        "concat(decodeUriComponent('%0A%0A'),'A verified chat preview is unavailable. The private export will still verify its results before delivery.')),''))"
+        "decodeUriComponent('%0A%0A'),'---',decodeUriComponent('%0A%0A'),"
+        f"'**Preview:** up to {PREVIEW_ROWS} results from at most {PREVIEW_CANDIDATES} checked candidates.',decodeUriComponent('%0A'),"
+        f"'**Export bounds:** {MAX_ROWS} rows · {MAX_CANDIDATES} candidates · {MAX_SEARCH_PAGES} search pages · {MAX_BATCHES} batches of {SITES_PER_BATCH} sites.',decodeUriComponent('%0A%0A'),"
+        "'Source permissions still apply. Excel includes these matches and the remaining verified results within those bounds. Exports may be partial; the index estimate can differ from the final exported-row count. Completion and omission details are recorded in Excel.'),"
+        "concat(variables('Result'),if(equals(variables('Started'),true),"
+        "concat(decodeUriComponent('%0A%0A'),'A verified chat preview is unavailable. The private export will still verify its results before delivery.'),'')))"
     )
     actions["Format_chat_result"]["runAfter"] = after("Build_chat_preview", statuses=ALL_STATES)
     actions["Respond_to_agent"] = {

@@ -105,6 +105,13 @@ an old connected test tab can retain stale content.
   actual product readability without silently moving dates back into the title cell.
   Title/tag text is escaped for chat; tags exceeding 200 characters are shortened
   with a "full tags in Excel" notice. Excel retains full values.
+- Success formatting: a restrained search heading, bold Scope/Index estimate
+  summary and private-export-started callout identify the verified recipient while
+  explicitly stating delivery is pending. The four-column table/row values are
+  unchanged; two icons appear outside the table only. A separated footer retains
+  privacy, preview/export bounds, partial-result and count-semantics caveats.
+  No HTML/CSS or Adaptive Card redesign is used. No-match, failure and
+  unavailable-preview responses retain their previous output.
 - Export: 100-row search pages; caps of 1,000 written rows, 2,000 checked candidates,
   40 search pages, and 12 batches of 20 approved site collections. These are
   bounds, not a promise that a 240-site estate meets platform timeouts.
@@ -185,13 +192,16 @@ deployment validation before public release.
 
 ## Packaging validation record
 
-The local reference build and **37 offline tests** pass. Tests cover the four
+The local reference build and **42 offline tests** pass. Tests cover the four
 fictional sites, fail-closed configuration, all five Invoker bindings, ten/twenty
 preview bounds, 100-row source pages, canonical source-date selection, full raw
 timestamp roundtrips, controlled date/display/readback expressions, hidden wrapping,
 B9, summary formulas, hyperlinks and safe topic serialization. The embedded
 workbook bytes match the included runtime template. No archived count-only test or
 its connected-environment mismatch is included.
+Five success-formatter tests use a small offline expression evaluator to check
+hierarchy, unchanged row values, recipient escaping, caveats and verbatim
+non-success responses. This evaluator is not the Power Automate cloud engine.
 
 The blank base workbook has no formulas, hyperlinks or source rows. The runtime
 template contains intentional controlled formulas, with full automatic calculation
@@ -203,7 +213,7 @@ inventory should be relabelled as proof of this feature revision.
 
 ## Teams publication boundary
 
-Publication belongs to the owner after validation; this source makes no channel,
+Publication remains an owner operation; this source makes no channel,
 authentication, tenant-policy or developer-preview changes. Do not assume that
 Studio's four-column table will render identically in Teams desktop/mobile.
 [Microsoft's Teams formatting documentation](https://learn.microsoft.com/en-us/microsoftteams/platform/bots/how-to/format-your-bot-messages)

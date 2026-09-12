@@ -28,7 +28,10 @@ into a filterable workbook delivered through the selected account's mailbox.
 
 The current source adds a compact workbook with top-aligned rows, readable
 calendar dates, full timestamps retained in hidden columns, and an actual
-scope/query/completion summary. Ten preview rows are selected through bounded
+scope/query/completion summary. The chat now uses a clearer heading, compact
+scope/index summary and a distinct **export started / delivery pending**
+callout while retaining the four-column table and honest completion caveats.
+Ten preview rows are selected through bounded
 retrieval, not a guarantee of a globally ranked top ten across the estate.
 Historical screenshots retain their original five-row presentation; current
 four-column captures explicitly show the narrow-pane wrapping limitation.
@@ -42,6 +45,7 @@ general knowledge or fall back to an unrestricted web search.
 ![SharePoint Search Hub architecture](docs/images/architecture.svg)
 
 [Architecture and trust boundaries](docs/architecture.md) ·
+[Step-by-step agent and flow walkthrough](docs/flow-walkthrough.md) ·
 [Example prompts and outputs](docs/examples.md) ·
 [Setup and adaptation](docs/setup.md) ·
 [Evidence and limitations](docs/validation.md)
@@ -49,6 +53,7 @@ general knowledge or fall back to an unrestricted web search.
 ## Quick demonstration
 
 Start with **`Search SharePoint`**, choose **`HR`**, then enter **`leave`**.
+Use **`annual leave`** to reproduce the owner's page-and-document example.
 Use **`All`** and **`*`** to exercise the configured cross-site search rather
 than only the corporate hub.
 
@@ -60,7 +65,19 @@ The [examples guide](docs/examples.md) separates observed demonstration
 behavior from illustrative output. Counts are snapshots, not fixed values for
 another tenant.
 
+The [flow walkthrough](docs/flow-walkthrough.md) follows the actual named actions
+from `Valid_input` and `Initial_search` through `Respond_to_agent`, `Export_rows`
+and `Send_private_workbook`, including the source checks and completion gates.
+
 ## Real product screenshots
+
+<img src="docs/images/published-m365-owner-before-style.png" width="900" alt="Owner-provided published M365 Copilot result with four readable columns, before styling refinement">
+
+**Published M365 Copilot, supplied by the owner.** The reported HR /
+`annual leave` search displays one page and one Word document. The four-column
+table renders clearly in this wider client. This capture predates the styling
+refinement; the recipient email was removed by cropping. It is visual evidence,
+not a separate audit of published-channel authentication or delivery.
 
 <img src="docs/images/live-workbook-compact.png" width="900" alt="Actual compact 112-row workbook with separate created and modified date columns">
 
@@ -76,14 +93,102 @@ in the narrow Studio pane**; this is not polished narrow-client or Teams proof.
 Browser and account identifiers are cropped out.
 
 [View all screenshots, including the clearly labeled historical baseline](docs/screenshots.md).
-These are genuine captures, not mockups. This is owner-only draft evidence,
-not non-owner permission, published-channel or production-scale proof.
+These are genuine captures, not mockups. Draft runtime evidence and the
+owner-provided published visual are labelled separately; neither establishes
+non-owner permissions, published-channel delivery or production-scale readiness.
+
+## Captured inputs, output and agent flow
+
+The styled **HR / annual leave** conversation returned one SharePoint page and
+one Word document, verified both Excel rows and their source dates, and completed
+the private-delivery checks. These are actual Studio captures from that run,
+not reconstructed UI. M365 requested account selection in the automation browser,
+so no fresh published-channel execution is claimed.
+
+**Area and query input**
+
+<img src="docs/images/styled-hr/area-and-query-inputs.png" width="440" alt="Actual HR selection and annual leave input immediately before submission">
+
+**Styled result excerpt**
+
+<img src="docs/images/styled-hr/styled-result-rows-and-footer.png" width="480" alt="Actual styled result rows and bounds footer in the narrow Studio pane">
+
+The heading and delivery-pending callout were verified in the actual returned
+bot message but are above this captured viewport. The narrow Studio columns
+still wrap. [Message example and styling](docs/examples.md#chat-output-shape)
+is explicitly illustrative, not a substitute screenshot.
+
+**Topic-to-flow inputs and result binding**
+
+<img src="docs/images/styled-hr/topic-native-flow-binding.png" width="420" alt="Actual native flow binding with search words and department inputs and SearchResult output">
+
+**Agent response followed by the same-run private export**
+
+<img src="docs/images/styled-hr/native-response-and-continuation.png" width="780" alt="Actual flow graph with Format chat result, Respond to agent and Continue private export">
+
+[Complete flow definition](agent/flows/search-export/definition.json) ·
+[Flow builder](agent/scripts/build-search-export-flow.py) ·
+[Stage-by-stage walkthrough](docs/flow-walkthrough.md) ·
+[Runtime result](docs/styled-validation-summary.json)
+
+<details>
+<summary>More genuine input and native-flow screenshots</summary>
+
+**Entrypoint and trigger**
+
+![Actual Search SharePoint entrypoint and topic trigger](docs/images/styled-hr/entrypoint-and-trigger.png)
+
+**Flow overview and observed run history**
+
+![Native flow overview and run history](docs/images/styled-hr/native-flow-overview.png)
+
+**Native agent-call trigger and initialization**
+
+![Native flow entry](docs/images/styled-hr/native-flow-entry.png)
+
+**Initial search: RowLimit 100, StartRow 0**
+
+![Initial search request and source-locator fields](docs/images/styled-hr/native-initial-search.png)
+
+**Next-page request: unchanged RowLimit, advancing PageStart**
+
+![Native paging request definition](docs/images/styled-hr/native-paging-request.png)
+
+**Current-source metadata hydration**
+
+![Caller-connected source metadata read](docs/images/styled-hr/native-source-metadata-read.png)
+
+**Append verified rows to the private Excel table**
+
+![Native Excel append action](docs/images/styled-hr/native-excel-append.png)
+
+**Final destination-access gate**
+
+![Final file ACL and delivery access check](docs/images/styled-hr/native-delivery-guard.png)
+
+**Verified-profile recipient after the access gate**
+
+![Native workbook email action](docs/images/styled-hr/native-verified-recipient-email.png)
+
+These are partial designer views, not a full-flow image or a new pagination
+execution. Some expression-backed conditions do not populate modern Parameters
+controls faithfully; no designer values were edited or saved. The complete
+JSON and runtime evidence, not blank/default UI controls, establish the actual
+definition and execution. Captions and [provenance](docs/styled-capture-provenance.json)
+record the crop boundaries.
+
+</details>
 
 ## Repository guide
 
 | Area | Purpose |
 |---|---|
 | [`agent/`](agent/) | Portable agent/source reference and component-specific instructions. |
+| [`agent/topics/SearchSharePoint.mcs.yml`](agent/topics/SearchSharePoint.mcs.yml) | Actual guided input and native-flow invocation source. |
+| [`agent/actions/SearchAndExport.mcs.yml`](agent/actions/SearchAndExport.mcs.yml) | Portable native-tool binding and caller-authentication contract. |
+| [`agent/flows/search-export/definition.json`](agent/flows/search-export/definition.json) | Complete generated native agent-flow definition. |
+| [`agent/scripts/build-search-export-flow.py`](agent/scripts/build-search-export-flow.py) | Maintainable builder for the search, preview, paging, private export and delivery flow. |
+| [`docs/flow-walkthrough.md`](docs/flow-walkthrough.md) | Inputs, named flow stages, current-source checks, workbook schema, limits and delivery behaviour. |
 | [`docs/architecture.md`](docs/architecture.md) | Components, request lifecycle, identity boundaries and search semantics. |
 | [`docs/examples.md`](docs/examples.md) | Guided prompts, output shapes and negative-path examples. |
 | [`docs/screenshots.md`](docs/screenshots.md) | Genuine cropped chat, native-tool binding and topic-response captures, with their evidence limits. |

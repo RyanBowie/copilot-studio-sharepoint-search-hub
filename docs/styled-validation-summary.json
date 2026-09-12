@@ -1,0 +1,108 @@
+{
+  "date": "2026-09-12",
+  "result": "PASS",
+  "channel": "Copilot Studio draft test pane, fresh same-profile tab",
+  "inputs": {
+    "entrypoint": "Search SharePoint",
+    "area": "HR",
+    "query": "annual leave"
+  },
+  "indexEstimate": 2,
+  "previewRows": 2,
+  "excelRows": 2,
+  "files": 1,
+  "pages": 1,
+  "completion": "Complete",
+  "sourceTitles": [
+    "Annual leave guidance",
+    "Leave and working time policy"
+  ],
+  "checksPassed": 28,
+  "checksTotal": 28,
+  "sourceDateChecksPassed": 13,
+  "sourceDateChecksTotal": 13,
+  "sourceTimestampComparisons": 4,
+  "numericCalendarResults": 4,
+  "formulaErrorValues": 0,
+  "layout": "Four separate columns; link-only titles, Created (UTC), Modified (UTC), and stored tags.",
+  "style": "Actual heading/scope/index summary, started/pending callout and honest bounds/footer verified against the returned bot activity. Narrow Studio rendering wraps.",
+  "delivery": "Owner-only final ACL; one email to the verified profile accepted with HTTP 200. This is not inbox-receipt proof.",
+  "publishedChannelBoundary": "M365 required account selection, so the authorized Studio fallback was used. No current published-M365 or Teams execution is claimed.",
+  "captureBoundaries": {
+    "studioOutput": "Actual rows/footer captured. Narrow columns wrap. Full styled heading/callout was verified in the actual bot activity and native message, but a reliable full-header pixel capture was blocked by scrolling/focus constraints.",
+    "flowOverviewDesigner": "Captured read-only through the already-authenticated Studio Flows app. Standalone Power Automate required account selection and was not used.",
+    "designerParameterForms": "Some serialized expression conditions and the response output show blank/default controls in the modern Parameters UI despite unchanged authoritative definition and successful runtime. No values were edited or saved; graph-only crops are used for those nodes. Do not infer missing runtime guards from those forms.",
+    "fullDefinition": "Partial genuine UI views are documentation illustrations, not a replacement for the parent's separately preserved full portable JSON.",
+    "historicalPublishedImage": "Parent-owned published-m365-owner-before-style.png remains pre-style owner-provided evidence; not reused as current styling proof.",
+    "paging": "This 2-match run does not exercise continuation. Prior actual 100+12/112 evidence retains its historical hash and provenance.",
+    "workbook": "Current 2-row readback, four source timestamps/calendars and exact blank bytes checked. Prior actual compact-workbook UI evidence remains scoped to the earlier run; no repeated deep workbook UI inspection."
+  },
+  "noAdditionalQueriesSourceEditsOrPublication": true,
+  "images": [
+    {
+      "file": "images/styled-hr/entrypoint-and-trigger.png",
+      "caption": "Actual Studio entrypoint and topic trigger",
+      "note": "The user entered Search SharePoint; the real introduction and area question are shown."
+    },
+    {
+      "file": "images/styled-hr/area-and-query-inputs.png",
+      "caption": "Actual inputs: HR / annual leave",
+      "note": "Captured immediately before submitting the query."
+    },
+    {
+      "file": "images/styled-hr/styled-result-rows-and-footer.png",
+      "caption": "Actual styled Studio rows and footer",
+      "note": "Heading/callout above viewport; narrow columns wrap."
+    },
+    {
+      "file": "images/styled-hr/topic-native-flow-binding.png",
+      "caption": "Actual topic / native-flow binding",
+      "note": "Two inputs; one result mapped to SearchResult."
+    },
+    {
+      "file": "images/styled-hr/native-flow-overview.png",
+      "caption": "Native flow overview and run history",
+      "note": "Genuine read-only Studio view; dates/times are browser-local."
+    },
+    {
+      "file": "images/styled-hr/native-flow-entry.png",
+      "caption": "Native designer entry \u2014 excerpt",
+      "note": "Actual trigger and initialization; not a full-flow diagram."
+    },
+    {
+      "file": "images/styled-hr/native-initial-search.png",
+      "caption": "Native initial-search definition",
+      "note": "Genuine designer: RowLimit 100, StartRow 0, locator properties and SharePoint search."
+    },
+    {
+      "file": "images/styled-hr/native-paging-request.png",
+      "caption": "Native next-page definition",
+      "note": "RowLimit stays 100; StartRow uses PageStart. This is a definition view, not a new paging execution."
+    },
+    {
+      "file": "images/styled-hr/native-response-and-continuation.png",
+      "caption": "Native response and private-export continuation",
+      "note": "Graph-only excerpt: format results, respond, then continue the private export."
+    },
+    {
+      "file": "images/styled-hr/native-source-metadata-read.png",
+      "caption": "Native current-source metadata read",
+      "note": "Genuine designer: dynamic source site, GET request and metadata-field handling."
+    },
+    {
+      "file": "images/styled-hr/native-excel-append.png",
+      "caption": "Native Excel append action \u2014 excerpt",
+      "note": "Dynamic private workbook, SearchResults table, metadata fields and source-link formula."
+    },
+    {
+      "file": "images/styled-hr/native-delivery-guard.png",
+      "caption": "Native final-permission gate",
+      "note": "Graph-only excerpt: complete metadata, read final file ACL, verify delivery access."
+    },
+    {
+      "file": "images/styled-hr/native-verified-recipient-email.png",
+      "caption": "Native email action after the ACL gate",
+      "note": "Genuine designer: dynamic profile-mail recipient, subject and workbook-link body."
+    }
+  ]
+}

@@ -85,12 +85,42 @@ fresh run against the prepared ten-collection policy.
 
 The following is an **illustrative rendering of the intended four-column
 preview**, not a transcript or a promise that these exact rows will appear for
-every query. Links use an example tenant.
+every query. Links and recipient use example domains. The message styling uses
+Markdown headings, two restrained icons and an export-status blockquote, not
+HTML/CSS or an Adaptive Card.
+
+### 🔎 SharePoint results
+
+**Scope:** HR · **Index estimate:** 2
+
+> 📄 **Private Excel export started**
+>
+> **Verified recipient:** example.user@example.invalid
+>
+> Delivery is pending. A private workbook link will be emailed only after row
+> and access verification.
+
+#### Verified matches
+
+Created and last modified dates are UTC (YYYY-MM-DD).
 
 | File or page | Created (UTC) | Modified (UTC) | Stored tags |
 |---|---|---|---|
 | [Leave and working time policy](https://contoso.sharepoint.com/sites/HR/Shared%20Documents/Leave-and-Working-Time-Policy.docx) | 2026-01-05 | 2026-09-10 | leave; wellbeing; meadow-27 |
 | [Annual leave guidance](https://contoso.sharepoint.com/sites/HR/SitePages/Annual-Leave.aspx) | 2026-02-12 | 2026-09-11 | hr; leave; people-policy |
+
+---
+
+**Preview:** up to 10 results from at most 20 checked candidates.
+
+**Export bounds:** 1000 rows · 2000 candidates · 40 search pages · 12 batches of 20 sites.
+
+Source permissions still apply. Excel includes these matches and the remaining
+verified results within those bounds. Exports may be partial; the index estimate
+can differ from the final exported-row count. Completion and omission details
+are recorded in Excel.
+
+**End of illustrative message.**
 
 An initial status should communicate **export started**, not “email sent.”
 The actual response also qualifies the index estimate, effective account and
@@ -98,6 +128,9 @@ any applicable limitations. At most ten verified rows are displayed, with
 dates from the current file/page, not its containing site's creation date.
 These fictional dates illustrate content only, not exact client rendering.
 Created and modified dates occupy their own columns, not the name/link cell.
+The success-formatting revision changes only the message wrapper, reusing the
+same verified table rows. Error/no-match responses, source values, workbook
+templates, permissions and retrieval bounds are unchanged.
 
 There is no result row when no accessible source was verified. The agent must
 not fill an empty result table with plausible company policies.

@@ -10,7 +10,53 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
-## Current four-column draft - 12 September 2026
+## Styled HR runtime and documentation captures - 12 September 2026
+
+The success-formatting revision passed **28/28 runtime/style checks and 13/13
+source-date checks** in one owner-account Studio conversation:
+**Search SharePoint -> HR -> annual leave**. The result contained exactly
+two verified rows: **Annual leave guidance** (SharePoint page) and
+**Leave and working time policy** (Word document).
+
+Both rows, their metadata, four full timestamps and four numeric calendar-date
+values matched the caller-checked source and actual Excel read-back. No formula
+error values, omissions, duplicate hits or processing errors occurred. Final
+ACL was owner-private and the verified-profile email action was accepted.
+The agent response preceded that email and correctly said delivery was pending.
+
+The actual bot activity matched the returned styled heading, scope/index
+summary, callout, four-column table and bounds/footer. The complete definition
+and workbook bytes remained unchanged during read-only designer capture.
+The style release had changed only the success formatter, not retrieval logic.
+
+**Capture boundaries:** M365 and standalone Power Automate required account
+selection, so neither was used. The test used a fresh Studio context and its
+already-authenticated Flows view. Thirteen genuine crops cover inputs, result
+rows/footer, binding and native flow stages. Initially the complete heading/
+callout was verified as bot text but could not be reliably captured in pixels
+because of scroll/focus constraints. Narrow Studio wrapping remains visible.
+Designer excerpts are not a full-flow image or proof that this two-row run
+exercised next-page retrieval.
+
+[Runtime summary](styled-validation-summary.json) ·
+[Capture provenance](styled-capture-provenance.json) ·
+[Input/output and flow gallery](screenshots.md#styled-run-inputs-output-and-flow)
+
+## Owner-provided published M365 Copilot view - 12 September 2026
+
+After publishing the agent themselves, the owner supplied a screenshot of
+**HR / annual leave** in M365 Copilot. Two source-linked rows and separate
+Created/Modified UTC columns are readable without the severe Studio wrapping.
+The fixture records identify one SharePoint page and one Word document.
+
+This establishes a user-provided view of that published result, not an
+independently captured input sequence or a hash-pinned published runtime test.
+It predates the message-styling refinement and does not establish export/email
+completion, ten-row channel rendering, Teams behaviour or non-owner permissions.
+
+[Privacy-cropped published output](screenshots.md#owner-provided-published-m365-copilot-output)
+
+## Four-column draft runtime - 12 September 2026
 
 **45/45 functional checks passed**, with an explicit narrow-pane readability
 caveat. One actual owner-account GPT-5 Chat conversation produced ten rows in
@@ -187,9 +233,10 @@ The actual two-page verification above establishes continuation for this
 
 ## Portable-source checks
 
-The publication-safe agent package builds offline and its **37 focused tests
+The publication-safe agent package builds offline and its **42 focused tests
 pass**, covering ten-row bounds, source dates, workbook formatting/contracts
-and authoring serialization. The original and expansion fixture generation
+and authoring serialization, plus the success-message wrapper, recipient
+escaping, verbatim non-success output and retained caveats. The original and expansion fixture generation
 commands previously ran successfully, and their **47 generated Word documents**
 passed document-package validation. The separate connected paging fixture
 pipeline validated its additional 60 documents before upload and runtime testing.
@@ -225,7 +272,9 @@ draft; the portable policy remains four fictional Contoso entries.
 - Classic-subsite traversal in a tenant that refuses classic-subsite creation.
 - Stored policy-status retrieval/export or approval-status filtering.
 - A fully imported portable solution in another environment.
-- Agent publication or SharePoint-hosted channel behavior.
+- Independent published-channel runtime/authentication verification or
+  SharePoint-hosted/Teams behaviour. The owner-provided M365 visual has the
+  narrower evidence scope described above.
 - A public GitHub release, GitHub Pages site or open-source license grant.
 
 The release checklist deliberately keeps these boundaries visible instead of
