@@ -1,0 +1,13 @@
+mcs.metadata:
+  componentName: Fallback
+  description: End unmatched requests with an explicit failure, without retry escalation or unverified answers.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_QZreqo
+      activity: I could not return verified SharePoint results for this request. Please try again later.
+    - kind: CancelAllDialogs
+      id: cancel-unverified-fallback

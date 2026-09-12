@@ -1,0 +1,19 @@
+{
+  "configurationMode": "fictional-reference",
+  "agentSchema": "cnh_corpnetSearchHub",
+  "tenantOrigin": "https://contoso.sharepoint.com",
+  "searchSiteUrl": "https://contoso.sharepoint.com/sites/CorpNet",
+  "hubSiteCollectionId": "00000000-0000-4000-8000-000000000001",
+  "hubRegistrationVerified": false,
+  "hubSearchVerified": false,
+  "metadataFieldsVerified": false,
+  "searchLocatorFieldsVerified": false,
+  "scopeMode": "approved-inventory",
+  "sites": [
+    {"url": "https://contoso.sharepoint.com/sites/CorpNet", "department": "CorpNet", "siteId": "00000000-0000-4000-8000-000000000001"},
+    {"url": "https://contoso.sharepoint.com/sites/HR", "department": "HR", "siteId": "00000000-0000-4000-8000-000000000002"},
+    {"url": "https://contoso.sharepoint.com/sites/Finance", "department": "Finance", "siteId": "00000000-0000-4000-8000-000000000003"},
+    {"url": "https://contoso.sharepoint.com/sites/IT", "department": "IT", "siteId": "00000000-0000-4000-8000-000000000004"}
+  ],
+  "limits": {"scopeCharacters": 2800, "sitesPerBatch": 20, "maxBatches": 12}
+}

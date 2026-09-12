@@ -1,0 +1,94 @@
+mcs.metadata:
+  componentName: Search approved SharePoint sites
+  description: Show up to five permission-checked file/page links and stored tags, then email a private Excel workbook of the full verified results.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Search approved SharePoint sites
+    triggerQueries:
+      - Search SharePoint
+      - Search for SharePoint content
+      - Search the intranet
+      - CorpNet search check
+      - Find HR documents
+      - Find Finance documents
+      - Search IT guidance
+  actions:
+    - kind: SendActivity
+      id: searchReady
+      activity: I can search approved CorpNet and departmental sites using your selected accounts. I will show up to five verified file/page links with stored tags, then email a private Excel workbook containing the full verified results, including those shown here. Export limits and partial results will be reported.
+    - kind: Question
+      id: chooseDepartment
+      variable: Topic.DepartmentInput
+      prompt: Which area would you like to search? Enter All, CorpNet, HR, Finance, or IT.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+      interruptionPolicy:
+        allowInterruption: false
+    - kind: SetVariable
+      id: normalizeDepartment
+      variable: Topic.Department
+      value: =Switch(Lower(Trim(Topic.DepartmentInput)), "all", "All", "corpnet", "CorpNet", "hr", "HR", "finance", "Finance", "it", "IT", "")
+    - kind: ConditionGroup
+      id: checkDepartment
+      conditions:
+        - id: invalidDepartment
+          condition: =IsBlank(Topic.Department)
+          actions:
+            - kind: SendActivity
+              id: invalidDepartmentMessage
+              activity: That area is not configured. No search was run. Start again with "Search SharePoint" and choose All, CorpNet, HR, Finance, or IT.
+            - kind: EndDialog
+              id: invalidDepartmentEnd
+    - kind: Question
+      id: askKeywords
+      variable: Topic.Keywords
+      prompt: Enter up to 12 search words, or * to search all indexed files and pages in that area. Use letters, numbers, spaces and hyphens only.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+      interruptionPolicy:
+        allowInterruption: false
+    - kind: ConditionGroup
+      id: checkKeywords
+      conditions:
+        - id: invalidKeywords
+          condition: =Trim(Topic.Keywords) <> "*" && (!IsMatch(Trim(Topic.Keywords), "^[A-Za-z0-9][A-Za-z0-9 \-]{0,159}$") || CountRows(MatchAll(Trim(Topic.Keywords), "[A-Za-z0-9]+")) > 12)
+          actions:
+            - kind: SendActivity
+              id: invalidKeywordsMessage
+              activity: Those search words are not supported. No search was run. Start again with "Search SharePoint"; use up to 12 plain words or a single *.
+            - kind: EndDialog
+              id: invalidKeywordsEnd
+    - kind: SendActivity
+      id: searching
+      activity: "Searching files and pages in {Topic.Department} using your selected accounts..."
+    - kind: InvokeFlowAction
+      id: searchCount
+      input:
+        binding:
+          query: =Trim(Topic.Keywords)
+          scope: =Topic.Department
+      output:
+        binding:
+          result: Topic.SearchResult
+      flowId: 00000000-0000-4000-8000-000000000100
+    - kind: ConditionGroup
+      id: checkSearchResult
+      conditions:
+        - id: missingResult
+          condition: =IsBlank(Topic.SearchResult)
+          actions:
+            - kind: SendActivity
+              id: missingResultMessage
+              activity: The search flow did not return a usable response. No count, export or email is being reported.
+            - kind: EndDialog
+              id: missingResultEnd
+    - kind: SendActivity
+      id: reportCount
+      activity: "{Topic.SearchResult}"
+inputType: {}
+outputType: {}

@@ -1,0 +1,17 @@
+mcs.metadata:
+  componentName: CorpNet Search - Files, Pages and Private Export
+kind: TaskDialog
+outputs:
+  - propertyName: result
+action:
+  kind: InvokeFlowTaskAction
+  flowId: 00000000-0000-4000-8000-000000000100
+  connectionProperties:
+    $kind: ConnectionProperties
+    diagnostics: null
+    mode: Invoker
+outputMode: All
+modelDescription: >-
+  Search approved files and pages, return a qualified count, and create/email a
+  private workbook using the selected caller accounts. Results are permission-checked;
+  limits and partial completion are explicit.

@@ -1,0 +1,12 @@
+mcs.metadata:
+  componentName: Scoped search fallback
+  description: Route unmatched requests to the approved search topic without ungrounded answers.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  priority: -1
+  actions:
+    - kind: BeginDialog
+      id: approved-search
+      dialog: cnh_corpnetSearchHub.topic.SearchSharePoint

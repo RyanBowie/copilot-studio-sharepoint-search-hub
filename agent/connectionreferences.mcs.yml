@@ -1,0 +1,11 @@
+connectionReferences:
+  - connectionReferenceLogicalName: cnh_reference_sharepoint
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_sharepointonline
+  - connectionReferenceLogicalName: cnh_reference_profile
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_office365users
+  - connectionReferenceLogicalName: cnh_reference_onedrive
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness
+  - connectionReferenceLogicalName: cnh_reference_excel
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness
+  - connectionReferenceLogicalName: cnh_reference_outlook
+    connectorId: /providers/Microsoft.PowerApps/apis/shared_office365

@@ -1,0 +1,28 @@
+mcs.metadata:
+  componentName: On Error
+  description: Report errors without exposing connector payloads, source content, or credentials.
+kind: AdaptiveDialog
+startBehavior: UseLatestPublishedContentAndCancelOtherTopics
+beginDialog:
+  kind: OnError
+  id: main
+  actions:
+    - kind: SetVariable
+      id: setVariable_timestamp
+      variable: init:Topic.CurrentTime
+      value: =Text(Now(), DateTimeFormat.UTC)
+
+    - kind: SendActivity
+      id: sendMessage_dZ0gaF
+      activity: |-
+        The request could not be completed. No successful search is being reported.
+        If a connection prompt appeared, sign in with your own SharePoint account and retry.
+        Reference: {System.Error.Code}; conversation {System.Conversation.Id}; {Topic.CurrentTime}.
+
+    - kind: LogCustomTelemetryEvent
+      id: 9KwEAn
+      eventName: OnErrorLog
+      properties: "={ErrorCode: System.Error.Code, TimeUTC: Topic.CurrentTime, ConversationId: System.Conversation.Id}"
+
+    - kind: CancelAllDialogs
+      id: NW7NyY

@@ -1,0 +1,52 @@
+{
+  "shared_sharepointonline": {
+    "runtimeSource": "invoker",
+    "connection": {
+      "name": "REPLACE_WITH_CALLER_SHAREPOINT_CONNECTION",
+      "connectionReferenceLogicalName": "cnh_reference_sharepoint"
+    },
+    "api": {
+      "name": "shared_sharepointonline"
+    }
+  },
+  "shared_office365users": {
+    "runtimeSource": "invoker",
+    "connection": {
+      "name": "REPLACE_WITH_CALLER_PROFILE_CONNECTION",
+      "connectionReferenceLogicalName": "cnh_reference_profile"
+    },
+    "api": {
+      "name": "shared_office365users"
+    }
+  },
+  "shared_onedriveforbusiness": {
+    "runtimeSource": "invoker",
+    "connection": {
+      "name": "REPLACE_WITH_CALLER_ONEDRIVE_CONNECTION",
+      "connectionReferenceLogicalName": "cnh_reference_onedrive"
+    },
+    "api": {
+      "name": "shared_onedriveforbusiness"
+    }
+  },
+  "shared_excelonlinebusiness": {
+    "runtimeSource": "invoker",
+    "connection": {
+      "name": "REPLACE_WITH_CALLER_EXCEL_CONNECTION",
+      "connectionReferenceLogicalName": "cnh_reference_excel"
+    },
+    "api": {
+      "name": "shared_excelonlinebusiness"
+    }
+  },
+  "shared_office365": {
+    "runtimeSource": "invoker",
+    "connection": {
+      "name": "REPLACE_WITH_CALLER_OUTLOOK_CONNECTION",
+      "connectionReferenceLogicalName": "cnh_reference_outlook"
+    },
+    "api": {
+      "name": "shared_office365"
+    }
+  }
+}

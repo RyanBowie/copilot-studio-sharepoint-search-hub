@@ -1,0 +1,8 @@
+node_modules/
+documents/
+expansion-documents/
+documents-manifest.json
+expansion-documents-manifest.json
+expansion-content.json
+deployment.json
+expansion-deployment.json

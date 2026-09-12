@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1030" viewBox="0 0 1420 1030" role="img" aria-labelledby="title description">
+<title id="title">SharePoint Search Hub architecture</title>
+<desc id="description">A guided Copilot Studio topic calls a native caller-authenticated flow. The flow aligns identities, searches approved SharePoint collections, rechecks source access and metadata, returns up to five linked rows, then continues to a verified private workbook and email.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#605E5C"/></marker></defs>
+<rect width="1420" height="1030" fill="#ffffff"/>
+<text x="40" y="58" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700">SharePoint Search Hub</text>
+<text x="40" y="96" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="400">Permission-aware retrieval  |  Small chat preview  |  Private, bounded export</text>
+<polyline points="330,220 390,220" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="680,220 740,220" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1030,220 1090,220" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1235,290 1235,380" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1090,450 1030,450" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="740,450 680,450" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="440,520 440,605 185,605 185,660" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="535,520 535,575 885,575 885,660" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1030,730 1090,730" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<polyline points="1235,800 1235,870" fill="none" stroke="#605E5C" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="40" y="150" width="290" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="1.5"/>
+<text x="55" y="186" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Authenticated user</text>
+<text x="55" y="224" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Starts Search SharePoint</text>
+<text x="55" y="249" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Chooses scope and keywords</text>
+<rect x="390" y="150" width="290" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="1.5"/>
+<text x="405" y="186" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Guided topic</text>
+<text x="405" y="224" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Validates plain input</text>
+<text x="405" y="249" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Invokes the registered tool</text>
+<rect x="740" y="150" width="290" height="140" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="1.5"/>
+<text x="755" y="186" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Native Power Automate flow</text>
+<text x="755" y="224" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Caller-provided connectors</text>
+<text x="755" y="249" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">No provisioning fallback</text>
+<rect x="1090" y="150" width="290" height="140" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="1.5"/>
+<text x="1105" y="186" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Identity alignment</text>
+<text x="1105" y="224" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Profile + source + destination</text>
+<text x="1105" y="249" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Verified mailbox, not chat input</text>
+<rect x="1090" y="380" width="290" height="140" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="1.5"/>
+<text x="1105" y="416" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Approved inventory</text>
+<text x="1105" y="454" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Known collection IDs + hub</text>
+<text x="1105" y="479" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Department is a relevance filter</text>
+<rect x="740" y="380" width="290" height="140" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="1.5"/>
+<text x="755" y="416" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">SharePoint Search</text>
+<text x="755" y="454" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Files, pages and folder content</text>
+<text x="755" y="479" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Bounded candidates and paging</text>
+<rect x="390" y="380" width="290" height="140" rx="12" fill="#DFF6DD" stroke="#107C10" stroke-width="1.5"/>
+<text x="405" y="416" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Current source checks</text>
+<text x="405" y="454" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Recheck access per result</text>
+<text x="405" y="479" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Read actual stored metadata</text>
+<rect x="40" y="660" width="290" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="1.5"/>
+<text x="55" y="696" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Chat preview</text>
+<text x="55" y="734" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Up to 5 real links + stored tags</text>
+<text x="55" y="759" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Initial status is not completion</text>
+<rect x="740" y="660" width="290" height="140" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="1.5"/>
+<text x="755" y="696" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Same-run continuation</text>
+<text x="755" y="734" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Continue bounded verification</text>
+<text x="755" y="759" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Record caps and partial results</text>
+<rect x="1090" y="660" width="290" height="140" rx="12" fill="#E8DAEF" stroke="#5C2D91" stroke-width="1.5"/>
+<text x="1105" y="696" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Private Excel workbook</text>
+<text x="1105" y="734" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Filterable table + source links</text>
+<text x="1105" y="759" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Verify rows and private access</text>
+<rect x="1090" y="870" width="290" height="140" rx="12" fill="#CFE4FA" stroke="#0078D4" stroke-width="1.5"/>
+<text x="1105" y="906" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700">Verified-account email</text>
+<text x="1105" y="944" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Private workbook link</text>
+<text x="1105" y="969" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">Actual delivery action evidence</text>
+<text x="40" y="405" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700">Trust boundary</text>
+<text x="40" y="444" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">The index is not a live inventory.</text>
+<text x="40" y="469" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">The hub does not grant access.</text>
+<text x="40" y="494" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="15" font-weight="400">No row is invented or inferred.</text>
+<text x="40" y="870" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700">Explicit bounds, honest status</text>
+<text x="40" y="911" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400">1,000 exported rows  |  2,000 candidates  |  40 search pages</text>
+<text x="40" y="937" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400">12 batches of up to 20 approved collections</text>
+<text x="40" y="963" fill="#000000" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="400">Owner-only demo evidence is not production or permission-denial proof.</text>
+</svg>

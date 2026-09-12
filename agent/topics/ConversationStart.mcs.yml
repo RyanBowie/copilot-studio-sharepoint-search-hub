@@ -1,0 +1,15 @@
+mcs.metadata:
+  componentName: Conversation Start
+  description: This system topic triggers when the agent receives an Activity indicating the beginning of a new conversation. If you do not want the agent to initiate the conversation, disable this topic.
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_M0LuhV
+      activity:
+        text:
+          - Hello, I'm {System.Bot.Name}. Say Search SharePoint to search files and pages across approved CorpNet, HR, Finance and IT sites. See up to five links with stored tags here, then receive a private Excel workbook of the verified results by email. Use your own connector accounts; export limits apply.
+        speak:
+          - Hello, I'm {System.Bot.Name}. Say Search SharePoint to search files and pages. See up to five links with stored tags, then receive the verified results in private Excel by email.

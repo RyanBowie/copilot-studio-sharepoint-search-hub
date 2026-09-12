@@ -1,0 +1,49 @@
+# Connected workspaces, credentials and environment-specific configuration.
+**/.mcs/
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.local.json
+*.local.yml
+*.local.yaml
+*.local.ps1
+**/deployment.json
+**/cloud-deployment.json
+**/registered-tool.json
+**/conn.json
+**/changetoken.txt
+**/.credentials/
+*.pfx
+*.p12
+*.pem
+*.key
+
+# Dependencies, compiled tools and local caches.
+**/node_modules/
+**/.tools/
+**/.venv/
+**/venv/
+**/__pycache__/
+*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/workbook-check-*/
+
+# Generated execution evidence is not publication material.
+**/.artifacts/
+**/live-evidence/
+**/run-evidence/
+**/exports/flow/evidence/
+**/playwright-report/
+**/test-results/
+*.log
+*.har
+*.trace.zip
+
+# Keep curated screenshots, reference JSON and blank workbook templates tracked.
+Thumbs.db
+.DS_Store
