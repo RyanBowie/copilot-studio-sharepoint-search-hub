@@ -10,6 +10,49 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## 512-result native export - 13 September 2026
+
+**PASS: 512 actual exported rows, not just an index estimate.** The owner
+started one published M365 `Search SharePoint -> All -> hubspokeverify` request.
+Its native run started at **10:42:24 UTC** and completed at **11:09:10 UTC**,
+taking **26m46s**. Verification read only that existing run; it did not submit
+another query, invoke a fallback flow or create another workbook/email.
+
+| Evidence | Observed result |
+|---|---|
+| Native source paging | StartRow 0, 100, 200, 300, 400, 500; RowLimit 100; document-ID ascending only on every request. |
+| Actual page counts | 100 + 100 + 100 + 100 + 100 + 12, pairwise disjoint and exactly matching the 512-source oracle. |
+| Current caller source reads | All 512 locators hydrated in their correct page iterations: 499 documents and 13 pages across ten collections. |
+| Chat preview | Ten distinct linked rows, each included in the complete export; four-column title/glyph/tag/date fidelity checked. |
+| Excel readback | 512 real rows, retrieved as 250 + 250 + 12; exact titles, department, raw tags, types and URLs. |
+| Source dates | 1,024 full-timestamp/calendar comparisons matched; no formula-error values or sentinel row. |
+| Completion | Complete; zero omissions, duplicate index hits, raw-metadata mismatches, processing errors or upstream truncation. |
+| Access and delivery | Final owner-private ACL verified; one email to the verified profile accepted. Inbox receipt remains unverified. |
+
+**25 final checks, 23 paging checks and 15 date/markup checks passed.** The
+date/markup group includes an offline parser alignment check, not a claim that
+M365 centers dates: the visible host still left-aligns them. Export processing
+took about 25m13s within the 45-minute loop limit; readback took about six seconds
+within its five-minute limit. These are observed timings, not a service guarantee.
+
+Revision attribution uses the unchanged canonical/management definition and
+workflow ETag before, during and after the run, plus the actual DocId-sorted
+requests. The revision is `80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a`.
+The management API did not expose an immutable per-run definition/version
+payload; the evidence is an unchanged-record envelope, not a claimed download
+of a frozen run definition. Agent/tool/publication, connections and template
+were preserved.
+
+The owner's earlier different-term no-match is separate activity, not a retry
+of this positive run. The supplied screenshot shows the initial pending-export
+response; completion comes from the same run's actual connector evidence.
+No new workbook UI/download inspection, permission workaround, Teams test,
+non-owner denial/revocation test, new-tenant import or production-scale claim
+is implied.
+
+[Safe runtime summary](scale-runtime-validation-summary.json) ·
+[Genuine owner-provided preview](screenshots.md#owner-provided-512-item-preview)
+
 ## 512-source creation and indexing - 13 September 2026
 
 The scale fixture adds **400 real Word documents**, 40 in each of the ten
@@ -33,8 +76,8 @@ reached 512. Adding document ID only as a secondary rank tie-break still returne
 478 unique sources across 512 rows. Document-ID-only ascending order returned all
 512 exactly. The subsequent stable-paging change adds document-ID ascending
 sorting to both native request paths, with no other search/export change.
-The actual 512-row native run is a separate gate; its preview is a bounded
-verified sample, not the best ten by rank.
+The actual 512-row native run subsequently passed the separate gate above;
+its preview is a bounded verified sample, not the best ten by rank.
 
 [Source/index checkpoint and counts](scale-source-validation-summary.json) ·
 [Reproducible corpus and 512-item blueprint](../fixtures/corpnet-demo/README.md#500-plus-scale-fixture)
@@ -377,6 +420,11 @@ only those 60 additions and is not itself a greater-than-100 paging test.
 The actual two-page verification above establishes continuation for this
 112-item owner-account case, not the configured 1,000-row maximum.
 
+The later 400-document scale addition raised the shared marker corpus to 512.
+Its source/index checks and completed six-page native export are documented
+separately above. Neither the 112-row nor 512-row run exercises the configured
+1,000-row maximum.
+
 ## Portable-source checks
 
 The publication-safe agent package builds offline and its **68 focused tests
@@ -398,11 +446,15 @@ pipeline validated its additional 60 documents before upload and runtime testing
 The architecture SVG and editable diagram were structurally checked.
 
 These checks apply to the portable copy. They do not replace the original
-environment's separate draft tests. The expanded live results above are
-separate runtime evidence against the deployed ten-collection/two-column
-draft; the portable policy remains four fictional Contoso entries.
+environment's separate runtime tests. The early expanded run belongs to the
+historical ten-collection/two-column draft; later four-column and 512-row cases
+are separately identified above. The portable policy remains four fictional
+Contoso entries.
 
 ## Required end-to-end checks
+
+These requirements apply to each deployment. Passing the connected demo cases
+above does not transfer that evidence to a customized tenant.
 
 | Check | Evidence needed |
 |---|---|

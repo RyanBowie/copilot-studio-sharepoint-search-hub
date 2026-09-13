@@ -84,6 +84,12 @@ reads, preview inclusion, full private workbook and delivery outcome. A generate
 blueprint, uploaded file count or diagnostic index query is not an agent test.
 Earlier 112-item evidence remains a separate historical snapshot.
 
+The connected source deployment subsequently passed this exact case:
+**512 caller-hydrated sources and 512 private Excel rows**, with no missing
+or duplicate rows, in 26m46s. See the
+[native-run evidence](../../docs/scale-runtime-validation-summary.json).
+That result does not populate or validate these fictional targets in a new tenant.
+
 **Tenant setup is required.** These are ten collection targets, while the
 portable agent's default policy deliberately retains four fictional references.
 Approve and verify the actual ten sites/hub association before updating that

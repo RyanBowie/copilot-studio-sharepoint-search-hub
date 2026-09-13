@@ -1,5 +1,6 @@
 {
-  "state": "SOURCE_AND_INDEX_VERIFIED_NATIVE_SCALE_RUN_PENDING",
+  "state": "SOURCE_AND_INDEX_VERIFIED",
+  "separateNativeRuntimeEvidence": "scale-runtime-validation-summary.json",
   "sourceVerifiedUtc": "2026-09-13T01:09:01.067705+00:00",
   "query": "hubspokeverify",
   "scope": "All",

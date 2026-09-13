@@ -1,0 +1,86 @@
+{
+  "result": "PASS",
+  "date": "2026-09-13",
+  "runStartedUtc": "2026-09-13T10:42:24.9570368Z",
+  "runCompletedUtc": "2026-09-13T11:09:10.6160426Z",
+  "channel": "Owner-started published Microsoft365 Copilot",
+  "definitionRevisionSha256": "80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a",
+  "revisionEvidence": "Unchanged canonical/management definition and workflow ETag before, during and after the run; actual native requests use the expected document-ID sort. No immutable per-run definition/version payload was exposed by the management API.",
+  "inputs": {
+    "entrypoint": "Search SharePoint",
+    "area": "All",
+    "query": "hubspokeverify"
+  },
+  "nativeSourceStartRows": [
+    0,
+    100,
+    200,
+    300,
+    400,
+    500
+  ],
+  "nativeSourcePageCounts": [
+    100,
+    100,
+    100,
+    100,
+    100,
+    12
+  ],
+  "nativeSort": "[docid] ascending only",
+  "uniqueCallerHydratedRows": 512,
+  "actualExcelRows": 512,
+  "excelReadbackCounts": [
+    250,
+    250,
+    12
+  ],
+  "files": 499,
+  "pages": 13,
+  "collections": 10,
+  "sourceTimestampAndCalendarComparisons": 1024,
+  "previewRows": 10,
+  "columns": 4,
+  "previewOrdering": "Stable index-order matched sample, not relevance-ranked top ten.",
+  "completionStatus": "Complete",
+  "omittedRows": 0,
+  "duplicateIndexHits": 0,
+  "processingErrors": false,
+  "truncatedUpstream": false,
+  "upstreamComplete": true,
+  "finalChecksPassed": 25,
+  "finalChecksTotal": 25,
+  "pagingChecksPassed": 23,
+  "pagingChecksTotal": 23,
+  "dateMarkupChecksPassed": 15,
+  "dateMarkupChecksTotal": 15,
+  "formulaErrorValues": 0,
+  "exactRawMetadataMismatches": 0,
+  "durations": {
+    "totalSeconds": 1605.659006,
+    "Export_rows": 1513.216691,
+    "Read_back_written_rows": 5.829694
+  },
+  "caps": {
+    "exportRows": 1000,
+    "candidates": 2000,
+    "sourcePages": 40,
+    "siteBatches": 12,
+    "sitesPerBatch": 20,
+    "exportLoopMinutes": 45,
+    "excelReadbackMinutes": 5
+  },
+  "delivery": "Final owner-private ACL verified; one email accepted for the verified profile. Inbox receipt not independently verified.",
+  "boundaries": [
+    "An earlier different-term no-match is separate owner activity, not a retry of this positive run.",
+    "Native connector requests/results and same-iteration hydration prove six-page retrieval, not independent index diagnostics or management nextLink paging.",
+    "Stable document-ID index-order preview sample, not relevance-ranked/global top ten or an index snapshot guarantee.",
+    "All 512 rows proved via actual Excel connector readback; no new workbook UI/download inspection or download-permission workaround.",
+    "The owner-provided screenshot was separately preserved and privacy-cropped. Runtime verification inspected existing run evidence without browser automation.",
+    "Known M365 date alignment limitation remains separately scoped: source center markers are not visual centering proof.",
+    "Final owner-private ACL and aligned connector identities are positive owner evidence, not cross-user negative ACL/revocation proof.",
+    "Email HTTP 200 is connector acceptance, not inbox receipt. No Teams test.",
+    "Earlier 112-row and pre-DocId-polish evidence remains historical; no new 150-site claim."
+  ],
+  "automatedInvocations": 0
+}

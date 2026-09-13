@@ -83,7 +83,9 @@ The SharePoint corpus is separate from the solution. The
 [512-item fixture blueprint](fixtures/corpnet-demo/scale-expected-results.example.json)
 and [generator](fixtures/corpnet-demo/README.md#500-plus-scale-fixture) define
 499 documents and 13 pages across ten collection targets. Creating, indexing
-and actually retrieving those items are separate checks.
+and actually retrieving those items are separate checks. The connected source
+deployment has now passed the [full 512-row native export check](docs/validation.md#512-result-native-export---13-september-2026);
+that does not establish import or runtime success for the fictional reference ZIP.
 
 ## Quick demonstration
 
@@ -118,11 +120,19 @@ had started, but delivery was still pending at capture.
 **This is not proof of 512 completed Excel rows.** The header and four-row
 excerpt are separate crops of one real screenshot, not a stitched full result.
 The account/recipient block is excluded; browser zoom was not independently
-verified. The full native-run and workbook checks remain a separate gate.
+verified.
+
+**The same owner-started run subsequently completed all 512 Excel rows in
+26m46s.** Read-only verification confirmed six disjoint source pages, all 512
+caller-hydrated sources, exact workbook readback and final owner-private access.
+No rows were omitted or duplicated. One verified-profile email was accepted;
+inbox receipt was not independently checked. The screenshot remains a
+pending-export capture, not a picture of the completed workbook.
 
 [Screenshot context and limits](docs/screenshots.md#owner-provided-512-item-preview) ·
 [Capture provenance](docs/scale-512-capture-provenance.json) ·
-[Source/index evidence](docs/scale-source-validation-summary.json)
+[Source/index evidence](docs/scale-source-validation-summary.json) ·
+[Completed native export evidence](docs/scale-runtime-validation-summary.json)
 
 ## Updated table in published M365
 

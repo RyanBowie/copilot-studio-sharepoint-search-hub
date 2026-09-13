@@ -32,11 +32,15 @@ footers were added. Browser zoom was not independently verified.
 This owner-operated published-channel view is distinct from an automated
 invocation. It does not by itself prove all six native search pages, 512
 caller-hydrated sources, 512 Excel rows, final private access or email delivery.
-Those checks must use the same existing native run, without submitting another
-query merely to obtain evidence.
+Subsequent read-only checks of the **same owner-started native run passed**:
+512 caller-hydrated sources and 512 Excel rows, exact metadata, private access
+and one accepted verified-profile email. No additional query was submitted to
+obtain evidence. Completion was established from connector results, not a new
+workbook screenshot or an altered version of this pending-export image.
 
 [Exact crop coordinates and hashes](scale-512-capture-provenance.json) ·
-[Source/index checkpoint](scale-source-validation-summary.json)
+[Source/index checkpoint](scale-source-validation-summary.json) ·
+[Completed native-run evidence](scale-runtime-validation-summary.json)
 
 ## Published M365 table polish
 

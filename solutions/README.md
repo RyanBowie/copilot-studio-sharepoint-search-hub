@@ -87,8 +87,12 @@ up to ten verified results are not the relevance-ranked “best ten” or a glob
 ranked top ten. Metadata hydration may reorder workbook rows. The change was
 selected after source-owner read-only diagnostics covered 512 combined and 400
 body-only matches without overlap, while rank-first requests still overlapped.
-Those probes are **not native agent/export proof**; post-change native validation
-is pending. See [stable paging](../agent/flows/search-export/stable-paging.md).
+Those probes are **not native agent/export proof**. A subsequent owner-started
+connected-source run separately verified all 512 caller-hydrated sources and
+512 private Excel rows, with one accepted verified-profile email in 26m46s.
+That does not test an import of this sanitized package. See
+[stable paging](../agent/flows/search-export/stable-paging.md) and the
+[completed native-run evidence](../docs/scale-runtime-validation-summary.json).
 
 ## Import safety defaults
 
@@ -179,7 +183,10 @@ The package has ZIP CRC/integrity checks, 13 package/reference tests, 68 complet
 portable-agent tests and a supported PAC **unpack → pack → unpack** semantic
 roundtrip. See [`validation.json`](validation.json) for the artifact hashes and
 precise proof. No import, runtime query, export/email test or agent publication
-was performed in this release. The related source-environment deployment
+was performed during package export/build. Its timestamped validation snapshot
+therefore retains the then-pending native-test status; the later source-runtime
+result is recorded separately above, not retroactively asserted as package
+import evidence. The related source-environment deployment
 intentionally changed only two native-flow `SortList` properties using fresh
 ETag guards. Agent/topic/model/connection records and owner publication were
 preserved; the reference package was then synchronized offline.

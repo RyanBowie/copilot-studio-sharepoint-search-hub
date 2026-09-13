@@ -50,6 +50,8 @@
   "visibleIndexEstimate": 512,
   "exportStatusAtCapture": "Started; delivery pending, not completed",
   "visibleCompletePreviewRows": 4,
+  "subsequentSameRunEvidence": "scale-runtime-validation-summary.json",
+  "correlation": "Parent compared the four visible titles, dates and tag text with the same owner's native response. Runtime verification is separate from image evidence.",
   "notEvidenceOf": [
     "All ten preview rows fitting in one viewport",
     "Six disjoint native source pages or 512 caller source reads",

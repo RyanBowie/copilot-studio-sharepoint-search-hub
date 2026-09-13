@@ -27,10 +27,19 @@ rank ordering changed. Duplicate accounting avoids duplicate workbook rows but
 cannot recover candidates skipped by shifting offset boundaries.
 
 **These were provisioning-owner read-only index probes, not native agent/export
-executions.** Post-deployment native caller validation is a separate pending step.
+executions.** A subsequent owner-started native caller run separately passed:
+six disjoint pages (100 x 5 + 12), all 512 caller-hydrated sources, 512 actual
+Excel rows read back as 250 + 250 + 12, 1,024 timestamp/calendar comparisons,
+final owner-private access and one accepted verified-profile email. It completed
+in 26m46s without omissions or duplicate index hits. Verification was read-only;
+no additional agent invocation was made.
+
+[Completed native-run evidence](../../../docs/scale-runtime-validation-summary.json)
+is distinct from the earlier owner index probes and offline synthetic tests.
 The fictional four-collection portable policy does not contain the live expanded
 fixture corpus. Existing M365 formatting, source-date and email evidence belongs
-to earlier definition hashes and must not be relabelled as this release's proof.
+to explicitly identified revisions; earlier captures must not be relabelled as
+this release's proof. New-tenant import/runtime and inbox receipt remain unverified.
 
 ## Meaning of the preview and export
 
