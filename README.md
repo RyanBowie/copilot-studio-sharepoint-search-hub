@@ -6,10 +6,12 @@
 [Import and configure](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup) ·
 [View repository](https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub)
 
-| Actual M365 prompt | Matching output |
+| Copilot Studio agent prompt | Same agent's output |
 |---|---|
-| ![Actual M365 prompt: Search SharePoint, IT, devices typed before submission](docs/images/table-polish/published-m365-it-devices-inputs.png) | ![Matching real four-result IT devices output with verified source links, dates and tags](docs/images/table-polish/published-m365-polished-table-100.png) |
+| ![Copilot Studio agent in the Microsoft 365 Copilot channel: Search SharePoint, IT, devices typed before submission](docs/images/table-polish/published-m365-it-devices-inputs.png) | ![The same published Copilot Studio agent's four-result IT devices output with verified source links, dates and tags](docs/images/table-polish/published-m365-polished-table-100.png) |
 
+**Built in Copilot Studio and published to the Microsoft 365 Copilot channel,
+not the built-in Microsoft 365 Copilot assistant.**
 Genuine 12 September table-polish captures: one page and three documents.
 These illustrate the IT query, not the later 512-row scenario. Full-resolution
 images open from the previews. **New-tenant solution import remains unverified.**

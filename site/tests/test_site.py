@@ -251,6 +251,9 @@ class SiteTests(unittest.TestCase):
         self.assertEqual(Document(primary).text, ["Download solution ZIP", "Import and configure", "View repository"])
         self.assertIn("new-tenant import is unverified", showcase)
         self.assertIn("typed before submission", showcase)
+        self.assertIn("Copilot Studio agent · Microsoft 365 Copilot channel", showcase)
+        self.assertIn("not the built-in Microsoft 365 Copilot assistant", showcase)
+        self.assertNotIn("Actual published M365 Copilot", self.html)
 
     def test_all_sharepoint_requests_and_helpers_match_the_actual_definition(self):
         reference = BUILD.load_sharepoint_reference()
