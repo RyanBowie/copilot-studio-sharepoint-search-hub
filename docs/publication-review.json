@@ -46,9 +46,29 @@
   },
   "retainedIntrinsicWorkflowIdentity": "One reviewed solution component identity needed for internal references; not a tenant locator or credential.",
   "microsoftAssetReview": "Official Fabric Assets License clauses 1(a)-(b) and Annex 1; unmodified, labelled integration use, not project branding.",
+  "publishedWebsite": {
+    "url": "https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/",
+    "repositoryPublic": true,
+    "httpsEnforced": true,
+    "deploymentSourceCommit": "59a94e070f14ac5ebf2c35d222c859e840010698",
+    "deploymentRun": "https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/actions/runs/34756559466",
+    "deploymentResult": "success",
+    "anonymousPublicFilesVerified": 24,
+    "authorizationHeadersOrCookiesNeeded": false,
+    "solutionBytes": 64159,
+    "solutionDownloadHashMatched": true,
+    "liveInteractiveTabsPassed": 10,
+    "liveThemeTogglePassed": true,
+    "liveNoOverflowWidths": [768, 390, 320],
+    "liveBrowserPageAndHttpErrors": 0,
+    "githubSecretScanningEnabled": true,
+    "githubPushProtectionEnabled": true,
+    "mainBranchProtected": false,
+    "automaticDependencyUpdatePullRequestsEnabled": false
+  },
   "remainingBoundaries": [
     "Pattern scans and visual review do not establish absence of every possible vulnerability.",
-    "Website deployment and anonymous download verification are separate release steps.",
+    "Website and anonymous-download verification establish static publication, not target-tenant import or runtime behavior.",
     "New-tenant solution import/runtime, negative non-owner access and Teams remain unverified.",
     "Public reference availability is not a production support or licensing grant."
   ]

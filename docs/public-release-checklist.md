@@ -63,12 +63,16 @@ Future additions still require privacy and rights review before publication.
 
 ## Publication decision
 
-- [ ] Review the repository description, topics, branch protections and
-      dependency/secret-scanning settings.
+- [x] Review the repository description, topics, branch protections and
+      dependency/secret-scanning settings. GitHub secret scanning and push
+      protection are enabled. `main` is not branch-protected and automatic
+      dependency-update pull requests are not enabled; no stronger policy is claimed.
 - [x] Make a separate, explicit decision to change repository visibility:
       owner authorization on 13 September 2026.
-- [ ] Verify the reviewed Pages deployment, anonymous source/solution downloads
-      and responsive presentation. Publish only the curated static build.
+- [x] Verify the reviewed HTTPS Pages deployment, all 24 anonymously accessible
+      public files, exact solution bytes, live controls and tablet/mobile layouts.
+      Only the curated static build is published; the two staging control files
+      are not counted as user downloads.
 - [x] Retain an honest support statement and known limitations. This is a public
       reference, not a production-certified release or an open-source license grant.
 
