@@ -1,0 +1,160 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnRecognizedIntent
+  id: main
+  intent:
+    displayName: Search approved SharePoint sites
+    triggerQueries:
+      - Search SharePoint
+      - Search for SharePoint content
+      - Search the intranet
+      - CorpNet search check
+      - Find HR documents
+      - Find Finance documents
+      - Search IT guidance
+  actions:
+    - kind: SendActivity
+      id: searchReady
+      activity: I can search approved CorpNet and departmental sites using your selected accounts. I will show up to ten verified file/page links with stored tags and source created/last modified dates in UTC, using separate File or page, Created (UTC), Modified (UTC), and Stored tags columns. I will then email a private Excel workbook containing the full verified results, including those shown here and their source timestamps. Missing preview dates say Not supplied. Export limits and partial results will be reported.
+    - kind: Question
+      id: chooseDepartment
+      variable: Topic.DepartmentInput
+      prompt: Which area would you like to search? Enter All, CorpNet, HR, Finance, or IT.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+      interruptionPolicy:
+        allowInterruption: false
+    - kind: SetVariable
+      id: normalizeDepartment
+      variable: Topic.Department
+      value: =Switch(Lower(Trim(Topic.DepartmentInput)), "all", "All", "corpnet", "CorpNet", "hr", "HR", "finance", "Finance", "it", "IT", "")
+    - kind: ConditionGroup
+      id: checkDepartment
+      conditions:
+        - id: invalidDepartment
+          condition: =IsBlank(Topic.Department)
+          actions:
+            - kind: SendActivity
+              id: invalidDepartmentMessage
+              activity: That area is not configured. No search was run. Start again with "Search SharePoint" and choose All, CorpNet, HR, Finance, or IT.
+            - kind: EndDialog
+              id: invalidDepartmentEnd
+    - kind: Question
+      id: askKeywords
+      variable: Topic.Keywords
+      prompt: Enter up to 12 search words, or * to search all indexed files and pages in that area. Use letters, numbers, spaces and hyphens only.
+      entity:
+        kind: StringPrebuiltEntity
+        sensitivityLevel: None
+      interruptionPolicy:
+        allowInterruption: false
+    - kind: ConditionGroup
+      id: checkKeywords
+      conditions:
+        - id: invalidKeywords
+          condition: =Trim(Topic.Keywords) <> "*" && (!IsMatch(Trim(Topic.Keywords), "^[A-Za-z0-9][A-Za-z0-9 \-]{0,159}$") || CountRows(MatchAll(Trim(Topic.Keywords), "[A-Za-z0-9]+")) > 12)
+          actions:
+            - kind: SendActivity
+              id: invalidKeywordsMessage
+              activity: Those search words are not supported. No search was run. Start again with "Search SharePoint"; use up to 12 plain words or a single *.
+            - kind: EndDialog
+              id: invalidKeywordsEnd
+    - kind: SendActivity
+      id: searching
+      activity: Searching files and pages in {Topic.Department} using your selected accounts...
+    - kind: InvokeFlowAction
+      id: searchCount
+      input:
+        binding:
+          query: =Trim(Topic.Keywords)
+          scope: =Topic.Department
+      output:
+        binding:
+          result: Topic.SearchResult
+      flowId: 96794fbd-20ae-f111-aaab-002248403bef
+    - kind: ConditionGroup
+      id: checkSearchResult
+      conditions:
+        - id: missingResult
+          condition: =IsBlank(Topic.SearchResult)
+          actions:
+            - kind: SendActivity
+              id: missingResultMessage
+              activity: The search flow did not return a usable response. No count, export or email is being reported.
+            - kind: EndDialog
+              id: missingResultEnd
+    - kind: SendActivity
+      id: sharePointContextBanner
+      disabled: false
+      activity:
+        attachments:
+          - kind: AdaptiveCardTemplate
+            cardContent: |-
+              ={
+              '$schema': "http://adaptivecards.io/schemas/adaptive-card.json",
+              'type': "AdaptiveCard",
+              'version': "1.5",
+              'fallbackText': Switch(Topic.Department, "All", "All SharePoint search", "CorpNet", "CorpNet SharePoint search", "HR", "HR SharePoint search", "Finance", "Finance SharePoint search", "IT", "IT SharePoint search", ""),
+              'body': [
+              {
+              'type': "TextBlock",
+              'text': Switch(Topic.Department, "All", "All SharePoint search", "CorpNet", "CorpNet SharePoint search", "HR", "HR SharePoint search", "Finance", "Finance SharePoint search", "IT", "IT SharePoint search", ""),
+              'weight': "bolder",
+              'size': "medium",
+              'wrap': true
+              },
+              {
+              'type': "Image",
+              'url': Switch(Topic.Department, "All", "data:image/png;base64,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", "CorpNet", "data:image/png;base64,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", "HR", "data:image/png;base64,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", "Finance", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAoAAAABgBAMAAAB/ON67AAAAMFBMVEX////4+/ru9PLr9PTk7uzN3tqi1q2qxryFrJ1tnItdkH1Kg242dl4qbVMgZksXPTZXXrelAAAEp0lEQVR42u2bX2hbZRjGfyd/thZ2cYxjsu0msk1dUamISFAhdBXdKLGgtgQ3qHWms/6r4hREsReurIgxlLGRuc6MMWrbmyLLRsFqUFmdQ8nFcBSKO96MuSIUC7ZNc3K8SJueJm1jm2q6c9735vu+k5cQnj7P837n/b4qITiKleOO//brHVg8FATAdR2WB1AVAIWBVrZAYaAAWF4LtDqAijBQJGxtBQsDBcDyWqAwUAAsrwVaG0BFGCgStrqChYECYHktUBhYarjEApeIybbsGLUtA0tUcFveKBJeIQELJrYDUEWKiGxjrL6JEQYKgGW2wDwAPR6Px7ONDk0UvMqN9POAi1NVXtHm6gD0NQEcrhYFl/Qq94oQq7Qi4onhOX18R+s4ZDp2BDVySwYffjQBDD7rS4gFLluFp9r3fPkRXArXXj4wv5wO7twehOmga2tQ2LcsgEN9J9v7IfxC9KvR+WVnVW/vdIzOfb19lQNigcsB+KOfl9PoiRfZpc8vIx/jbvtCjxzE1TYgCi4sIsPDsLceYBc4dThajaLnlmm3H54cS7v9UP+J6LcQwH7AB0A9YOAMZb7508gtdQfg8/3tBDbrouBCAMNNeT/h1qGEaalnpaFPeYAKi3GpJTtURtaypZ85dLN/096Cx+769X0aoJTQQZ1c0zORmR9+8qbml04jOzij1jOzXOu+LbKG3ZgZlxfD9JfNAJc/cxrASFgssDiABmAqFq6ZBAz+7khpMHhGNjHFAXSlNeNTxnNLfzepSL37mTAz7W/JHqa4B7o3PfXEBcbnJKG8U9dypcLP4cemxzY2iYL/BQN77p84O89AfEe+vvcC3HfkysYeYR+AYsF/d1XUEraBcxvByVxVjsqhkhwqrV8LtCKAijBQJGwfBQsDBcDyWqAFb6iqa3wFVSRMaVdQ7QagstZXUIWBUkTW8SZmEQAzBQ3tEYB0YOED8xrpB85Gep/K01oBpEUf2HcTk7+NqehbJGV30Qc2VnChhNOBeE9j0uhoTMZ7GpOcaByIa380vA6QCrUG4lo6ENdSoTcwp3CiMSFFJBfDXbHUza4Yw12x1K/nTsHpzm0A3a11sxndrXWYU1LXznXbU8F5AE41NAA1nutK852/UeO5PrbHFYAtdz+ogXG+ujabZpyvrsWcMtbsekCKSNYD0+BVDPfIRfAqRtJLKE6gc/Q9yDjm4M44cLAg5QwT79rSAheVsApT3z8H6twP+uARP7ljYmN2Zk5R3++7KB5ojl8OerNYanyOfqNm9lqCAePG7Myc4tV41Z4WuBSAanIUgJ1DM9+h6JkEBo7Hk0M89O3PZGfmlM1DtybsqeClALzn0jEDYEPV/pdwHAj6/9qq0dxxlS3XzgLNHVcXpGzY/ebbyLlwsXjtWCoUs8yBcP7B7yrPhVfSUN2u3fDLy28JADZ/6DounZgSALzrpBDO0v1ARQC8/RRs45Z+Zd4k10iOLPqxDQBcqYIjC8fKPMDyPrbB/UBFJHwbWqAca8rVjtVYYMuKK07E+gxUhYH/X0TFA9fHa4gUEQGw3BYoDBQAy2uBlgFQFQBFwrZUsDBQACyvBQoDS41/ABE0WEPbzSIQAAAAAElFTkSuQmCC", "IT", "data:image/png;base64,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", ""),
+              'altText': Switch(Topic.Department, "All", "All approved areas: Connected knowledge. Original All scope artwork.", "CorpNet", "CorpNet: Company knowledge. Original CorpNet scope artwork.", "HR", "Human Resources: People and workplace. Original HR scope artwork.", "Finance", "Finance: Financial guidance. Original Finance scope artwork.", "IT", "Information Technology: Services and support. Original IT scope artwork.", ""),
+              'size': "stretch",
+              'spacing': "small"
+              },
+              {
+              'type': "ColumnSet",
+              'spacing': "small",
+              'columns': [
+              {
+              'type': "Column",
+              'width': "auto",
+              'verticalContentAlignment': "center",
+              'items': [
+              {
+              'type': "Image",
+              'url': "data:image/png;base64,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",
+              'altText': "Microsoft SharePoint product icon",
+              'width': "24px",
+              'backgroundColor': "#FFFFFF"
+              }
+              ]
+              },
+              {
+              'type': "Column",
+              'width': "stretch",
+              'items': [
+              {
+              'type': "TextBlock",
+              'text': "Microsoft SharePoint",
+              'wrap': true,
+              'size': "small"
+              },
+              {
+              'type': "TextBlock",
+              'text': "Search uses your selected accounts and approved sites.",
+              'wrap': true,
+              'size': "small",
+              'isSubtle': true,
+              'spacing': "none"
+              }
+              ]
+              }
+              ]
+              }
+              ]
+              }
+    - kind: SendActivity
+      id: reportCount
+      activity: '{Topic.SearchResult}'
+inputType: {}
+outputType: {}

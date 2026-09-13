@@ -6,7 +6,9 @@
   "scripts": {
     "generate": "node generate-documents.cjs",
     "generate:expansion": "node build-expansion.cjs && node generate-documents.cjs --content expansion-content.json --manifest expansion-documents-manifest.json --documents expansion-documents",
-    "generate:paging": "node build-paging.cjs && node generate-documents.cjs --content paging-content.json --manifest paging-documents-manifest.json --documents paging-documents"
+    "generate:paging": "node build-paging.cjs && node generate-documents.cjs --content paging-content.json --manifest paging-documents-manifest.json --documents paging-documents",
+    "generate:scale": "node build-scale.cjs && node generate-documents.cjs --content scale-content.json --manifest scale-documents-manifest.json --documents scale-documents",
+    "test:scale": "node --test test-scale.cjs"
   },
   "dependencies": {
     "docx": "9.7.1"

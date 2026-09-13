@@ -1,0 +1,481 @@
+{
+  "solutionUniqueName": "cnh_CorpNetSearchHubReference",
+  "version": "1.0.0.0",
+  "managed": false,
+  "components": {
+    "agents": 1,
+    "activeTopics": 14,
+    "gptComponents": 1,
+    "nativeFlowTools": 1,
+    "workflows": 1,
+    "connectionReferences": 5,
+    "toolWorkflowRelationships": 1
+  },
+  "botSchemas": [
+    "cnh_corpnetSearchHub"
+  ],
+  "botComponentSchemas": [
+    "cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions",
+    "cnh_corpnetSearchHub.gpt.default",
+    "cnh_corpnetSearchHub.topic.ConversationStart",
+    "cnh_corpnetSearchHub.topic.EndofConversation",
+    "cnh_corpnetSearchHub.topic.Escalate",
+    "cnh_corpnetSearchHub.topic.Fallback",
+    "cnh_corpnetSearchHub.topic.Goodbye",
+    "cnh_corpnetSearchHub.topic.Greeting",
+    "cnh_corpnetSearchHub.topic.MultipleTopicsMatched",
+    "cnh_corpnetSearchHub.topic.OnError",
+    "cnh_corpnetSearchHub.topic.ResetConversation",
+    "cnh_corpnetSearchHub.topic.Search",
+    "cnh_corpnetSearchHub.topic.SearchSharePoint",
+    "cnh_corpnetSearchHub.topic.Signin",
+    "cnh_corpnetSearchHub.topic.StartOver",
+    "cnh_corpnetSearchHub.topic.ThankYou"
+  ],
+  "connectionReferenceLogicalNames": [
+    "cnh_corpnetexport_r3_excel",
+    "cnh_corpnetexport_r3_onedrive",
+    "cnh_corpnetexport_r3_outlook",
+    "cnh_corpnetexport_r3_profile",
+    "cnh_corpnetsearch_sharepoint"
+  ],
+  "preservedIdentifiers": [
+    {
+      "value": "96794fbd-20ae-f111-aaab-002248403bef",
+      "classification": "intrinsic solution workflow component identity",
+      "whyRetained": "Required consistency across workflow, manifest, native topic/tool bindings and relationship; not a tenant/site/connection locator.",
+      "sourcePaths": [
+        "Assets\\botcomponent_workflowset.xml",
+        "botcomponents\\cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions\\data",
+        "botcomponents\\cnh_corpnetSearchHub.topic.SearchSharePoint\\data",
+        "Other\\Solution.xml",
+        "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
+        "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json.data.xml"
+      ],
+      "zipEntries": [
+        "customizations.xml",
+        "solution.xml",
+        "Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
+        "Assets/botcomponent_workflowset.xml",
+        "botcomponents/cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions/data",
+        "botcomponents/cnh_corpnetSearchHub.topic.SearchSharePoint/data"
+      ],
+      "supportingPaths": [
+        "tools\\sync_reference.py",
+        "tests\\test_solution.py",
+        "component-inventory.json"
+      ]
+    }
+  ],
+  "fictionalIdentifiers": [
+    "00000000-0000-4000-8000-000000000001",
+    "00000000-0000-4000-8000-000000000002",
+    "00000000-0000-4000-8000-000000000003",
+    "00000000-0000-4000-8000-000000000004"
+  ],
+  "removedClasses": [
+    "source tenant/environment/organization/site/hub locators",
+    "actual connection IDs",
+    "disabled connector probes and their unused relationships",
+    "unprovenance original agent icon"
+  ],
+  "excludedWorkflowClasses": [
+    "fixture provisioning",
+    "retired private writer",
+    "superseded count scaffold"
+  ],
+  "sourceFiles": [
+    {
+      "path": "Assets\\botcomponent_workflowset.xml",
+      "bytes": 304,
+      "sha256": "9c9ab5470c9d16c4265d58fb9f03b29ad8014181f0377c48bda395bbb78d9f2c"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions\\botcomponent.xml",
+      "bytes": 392,
+      "sha256": "eee6d47d9316cdc34b31b942c94cef61c86c8bd9643b3ffcd1fba93ec20e803f"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions\\data",
+      "bytes": 818,
+      "sha256": "4cb7bd42f58308a4f8fd9623262fe965f1a22e418c7464a3d0374a7245413c49"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.gpt.default\\botcomponent.xml",
+      "bytes": 331,
+      "sha256": "c8ad51cf1fd0a9ad2a728eec3c97a0a85b1cb47eab71de5e84f9b5bd7e5b74c6"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.gpt.default\\data",
+      "bytes": 5078,
+      "sha256": "95ed74173704caf68063de30384303167c21c7653b855c74e37d87879091fa86"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ConversationStart\\botcomponent.xml",
+      "bytes": 562,
+      "sha256": "401daf026615b6f8417a56aa5a2c21497adae33c9d4043952803e99dccc86408"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ConversationStart\\data",
+      "bytes": 737,
+      "sha256": "a81f6712c34fd2d37c4dc764ae5601ef1ceae1ab689db3f234792d7b2441d7a1"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.EndofConversation\\botcomponent.xml",
+      "bytes": 501,
+      "sha256": "c55f1ad0588c8b3981f7fe812763bcfb1e7450b451d27409e5426d245aa46c68"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.EndofConversation\\data",
+      "bytes": 2291,
+      "sha256": "6f6a24a9fe3423b3329e50219fa1d9aaf2ce91db56d2838cba0307b78aae3fbb"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Escalate\\botcomponent.xml",
+      "bytes": 621,
+      "sha256": "4a2095999a0d16a1887384aec339f057cdf309fd3786598e243d09065883b83c"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Escalate\\data",
+      "bytes": 1990,
+      "sha256": "f52cc34cbd753333ad03a61845e794e778da18a808b3f1e75e6ee50ede88bb12"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Fallback\\botcomponent.xml",
+      "bytes": 442,
+      "sha256": "0516531ea0b018eb30902177488d8a2eb2c0b9872cdef11e1f4b756b638cd400"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Fallback\\data",
+      "bytes": 315,
+      "sha256": "0b1e919cb638139f0f4ef1cccebd444636db074f302c858262149ad9ced646b7"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Goodbye\\botcomponent.xml",
+      "bytes": 629,
+      "sha256": "d19152f5195b138eb51312ce9c5f1354c1fb004f0aa0812dbb70c2c05f1af3c2"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Goodbye\\data",
+      "bytes": 1067,
+      "sha256": "acc97a299159d05f6dd2d5f51f3ef61808f3b99ced1d8d03570d3291fdab78ec"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Greeting\\botcomponent.xml",
+      "bytes": 409,
+      "sha256": "c0291e177fa41b23190bd11a08e9c56775977e69de0f5c0207c37a52767fbba2"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Greeting\\data",
+      "bytes": 942,
+      "sha256": "8807cc1d89ca63aa4fed0416c230a8baf180194cd9220d4ceae080533a66e60a"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.MultipleTopicsMatched\\botcomponent.xml",
+      "bytes": 525,
+      "sha256": "23b0afab422124fcb1e8fb5229011b7ac6c09331259dced261c8557431617cce"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.MultipleTopicsMatched\\data",
+      "bytes": 1276,
+      "sha256": "5a11778f950c28a077b1504dc77fa0e3ee423429ec790f2a67a9c568e6a73651"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.OnError\\botcomponent.xml",
+      "bytes": 435,
+      "sha256": "3b3a5e8eb1ea76870ecaa01ae248aaab788d9b383bfa9111d21f3126a8cf8599"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.OnError\\data",
+      "bytes": 893,
+      "sha256": "d5f918356dc92170f60eceb9b7fcb69c501cb62eacbfa1a8dba018bd10d49d02"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ResetConversation\\botcomponent.xml",
+      "bytes": 342,
+      "sha256": "d8017ecdd485ade87df7357c28ca86cbdc974919342b2fd6e8b84668bc7a77b7"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ResetConversation\\data",
+      "bytes": 425,
+      "sha256": "1757ef3f22dc762922edde1186c3562fec2ae104eca273c1d0629977e5f647e9"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Search\\botcomponent.xml",
+      "bytes": 447,
+      "sha256": "0c8083d84b9672abafd06e1607d68d5110674064b07cf03b81f641b93314f75d"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Search\\data",
+      "bytes": 212,
+      "sha256": "4e80562cce3b15b47ef8332557ea8fe7f83b4d30dae1a99aa31e6edfe357e558"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.SearchSharePoint\\botcomponent.xml",
+      "bytes": 596,
+      "sha256": "7fc692b7a740a5bd8d975684dc339dad1465a281d84b244312f340df53a69caf"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.SearchSharePoint\\data",
+      "bytes": 23570,
+      "sha256": "84794272e9dece934e9b37ea40146bfd1798a0c57cd052085f391c849964b49d"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Signin\\botcomponent.xml",
+      "bytes": 449,
+      "sha256": "1eedfd538699747821659510855c2f0be7bbb6e711175cc2d1ea133c7f9bc014"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.Signin\\data",
+      "bytes": 542,
+      "sha256": "1bab6021f7a2ef9b978b5097522da4b4f8f0c285941141e3690cccb9cf7152a0"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.StartOver\\botcomponent.xml",
+      "bytes": 326,
+      "sha256": "9e798cb3edafa05c1b8459534e843fa268df1b4dbee2c359e8831313fe6bc47a"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.StartOver\\data",
+      "bytes": 917,
+      "sha256": "2cf0a49c8458abe1708b122b746ea493300b9839bd1c2c7949bd7a6b0a3eb3d6"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ThankYou\\botcomponent.xml",
+      "bytes": 404,
+      "sha256": "247fb3f9bc9e670ba5552ce025d7de924a74dcc9610b2ff71da789128a9e3f77"
+    },
+    {
+      "path": "botcomponents\\cnh_corpnetSearchHub.topic.ThankYou\\data",
+      "bytes": 344,
+      "sha256": "f86e2fefb1ed28fa23fe96bef634bb5549c8c147f6f18b37660126a04f8750aa"
+    },
+    {
+      "path": "bots\\cnh_corpnetSearchHub\\bot.xml",
+      "bytes": 425,
+      "sha256": "649f7b08eb3566447d5fc976ecdfc00a6e1c844a654af7986945c7ed3a944f40"
+    },
+    {
+      "path": "bots\\cnh_corpnetSearchHub\\configuration.json",
+      "bytes": 589,
+      "sha256": "66f660e71d67c197a899cafd64f11e653625d3f10355ebca3dd06924f0e6ae79"
+    },
+    {
+      "path": "Other\\Customizations.xml",
+      "bytes": 3666,
+      "sha256": "09fe42346d78f40786b92dce574a0217d7b430b3278780be3ce8ea16cee97a58"
+    },
+    {
+      "path": "Other\\Solution.xml",
+      "bytes": 3939,
+      "sha256": "ca60cbef7698b05069316412a0318bb9200937e41da4217bfb67c65a7d07da92"
+    },
+    {
+      "path": "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
+      "bytes": 158731,
+      "sha256": "98dae735168a8d8955f9b5011916bf3c4775e02582abcc0bd5a2525b23b56330"
+    },
+    {
+      "path": "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json.data.xml",
+      "bytes": 1735,
+      "sha256": "b98af7650408199eea0dea336adcd07b8511f199bb3922751741810054783095"
+    }
+  ],
+  "zipEntries": [
+    {
+      "path": "customizations.xml",
+      "bytes": 5496,
+      "sha256": "f623e00eb697b78f3d163b55ab81c5f8e26de6fd2ba4853b4f88f9ee45f06a32"
+    },
+    {
+      "path": "solution.xml",
+      "bytes": 3942,
+      "sha256": "0d57476505fc80600e389d4b637fc3f7c49a2fb16027772c74fb9145b401a190"
+    },
+    {
+      "path": "Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
+      "bytes": 158731,
+      "sha256": "98dae735168a8d8955f9b5011916bf3c4775e02582abcc0bd5a2525b23b56330"
+    },
+    {
+      "path": "Assets/botcomponent_workflowset.xml",
+      "bytes": 304,
+      "sha256": "9c9ab5470c9d16c4265d58fb9f03b29ad8014181f0377c48bda395bbb78d9f2c"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions/botcomponent.xml",
+      "bytes": 392,
+      "sha256": "eee6d47d9316cdc34b31b942c94cef61c86c8bd9643b3ffcd1fba93ec20e803f"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions/data",
+      "bytes": 818,
+      "sha256": "4cb7bd42f58308a4f8fd9623262fe965f1a22e418c7464a3d0374a7245413c49"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.gpt.default/botcomponent.xml",
+      "bytes": 331,
+      "sha256": "c8ad51cf1fd0a9ad2a728eec3c97a0a85b1cb47eab71de5e84f9b5bd7e5b74c6"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.gpt.default/data",
+      "bytes": 5078,
+      "sha256": "95ed74173704caf68063de30384303167c21c7653b855c74e37d87879091fa86"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ConversationStart/botcomponent.xml",
+      "bytes": 562,
+      "sha256": "401daf026615b6f8417a56aa5a2c21497adae33c9d4043952803e99dccc86408"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ConversationStart/data",
+      "bytes": 737,
+      "sha256": "a81f6712c34fd2d37c4dc764ae5601ef1ceae1ab689db3f234792d7b2441d7a1"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.EndofConversation/botcomponent.xml",
+      "bytes": 501,
+      "sha256": "c55f1ad0588c8b3981f7fe812763bcfb1e7450b451d27409e5426d245aa46c68"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.EndofConversation/data",
+      "bytes": 2291,
+      "sha256": "6f6a24a9fe3423b3329e50219fa1d9aaf2ce91db56d2838cba0307b78aae3fbb"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Escalate/botcomponent.xml",
+      "bytes": 621,
+      "sha256": "4a2095999a0d16a1887384aec339f057cdf309fd3786598e243d09065883b83c"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Escalate/data",
+      "bytes": 1990,
+      "sha256": "f52cc34cbd753333ad03a61845e794e778da18a808b3f1e75e6ee50ede88bb12"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Fallback/botcomponent.xml",
+      "bytes": 442,
+      "sha256": "0516531ea0b018eb30902177488d8a2eb2c0b9872cdef11e1f4b756b638cd400"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Fallback/data",
+      "bytes": 315,
+      "sha256": "0b1e919cb638139f0f4ef1cccebd444636db074f302c858262149ad9ced646b7"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Goodbye/botcomponent.xml",
+      "bytes": 629,
+      "sha256": "d19152f5195b138eb51312ce9c5f1354c1fb004f0aa0812dbb70c2c05f1af3c2"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Goodbye/data",
+      "bytes": 1067,
+      "sha256": "acc97a299159d05f6dd2d5f51f3ef61808f3b99ced1d8d03570d3291fdab78ec"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Greeting/botcomponent.xml",
+      "bytes": 409,
+      "sha256": "c0291e177fa41b23190bd11a08e9c56775977e69de0f5c0207c37a52767fbba2"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Greeting/data",
+      "bytes": 942,
+      "sha256": "8807cc1d89ca63aa4fed0416c230a8baf180194cd9220d4ceae080533a66e60a"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.MultipleTopicsMatched/botcomponent.xml",
+      "bytes": 525,
+      "sha256": "23b0afab422124fcb1e8fb5229011b7ac6c09331259dced261c8557431617cce"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.MultipleTopicsMatched/data",
+      "bytes": 1276,
+      "sha256": "5a11778f950c28a077b1504dc77fa0e3ee423429ec790f2a67a9c568e6a73651"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.OnError/botcomponent.xml",
+      "bytes": 435,
+      "sha256": "3b3a5e8eb1ea76870ecaa01ae248aaab788d9b383bfa9111d21f3126a8cf8599"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.OnError/data",
+      "bytes": 893,
+      "sha256": "d5f918356dc92170f60eceb9b7fcb69c501cb62eacbfa1a8dba018bd10d49d02"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ResetConversation/botcomponent.xml",
+      "bytes": 342,
+      "sha256": "d8017ecdd485ade87df7357c28ca86cbdc974919342b2fd6e8b84668bc7a77b7"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ResetConversation/data",
+      "bytes": 425,
+      "sha256": "1757ef3f22dc762922edde1186c3562fec2ae104eca273c1d0629977e5f647e9"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Search/botcomponent.xml",
+      "bytes": 447,
+      "sha256": "0c8083d84b9672abafd06e1607d68d5110674064b07cf03b81f641b93314f75d"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Search/data",
+      "bytes": 212,
+      "sha256": "4e80562cce3b15b47ef8332557ea8fe7f83b4d30dae1a99aa31e6edfe357e558"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.SearchSharePoint/botcomponent.xml",
+      "bytes": 596,
+      "sha256": "7fc692b7a740a5bd8d975684dc339dad1465a281d84b244312f340df53a69caf"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.SearchSharePoint/data",
+      "bytes": 23570,
+      "sha256": "84794272e9dece934e9b37ea40146bfd1798a0c57cd052085f391c849964b49d"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Signin/botcomponent.xml",
+      "bytes": 449,
+      "sha256": "1eedfd538699747821659510855c2f0be7bbb6e711175cc2d1ea133c7f9bc014"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.Signin/data",
+      "bytes": 542,
+      "sha256": "1bab6021f7a2ef9b978b5097522da4b4f8f0c285941141e3690cccb9cf7152a0"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.StartOver/botcomponent.xml",
+      "bytes": 326,
+      "sha256": "9e798cb3edafa05c1b8459534e843fa268df1b4dbee2c359e8831313fe6bc47a"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.StartOver/data",
+      "bytes": 917,
+      "sha256": "2cf0a49c8458abe1708b122b746ea493300b9839bd1c2c7949bd7a6b0a3eb3d6"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ThankYou/botcomponent.xml",
+      "bytes": 404,
+      "sha256": "247fb3f9bc9e670ba5552ce025d7de924a74dcc9610b2ff71da789128a9e3f77"
+    },
+    {
+      "path": "botcomponents/cnh_corpnetSearchHub.topic.ThankYou/data",
+      "bytes": 344,
+      "sha256": "f86e2fefb1ed28fa23fe96bef634bb5549c8c147f6f18b37660126a04f8750aa"
+    },
+    {
+      "path": "bots/cnh_corpnetSearchHub/bot.xml",
+      "bytes": 425,
+      "sha256": "649f7b08eb3566447d5fc976ecdfc00a6e1c844a654af7986945c7ed3a944f40"
+    },
+    {
+      "path": "bots/cnh_corpnetSearchHub/configuration.json",
+      "bytes": 589,
+      "sha256": "66f660e71d67c197a899cafd64f11e653625d3f10355ebca3dd06924f0e6ae79"
+    },
+    {
+      "path": "[Content_Types].xml",
+      "bytes": 4544,
+      "sha256": "101e6aca4599c0e69d2ee37ffc06f3d7d732a837ae70010ca6ef7c6bda9f07aa"
+    }
+  ]
+}

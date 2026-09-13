@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Workflow WorkflowId="{96794fbd-20ae-f111-aaab-002248403bef}" Name="CorpNet Search - Files, Pages and Private Export" Description="Caller-authenticated files/pages search with verified source Created/Modified UTC dates, permission-checked pagination, private multi-row Excel export and verified-requester email. Cap 1000 rows; no maker-source fallback.">
+  <JsonFileName>/Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json</JsonFileName>
+  <Type>1</Type>
+  <Subprocess>0</Subprocess>
+  <Category>5</Category>
+  <Mode>0</Mode>
+  <Scope>4</Scope>
+  <OnDemand>0</OnDemand>
+  <TriggerOnCreate>0</TriggerOnCreate>
+  <TriggerOnDelete>0</TriggerOnDelete>
+  <AsyncAutodelete>0</AsyncAutodelete>
+  <SyncWorkflowLogOnFailure>0</SyncWorkflowLogOnFailure>
+  <StateCode>0</StateCode>
+  <StatusCode>1</StatusCode>
+  <RunAs>1</RunAs>
+  <IsTransacted>1</IsTransacted>
+  <IntroducedVersion>1.0</IntroducedVersion>
+  <IsCustomizable>1</IsCustomizable>
+  <BusinessProcessType>0</BusinessProcessType>
+  <IsCustomProcessingStepAllowedForOtherPublishers>1</IsCustomProcessingStepAllowedForOtherPublishers>
+  <ModernFlowType>1</ModernFlowType>
+  <PrimaryEntity>none</PrimaryEntity>
+  <LocalizedNames>
+    <LocalizedName languagecode="1033" description="CorpNet Search - Files, Pages and Private Export" />
+  </LocalizedNames>
+  <Descriptions>
+    <Description languagecode="1033" description="Caller-authenticated files/pages search with verified source Created/Modified UTC dates, permission-checked pagination, private multi-row Excel export and verified-requester email. Cap 1000 rows; no maker-source fallback." />
+  </Descriptions>
+</Workflow>

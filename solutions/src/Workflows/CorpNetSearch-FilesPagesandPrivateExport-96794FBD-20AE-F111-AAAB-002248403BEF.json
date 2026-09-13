@@ -1,0 +1,2992 @@
+{
+  "properties": {
+    "connectionReferences": {
+      "shared_sharepointonline": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "cnh_corpnetsearch_sharepoint"
+        },
+        "api": {
+          "name": "shared_sharepointonline"
+        }
+      },
+      "shared_office365": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "cnh_corpnetexport_r3_outlook"
+        },
+        "api": {
+          "name": "shared_office365"
+        }
+      },
+      "shared_excelonlinebusiness": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "cnh_corpnetexport_r3_excel"
+        },
+        "api": {
+          "name": "shared_excelonlinebusiness"
+        }
+      },
+      "shared_office365users": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "cnh_corpnetexport_r3_profile"
+        },
+        "api": {
+          "name": "shared_office365users"
+        }
+      },
+      "shared_onedriveforbusiness": {
+        "runtimeSource": "invoker",
+        "connection": {
+          "connectionReferenceLogicalName": "cnh_corpnetexport_r3_onedrive"
+        },
+        "api": {
+          "name": "shared_onedriveforbusiness"
+        }
+      }
+    },
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "metadata": {
+        "defaultToEmbeddedConnections": false
+      },
+      "parameters": {
+        "$authentication": {
+          "type": "SecureObject",
+          "defaultValue": {}
+        },
+        "$connections": {
+          "type": "Object",
+          "defaultValue": {}
+        }
+      },
+      "triggers": {
+        "manual": {
+          "type": "Request",
+          "kind": "Skills",
+          "inputs": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "query": {
+                  "title": "Search words",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT"
+                },
+                "scope": {
+                  "title": "Department",
+                  "type": "string",
+                  "x-ms-content-hint": "TEXT"
+                }
+              },
+              "required": [
+                "query",
+                "scope"
+              ]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Initialize_Result": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Result",
+                "type": "string",
+                "value": "The search/export could not be started. No successful export or email is being reported."
+              }
+            ]
+          },
+          "runAfter": {}
+        },
+        "Initialize_JobId": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "JobId",
+                "type": "string",
+                "value": "@guid()"
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Result": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_IndexTotal": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "IndexTotal",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_JobId": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Exported": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Exported",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_IndexTotal": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_FileCount": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "FileCount",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Exported": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PageCount": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PageCount",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_FileCount": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Checked": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Checked",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PageCount": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Omitted": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Omitted",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Checked": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Failures": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Failures",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Omitted": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Duplicates": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Duplicates",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Failures": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Capped": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Capped",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Duplicates": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_StopExport": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "StopExport",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Capped": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Started": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Started",
+                "type": "boolean",
+                "value": false
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_StopExport": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_Batches": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "Batches",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Started": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PageRows": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PageRows",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_Batches": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_CurrentBatch": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "CurrentBatch",
+                "type": "object",
+                "value": {}
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PageRows": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_BatchIndex": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "BatchIndex",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_CurrentBatch": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_ProcessedPages": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ProcessedPages",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_BatchIndex": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PageStart": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PageStart",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_ProcessedPages": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_SeenUrls": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "SeenUrls",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PageStart": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_ExpectedRows": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ExpectedRows",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_SeenUrls": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_ActualRows": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ActualRows",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_ExpectedRows": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_VerifyStart": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "VerifyStart",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_ActualRows": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_VerifyMore": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "VerifyMore",
+                "type": "boolean",
+                "value": true
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_VerifyStart": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_FileId": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "FileId",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_VerifyMore": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_ReportUrl": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "ReportUrl",
+                "type": "string",
+                "value": ""
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_FileId": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PreviewRows": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PreviewRows",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_ReportUrl": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PreviewUrls": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PreviewUrls",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PreviewRows": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PreviewLines": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PreviewLines",
+                "type": "array",
+                "value": []
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PreviewUrls": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Initialize_PreviewChecked": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "PreviewChecked",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          },
+          "runAfter": {
+            "Initialize_PreviewLines": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Start_search_export": {
+          "type": "Scope",
+          "actions": {
+            "Approved_scopes": {
+              "type": "Compose",
+              "inputs": {
+                "All": [
+                  {
+                    "Kql": "(SiteID:\"00000000-0000-4000-8000-000000000001\" OR SiteID:\"00000000-0000-4000-8000-000000000002\" OR SiteID:\"00000000-0000-4000-8000-000000000003\" OR SiteID:\"00000000-0000-4000-8000-000000000004\") AND DepartmentId:00000000-0000-4000-8000-000000000001",
+                    "Sites": {
+                      "00000000-0000-4000-8000-000000000001": {
+                        "url": "https://contoso.sharepoint.com/sites/CorpNet",
+                        "department": "CorpNet",
+                        "siteId": "00000000-0000-4000-8000-000000000001"
+                      },
+                      "00000000-0000-4000-8000-000000000002": {
+                        "url": "https://contoso.sharepoint.com/sites/HR",
+                        "department": "HR",
+                        "siteId": "00000000-0000-4000-8000-000000000002"
+                      },
+                      "00000000-0000-4000-8000-000000000003": {
+                        "url": "https://contoso.sharepoint.com/sites/Finance",
+                        "department": "Finance",
+                        "siteId": "00000000-0000-4000-8000-000000000003"
+                      },
+                      "00000000-0000-4000-8000-000000000004": {
+                        "url": "https://contoso.sharepoint.com/sites/IT",
+                        "department": "IT",
+                        "siteId": "00000000-0000-4000-8000-000000000004"
+                      }
+                    }
+                  }
+                ],
+                "CorpNet": [
+                  {
+                    "Kql": "(SiteID:\"00000000-0000-4000-8000-000000000001\") AND DepartmentId:00000000-0000-4000-8000-000000000001",
+                    "Sites": {
+                      "00000000-0000-4000-8000-000000000001": {
+                        "url": "https://contoso.sharepoint.com/sites/CorpNet",
+                        "department": "CorpNet",
+                        "siteId": "00000000-0000-4000-8000-000000000001"
+                      }
+                    }
+                  }
+                ],
+                "HR": [
+                  {
+                    "Kql": "(SiteID:\"00000000-0000-4000-8000-000000000002\") AND DepartmentId:00000000-0000-4000-8000-000000000001",
+                    "Sites": {
+                      "00000000-0000-4000-8000-000000000002": {
+                        "url": "https://contoso.sharepoint.com/sites/HR",
+                        "department": "HR",
+                        "siteId": "00000000-0000-4000-8000-000000000002"
+                      }
+                    }
+                  }
+                ],
+                "Finance": [
+                  {
+                    "Kql": "(SiteID:\"00000000-0000-4000-8000-000000000003\") AND DepartmentId:00000000-0000-4000-8000-000000000001",
+                    "Sites": {
+                      "00000000-0000-4000-8000-000000000003": {
+                        "url": "https://contoso.sharepoint.com/sites/Finance",
+                        "department": "Finance",
+                        "siteId": "00000000-0000-4000-8000-000000000003"
+                      }
+                    }
+                  }
+                ],
+                "IT": [
+                  {
+                    "Kql": "(SiteID:\"00000000-0000-4000-8000-000000000004\") AND DepartmentId:00000000-0000-4000-8000-000000000001",
+                    "Sites": {
+                      "00000000-0000-4000-8000-000000000004": {
+                        "url": "https://contoso.sharepoint.com/sites/IT",
+                        "department": "IT",
+                        "siteId": "00000000-0000-4000-8000-000000000004"
+                      }
+                    }
+                  }
+                ]
+              },
+              "runAfter": {}
+            },
+            "Invalid_characters": {
+              "type": "Query",
+              "inputs": {
+                "from": "@range(0,min(length(trim(coalesce(triggerBody()?['query'],''))),161))",
+                "where": "@not(contains('ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 -',substring(trim(coalesce(triggerBody()?['query'],'')),item(),1)))"
+              },
+              "runAfter": {
+                "Approved_scopes": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Keyword_tokens": {
+              "type": "Query",
+              "inputs": {
+                "from": "@split(replace(trim(coalesce(triggerBody()?['query'],'')),'-',' '),' ')",
+                "where": "@not(empty(item()))"
+              },
+              "runAfter": {
+                "Invalid_characters": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Valid_input": {
+              "type": "If",
+              "expression": "@and(contains(outputs('Approved_scopes'),coalesce(triggerBody()?['scope'],'')),greater(length(trim(coalesce(triggerBody()?['query'],''))),0),lessOrEquals(length(trim(coalesce(triggerBody()?['query'],''))),160),or(equals(trim(coalesce(triggerBody()?['query'],'')),'*'),and(empty(body('Invalid_characters')),greater(length(body('Keyword_tokens')),0),lessOrEquals(length(body('Keyword_tokens')),12))))",
+              "actions": {
+                "Literal_tokens": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@body('Keyword_tokens')",
+                    "select": "@concat('\"',item(),'\"')"
+                  },
+                  "runAfter": {}
+                },
+                "Literal_query": {
+                  "type": "Compose",
+                  "inputs": "@if(equals(trim(coalesce(triggerBody()?['query'],'')),'*'),'*',join(body('Literal_tokens'),' AND '))",
+                  "runAfter": {
+                    "Literal_tokens": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Selected_profile": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+                      "connectionName": "shared_office365users",
+                      "operationId": "MyProfile_V2"
+                    },
+                    "parameters": {
+                      "$select": "id,mail,userPrincipalName"
+                    },
+                    "retryPolicy": {
+                      "type": "none"
+                    }
+                  },
+                  "runAfter": {
+                    "Literal_query": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "SharePoint_profile": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                      "connectionName": "shared_sharepointonline",
+                      "operationId": "HttpRequest"
+                    },
+                    "parameters": {
+                      "dataset": "https://contoso.sharepoint.com/sites/CorpNet",
+                      "parameters/method": "GET",
+                      "parameters/uri": "_api/SP.UserProfiles.PeopleManager/GetMyProperties?$select=PersonalUrl,AccountName",
+                      "parameters/headers": {
+                        "Accept": "application/json;odata=nometadata"
+                      }
+                    },
+                    "retryPolicy": {
+                      "type": "none"
+                    }
+                  },
+                  "runAfter": {
+                    "Literal_query": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "OneDrive_root": {
+                  "type": "OpenApiConnection",
+                  "inputs": {
+                    "host": {
+                      "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness",
+                      "connectionName": "shared_onedriveforbusiness",
+                      "operationId": "GetFileMetadataByPath"
+                    },
+                    "parameters": {
+                      "path": "/"
+                    },
+                    "retryPolicy": {
+                      "type": "none"
+                    }
+                  },
+                  "runAfter": {
+                    "Literal_query": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Personal_site_available": {
+                  "type": "If",
+                  "expression": "@startsWith(toLower(coalesce(body('SharePoint_profile')?['PersonalUrl'],'')),'https://contoso-my.sharepoint.com/personal/')",
+                  "actions": {
+                    "Personal_drive": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest"
+                        },
+                        "parameters": {
+                          "dataset": "@body('SharePoint_profile')?['PersonalUrl']",
+                          "parameters/method": "GET",
+                          "parameters/uri": "_api/v2.0/drive?$select=id,owner,webUrl",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata"
+                          }
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Personal_site_user": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest"
+                        },
+                        "parameters": {
+                          "dataset": "@body('SharePoint_profile')?['PersonalUrl']",
+                          "parameters/method": "GET",
+                          "parameters/uri": "_api/web/currentuser?$select=Id,LoginName",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata"
+                          }
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Source_directory_profile": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365users",
+                          "connectionName": "shared_office365users",
+                          "operationId": "UserProfile_V2"
+                        },
+                        "parameters": {
+                          "id": "@last(split(body('SharePoint_profile')?['AccountName'],'|'))",
+                          "$select": "id,mail,userPrincipalName"
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Accounts_aligned": {
+                      "type": "If",
+                      "expression": "@and(not(empty(body('Selected_profile')?['id'])),not(empty(body('Selected_profile')?['mail'])),not(contains(body('Selected_profile')?['mail'],';')),not(contains(body('Selected_profile')?['mail'],',')),equals(body('Selected_profile')?['id'],body('Source_directory_profile')?['id']),equals(body('Selected_profile')?['id'],body('Personal_drive')?['owner']?['user']?['id']),not(empty(body('Personal_drive')?['id'])),startsWith(body('OneDrive_root')?['Id'],concat(body('Personal_drive')?['id'],'.')))",
+                      "actions": {
+                        "Read_index_batches": {
+                          "type": "Foreach",
+                          "foreach": "@outputs('Approved_scopes')[triggerBody()?['scope']]",
+                          "actions": {
+                            "Initial_request": {
+                              "type": "Compose",
+                              "inputs": {
+                                "request": {
+                                  "Querytext": "@concat('(', item()?['Kql'], ') AND (', outputs('Literal_query'), ') AND (contentclass:\"STS_ListItem_DocumentLibrary\" OR contentclass:\"STS_ListItem_WebPageLibrary\") AND (IsDocument:1 OR FileExtension:aspx)')",
+                                  "RowLimit": 100,
+                                  "StartRow": 0,
+                                  "TrimDuplicates": false,
+                                  "EnableQueryRules": false,
+                                  "SelectProperties": [
+                                    "SPWebUrl",
+                                    "SiteID",
+                                    "ListID",
+                                    "ListItemID"
+                                  ]
+                                }
+                              },
+                              "runAfter": {}
+                            },
+                            "Initial_search": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                                  "connectionName": "shared_sharepointonline",
+                                  "operationId": "HttpRequest"
+                                },
+                                "parameters": {
+                                  "dataset": "https://contoso.sharepoint.com/sites/CorpNet",
+                                  "parameters/method": "POST",
+                                  "parameters/uri": "_api/search/postquery",
+                                  "parameters/headers": {
+                                    "Accept": "application/json;odata=nometadata",
+                                    "Content-Type": "application/json;odata=nometadata"
+                                  },
+                                  "parameters/body": "@string(outputs('Initial_request'))"
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {
+                                "Initial_request": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Initial_response_valid": {
+                              "type": "If",
+                              "expression": "@and(not(equals(body('Initial_search')?['PrimaryQueryResult']?['RelevantResults']?['TotalRows'],null)),not(equals(body('Initial_search')?['PrimaryQueryResult']?['RelevantResults']?['Table']?['Rows'],null)))",
+                              "actions": {
+                                "Count_index_matches": {
+                                  "type": "IncrementVariable",
+                                  "inputs": {
+                                    "name": "IndexTotal",
+                                    "value": "@body('Initial_search')?['PrimaryQueryResult']?['RelevantResults']?['TotalRows']"
+                                  },
+                                  "runAfter": {}
+                                },
+                                "Remember_batch": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "Batches",
+                                    "value": {
+                                      "Kql": "@items('Read_index_batches')?['Kql']",
+                                      "Sites": "@items('Read_index_batches')?['Sites']",
+                                      "Total": "@body('Initial_search')?['PrimaryQueryResult']?['RelevantResults']?['TotalRows']",
+                                      "Rows": "@body('Initial_search')?['PrimaryQueryResult']?['RelevantResults']?['Table']?['Rows']"
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "Count_index_matches": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                }
+                              },
+                              "else": {
+                                "actions": {
+                                  "Count_bad_index": {
+                                    "type": "IncrementVariable",
+                                    "inputs": {
+                                      "name": "Failures",
+                                      "value": 1
+                                    },
+                                    "runAfter": {}
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Initial_search": [
+                                  "Succeeded"
+                                ]
+                              }
+                            }
+                          },
+                          "runtimeConfiguration": {
+                            "concurrency": {
+                              "repetitions": 1
+                            }
+                          },
+                          "runAfter": {}
+                        },
+                        "Matching_content": {
+                          "type": "If",
+                          "expression": "@and(equals(variables('Failures'),0),greater(variables('IndexTotal'),0))",
+                          "actions": {
+                            "Create_blank_report": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness",
+                                  "connectionName": "shared_onedriveforbusiness",
+                                  "operationId": "CreateFile"
+                                },
+                                "parameters": {
+                                  "folderPath": "/",
+                                  "name": "@concat('CorpNetSearchResults-',variables('JobId'),'.xlsx')",
+                                  "body": {
+                                    "$content-type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                    "$content": "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"
+                                  }
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {}
+                            },
+                            "Remember_file_id": {
+                              "type": "SetVariable",
+                              "inputs": {
+                                "name": "FileId",
+                                "value": "@body('Create_blank_report')?['Id']"
+                              },
+                              "runAfter": {
+                                "Create_blank_report": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Remember_report_url": {
+                              "type": "SetVariable",
+                              "inputs": {
+                                "name": "ReportUrl",
+                                "value": "@concat('https://contoso-my.sharepoint.com',replace(uriComponent(decodeUriComponent(uriPath(body('Personal_drive')?['webUrl']))),'%2F','/'),'/CorpNetSearchResults-',variables('JobId'),'.xlsx')"
+                              },
+                              "runAfter": {
+                                "Remember_file_id": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Report_item_uri": {
+                              "type": "Compose",
+                              "inputs": "@concat('_api/web/GetFileByServerRelativePath(decodedurl=',decodeUriComponent('%27'),replace(decodeUriComponent(uriPath(variables('ReportUrl'))),decodeUriComponent('%27'),concat(decodeUriComponent('%27'),decodeUriComponent('%27'))),decodeUriComponent('%27'),')/ListItemAllFields')",
+                              "runAfter": {
+                                "Remember_report_url": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Make_report_private": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                                  "connectionName": "shared_sharepointonline",
+                                  "operationId": "HttpRequest"
+                                },
+                                "parameters": {
+                                  "dataset": "@body('SharePoint_profile')?['PersonalUrl']",
+                                  "parameters/method": "POST",
+                                  "parameters/uri": "@concat(outputs('Report_item_uri'),'/breakroleinheritance(copyRoleAssignments=false,clearSubscopes=true)')",
+                                  "parameters/headers": {
+                                    "Accept": "application/json;odata=nometadata"
+                                  }
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {
+                                "Report_item_uri": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Private_file_acl": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                                  "connectionName": "shared_sharepointonline",
+                                  "operationId": "HttpRequest"
+                                },
+                                "parameters": {
+                                  "dataset": "@body('SharePoint_profile')?['PersonalUrl']",
+                                  "parameters/method": "GET",
+                                  "parameters/uri": "@concat(outputs('Report_item_uri'),'?$select=HasUniqueRoleAssignments,RoleAssignments/Member/Id,RoleAssignments/RoleDefinitionBindings/RoleTypeKind&$expand=RoleAssignments/Member,RoleAssignments/RoleDefinitionBindings')",
+                                  "parameters/headers": {
+                                    "Accept": "application/json;odata=nometadata"
+                                  }
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {
+                                "Make_report_private": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Private_report_verified": {
+                              "type": "If",
+                              "expression": "@and(equals(body('Private_file_acl')?['HasUniqueRoleAssignments'],true),equals(length(body('Private_file_acl')?['RoleAssignments']),1),equals(first(body('Private_file_acl')?['RoleAssignments'])?['Member']?['Id'],body('Personal_site_user')?['Id']),equals(first(first(body('Private_file_acl')?['RoleAssignments'])?['RoleDefinitionBindings'])?['RoleTypeKind'],5))",
+                              "actions": {
+                                "Initial_metadata_values": {
+                                  "type": "Compose",
+                                  "inputs": [
+                                    {
+                                      "Field": "Query",
+                                      "Value": "@trim(coalesce(triggerBody()?['query'],''))"
+                                    },
+                                    {
+                                      "Field": "Scope",
+                                      "Value": "@triggerBody()?['scope']"
+                                    },
+                                    {
+                                      "Field": "RequestedBy",
+                                      "Value": "@body('Selected_profile')?['mail']"
+                                    },
+                                    {
+                                      "Field": "GeneratedUTC",
+                                      "Value": "@utcNow()"
+                                    },
+                                    {
+                                      "Field": "CompletionStatus",
+                                      "Value": "Running"
+                                    },
+                                    {
+                                      "Field": "JobId",
+                                      "Value": "@variables('JobId')"
+                                    },
+                                    {
+                                      "Field": "ExportedRowCount",
+                                      "Value": "0"
+                                    },
+                                    {
+                                      "Field": "EstimatedIndexMatches",
+                                      "Value": "@variables('IndexTotal')"
+                                    },
+                                    {
+                                      "Field": "WriterRowCap",
+                                      "Value": "1000"
+                                    },
+                                    {
+                                      "Field": "SourceTypes",
+                                      "Value": "Files and SharePoint pages"
+                                    },
+                                    {
+                                      "Field": "Snapshot",
+                                      "Value": "Each source is permission-checked before its row is written. Original links remain subject to current SharePoint access."
+                                    },
+                                    {
+                                      "Field": "Sharing",
+                                      "Value": "Private to the verified source/profile/OneDrive account; no sharing link created."
+                                    },
+                                    {
+                                      "Field": "Tags",
+                                      "Value": "Stored source values; use Text Filters > Contains for semicolon-delimited tags."
+                                    },
+                                    {
+                                      "Field": "TextSafety",
+                                      "Value": "Source strings are literal; only controlled source-link HYPERLINK formulas are written."
+                                    }
+                                  ],
+                                  "runAfter": {}
+                                },
+                                "Initial_metadata": {
+                                  "type": "Foreach",
+                                  "foreach": "@outputs('Initial_metadata_values')",
+                                  "actions": {
+                                    "Initial_metadata_write": {
+                                      "type": "OpenApiConnection",
+                                      "inputs": {
+                                        "host": {
+                                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                                          "connectionName": "shared_excelonlinebusiness",
+                                          "operationId": "PatchItem"
+                                        },
+                                        "parameters": {
+                                          "source": "me",
+                                          "drive": "@body('Personal_drive')?['id']",
+                                          "file": "@last(split(variables('FileId'),'.'))",
+                                          "table": "ExportMetadata",
+                                          "idColumn": "Field",
+                                          "id": "@item()?['Field']",
+                                          "item": {
+                                            "Value": "@concat(decodeUriComponent('%27'),string(item()?['Value']))"
+                                          }
+                                        },
+                                        "retryPolicy": {
+                                          "type": "none"
+                                        }
+                                      },
+                                      "runAfter": {}
+                                    }
+                                  },
+                                  "runtimeConfiguration": {
+                                    "concurrency": {
+                                      "repetitions": 1
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "Initial_metadata_values": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Mark_started": {
+                                  "type": "SetVariable",
+                                  "inputs": {
+                                    "name": "Started",
+                                    "value": true
+                                  },
+                                  "runAfter": {
+                                    "Initial_metadata": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Set_started_result": {
+                                  "type": "SetVariable",
+                                  "inputs": {
+                                    "name": "Result",
+                                    "value": "@concat('SharePoint reports ',string(variables('IndexTotal')),' indexed files and pages in ',triggerBody()?['scope'],'. Your private Excel export is running; its link will be emailed to ',body('Selected_profile')?['mail'],'.')"
+                                  },
+                                  "runAfter": {
+                                    "Mark_started": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                }
+                              },
+                              "else": {
+                                "actions": {
+                                  "Stop_nonprivate_report": {
+                                    "type": "Terminate",
+                                    "inputs": {
+                                      "runStatus": "Failed",
+                                      "runError": {
+                                        "code": "PrivateOutputUnverified",
+                                        "message": "No source rows written: private output permissions could not be verified."
+                                      }
+                                    },
+                                    "runAfter": {}
+                                  }
+                                }
+                              },
+                              "runAfter": {
+                                "Private_file_acl": [
+                                  "Succeeded"
+                                ]
+                              }
+                            }
+                          },
+                          "else": {
+                            "actions": {
+                              "Set_no_export_result": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                  "name": "Result",
+                                  "value": "@if(greater(variables('Failures'),0),'No export was started: a SharePoint result batch was unusable. No completed export or email is being reported.',concat('No matching files or pages were found in ',triggerBody()?['scope'],'. No workbook or email was created.'))"
+                                },
+                                "runAfter": {}
+                              }
+                            }
+                          },
+                          "runAfter": {
+                            "Read_index_batches": [
+                              "Succeeded"
+                            ]
+                          }
+                        }
+                      },
+                      "else": {
+                        "actions": {
+                          "Set_account_mismatch": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "Result",
+                              "value": "No search/export was started: the selected SharePoint, profile and OneDrive accounts do not match, or the directory mailbox is missing."
+                            },
+                            "runAfter": {}
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Personal_drive": [
+                          "Succeeded"
+                        ],
+                        "Personal_site_user": [
+                          "Succeeded"
+                        ],
+                        "Source_directory_profile": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Set_no_onedrive": {
+                        "type": "SetVariable",
+                        "inputs": {
+                          "name": "Result",
+                          "value": "No export was started: a personal OneDrive site for your SharePoint account could not be verified."
+                        },
+                        "runAfter": {}
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Selected_profile": [
+                      "Succeeded"
+                    ],
+                    "SharePoint_profile": [
+                      "Succeeded"
+                    ],
+                    "OneDrive_root": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "else": {
+                "actions": {
+                  "Set_invalid_input": {
+                    "type": "SetVariable",
+                    "inputs": {
+                      "name": "Result",
+                      "value": "No search was run. Choose All, CorpNet, HR, Finance or IT and up to 12 plain words (160 characters), or a single *."
+                    },
+                    "runAfter": {}
+                  }
+                }
+              },
+              "runAfter": {
+                "Keyword_tokens": [
+                  "Succeeded"
+                ]
+              }
+            }
+          },
+          "runAfter": {
+            "Initialize_PreviewChecked": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Startup_failure": {
+          "type": "SetVariable",
+          "inputs": {
+            "name": "Result",
+            "value": "The search/export could not be started. Check your own SharePoint, profile, OneDrive and Excel connections. No completed export or email is being reported."
+          },
+          "runAfter": {
+            "Start_search_export": [
+              "Failed",
+              "TimedOut"
+            ]
+          }
+        },
+        "Build_chat_preview": {
+          "type": "If",
+          "expression": "@equals(variables('Started'),true)",
+          "actions": {
+            "Preview_batches": {
+              "type": "Foreach",
+              "foreach": "@variables('Batches')",
+              "actions": {
+                "Preview_batch_budget": {
+                  "type": "If",
+                  "expression": "@and(less(length(variables('PreviewRows')),10),less(variables('PreviewChecked'),20))",
+                  "actions": {
+                    "Preview_locators": {
+                      "type": "Select",
+                      "inputs": {
+                        "from": "@items('Preview_batches')?['Rows']",
+                        "select": {
+                          "WebUrl": "@xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"spweburl\"]/Value)')",
+                          "SiteId": "@toLower(replace(replace(xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"siteid\"]/Value)'),'{',''),'}',''))",
+                          "ListId": "@toLower(replace(replace(xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"listid\"]/Value)'),'{',''),'}',''))",
+                          "ItemId": "@xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"listitemid\"]/Value)')"
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Preview_basic_locators": {
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@body('Preview_locators')",
+                        "where": "@and(contains(items('Preview_batches')?['Sites'],item()?['SiteId']),equals(length(item()?['ListId']),36),empty(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(item()?['ListId'],'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),'a',''),'b',''),'c',''),'d',''),'e',''),'f',''),'-','')),equals(length(replace(item()?['ListId'],'-','')),32),equals(length(split(item()?['ListId'],'-')),5),isInt(item()?['ItemId']),startsWith(toLower(item()?['WebUrl']),'https://contoso.sharepoint.com/'),not(contains(item()?['WebUrl'],'?')),not(contains(item()?['WebUrl'],'#')))"
+                      },
+                      "runAfter": {
+                        "Preview_locators": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Preview_scoped_locators": {
+                      "type": "Query",
+                      "inputs": {
+                        "from": "@body('Preview_basic_locators')",
+                        "where": "@and(greater(int(item()?['ItemId']),0),lessOrEquals(int(item()?['ItemId']),2147483647),or(equals(toLower(item()?['WebUrl']),toLower(items('Preview_batches')?['Sites']?[item()?['SiteId']]?['url'])),startsWith(toLower(decodeUriComponent(uriPath(item()?['WebUrl']))),concat(toLower(decodeUriComponent(uriPath(items('Preview_batches')?['Sites']?[item()?['SiteId']]?['url']))),'/'))))"
+                      },
+                      "runAfter": {
+                        "Preview_basic_locators": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Each_preview_candidate": {
+                      "type": "Foreach",
+                      "foreach": "@take(body('Preview_scoped_locators'),max(0,sub(20,variables('PreviewChecked'))))",
+                      "actions": {
+                        "Preview_candidate_budget": {
+                          "type": "If",
+                          "expression": "@and(less(length(variables('PreviewRows')),10),less(variables('PreviewChecked'),20))",
+                          "actions": {
+                            "Count_preview_checked": {
+                              "type": "IncrementVariable",
+                              "inputs": {
+                                "name": "PreviewChecked",
+                                "value": 1
+                              },
+                              "runAfter": {}
+                            },
+                            "Preview_metadata_fields": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                                  "connectionName": "shared_sharepointonline",
+                                  "operationId": "HttpRequest"
+                                },
+                                "parameters": {
+                                  "dataset": "@items('Each_preview_candidate')?['WebUrl']",
+                                  "parameters/method": "GET",
+                                  "parameters/uri": "@concat('_api/web/lists(guid',decodeUriComponent('%27'),items('Each_preview_candidate')?['ListId'],decodeUriComponent('%27'),')/fields?$select=InternalName&$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27')",
+                                  "parameters/headers": {
+                                    "Accept": "application/json;odata=nometadata"
+                                  }
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {
+                                "Count_preview_checked": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Preview_field_names": {
+                              "type": "Select",
+                              "inputs": {
+                                "from": "@body('Preview_metadata_fields')?['value']",
+                                "select": "@item()?['InternalName']"
+                              },
+                              "runAfter": {
+                                "Preview_metadata_fields": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Read_preview_item": {
+                              "type": "OpenApiConnection",
+                              "inputs": {
+                                "host": {
+                                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                                  "connectionName": "shared_sharepointonline",
+                                  "operationId": "HttpRequest"
+                                },
+                                "parameters": {
+                                  "dataset": "@items('Each_preview_candidate')?['WebUrl']",
+                                  "parameters/method": "GET",
+                                  "parameters/uri": "@concat('_api/web/lists(guid',decodeUriComponent('%27'),items('Each_preview_candidate')?['ListId'],decodeUriComponent('%27'),')/items(',string(int(items('Each_preview_candidate')?['ItemId'])),')?$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated',if(empty(body('Preview_field_names')),'',concat(',',join(body('Preview_field_names'),','))),'&$expand=File')",
+                                  "parameters/headers": {
+                                    "Accept": "application/json;odata=nometadata"
+                                  }
+                                },
+                                "retryPolicy": {
+                                  "type": "none"
+                                }
+                              },
+                              "runAfter": {
+                                "Preview_field_names": [
+                                  "Succeeded"
+                                ]
+                              }
+                            },
+                            "Preview_item_verified": {
+                              "type": "If",
+                              "expression": "@and(equals(body('Read_preview_item')?['Id'],int(items('Each_preview_candidate')?['ItemId'])),not(empty(body('Read_preview_item')?['File']?['ServerRelativeUrl'])),startsWith(toLower(coalesce(body('Read_preview_item')?['File']?['ServerRelativeUrl'],'')),concat(toLower(decodeUriComponent(uriPath(items('Preview_batches')?['Sites']?[items('Each_preview_candidate')?['SiteId']]?['url']))),'/')),not(contains(variables('PreviewUrls'),toLower(concat('https://contoso.sharepoint.com',replace(replace(uriComponent(coalesce(body('Read_preview_item')?['File']?['ServerRelativeUrl'],'')),'%2F','/'),'%2f','/'))))))",
+                              "actions": {
+                                "Preview_row": {
+                                  "type": "Compose",
+                                  "inputs": {
+                                    "Title": "@if(empty(body('Read_preview_item')?['Title']),body('Read_preview_item')?['File']?['Name'],body('Read_preview_item')?['Title'])",
+                                    "Tags": "@coalesce(body('Read_preview_item')?['TopicTags'],'')",
+                                    "Type": "@if(endsWith(toLower(body('Read_preview_item')?['File']?['Name']),'.aspx'),'Page',if(empty(body('Read_preview_item')?['DocumentType']),toUpper(last(split(body('Read_preview_item')?['File']?['Name'],'.'))),body('Read_preview_item')?['DocumentType']))",
+                                    "ModifiedUTC": "@coalesce(body('Read_preview_item')?['File']?['TimeLastModified'],'')",
+                                    "CreatedUTC": "@coalesce(body('Read_preview_item')?['File']?['TimeCreated'],'')",
+                                    "URL": "@concat('https://contoso.sharepoint.com',replace(replace(uriComponent(coalesce(body('Read_preview_item')?['File']?['ServerRelativeUrl'],'')),'%2F','/'),'%2f','/'))"
+                                  },
+                                  "runAfter": {}
+                                },
+                                "Remember_preview_row": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "PreviewRows",
+                                    "value": "@outputs('Preview_row')"
+                                  },
+                                  "runAfter": {
+                                    "Preview_row": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Remember_preview_url": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "PreviewUrls",
+                                    "value": "@toLower(outputs('Preview_row')?['URL'])"
+                                  },
+                                  "runAfter": {
+                                    "Remember_preview_row": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Select_preview_tag_labels": {
+                                  "type": "Select",
+                                  "inputs": {
+                                    "from": "@if(greater(length(replace(string(coalesce(outputs('Preview_row')?['Tags'],'')),';','; ')),200),createArray(concat(take(replace(string(coalesce(outputs('Preview_row')?['Tags'],'')),';','; '),200),'... (full tags in Excel)')),split(string(coalesce(outputs('Preview_row')?['Tags'],'')),';'))",
+                                    "select": "@if(empty(string(coalesce(outputs('Preview_row')?['Tags'],''))),'Not supplied',if(and(greater(length(item()),0),lessOrEquals(length(item()),16),equals(item(),trim(item())),equals(uriComponent(replace(item(),' ','-')),replace(item(),' ','-'))),concat(decodeUriComponent('%60'),item(),decodeUriComponent('%60')),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(string(coalesce(replace(string(coalesce(item(),'')),'&','&amp;'),'')),decodeUriComponent('%0D'),' '),decodeUriComponent('%0A'),' '),decodeUriComponent('%5C'),concat(decodeUriComponent('%5C'),decodeUriComponent('%5C'))),'|',concat(decodeUriComponent('%5C'),'|')),'[',concat(decodeUriComponent('%5C'),'[')),']',concat(decodeUriComponent('%5C'),']')),'*',concat(decodeUriComponent('%5C'),'*')),'_',concat(decodeUriComponent('%5C'),'_')),'`',concat(decodeUriComponent('%5C'),'`')),'~',concat(decodeUriComponent('%5C'),'~')),'!',concat(decodeUriComponent('%5C'),'!')),'(',concat(decodeUriComponent('%5C'),'(')),')',concat(decodeUriComponent('%5C'),')')),'<','&lt;'),'>','&gt;')))"
+                                  },
+                                  "runAfter": {
+                                    "Remember_preview_url": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Remember_preview_line": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "PreviewLines",
+                                    "value": "@concat('| **[',if(empty(body('Read_preview_item')?['File']?['Name']),'',if(endsWith(toLower(body('Read_preview_item')?['File']?['Name']),'.aspx'),'🌐 ','📄 ')),replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(string(coalesce(replace(string(coalesce(outputs('Preview_row')?['Title'],'')),'&','&amp;'),'')),decodeUriComponent('%0D'),' '),decodeUriComponent('%0A'),' '),decodeUriComponent('%5C'),concat(decodeUriComponent('%5C'),decodeUriComponent('%5C'))),'|',concat(decodeUriComponent('%5C'),'|')),'[',concat(decodeUriComponent('%5C'),'[')),']',concat(decodeUriComponent('%5C'),']')),'*',concat(decodeUriComponent('%5C'),'*')),'_',concat(decodeUriComponent('%5C'),'_')),'`',concat(decodeUriComponent('%5C'),'`')),'~',concat(decodeUriComponent('%5C'),'~')),'!',concat(decodeUriComponent('%5C'),'!')),'(',concat(decodeUriComponent('%5C'),'(')),')',concat(decodeUriComponent('%5C'),')')),'<','&lt;'),'>','&gt;'),'](',outputs('Preview_row')?['URL'],')** | ',if(empty(outputs('Preview_row')?['CreatedUTC']),'Not supplied',formatDateTime(outputs('Preview_row')?['CreatedUTC'],'yyyy-MM-dd')),' | ',if(empty(outputs('Preview_row')?['ModifiedUTC']),'Not supplied',formatDateTime(outputs('Preview_row')?['ModifiedUTC'],'yyyy-MM-dd')),' | ',join(body('Select_preview_tag_labels'),'; '),' |')"
+                                  },
+                                  "runAfter": {
+                                    "Select_preview_tag_labels": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                }
+                              },
+                              "else": {
+                                "actions": {}
+                              },
+                              "runAfter": {
+                                "Read_preview_item": [
+                                  "Succeeded"
+                                ]
+                              }
+                            }
+                          },
+                          "else": {
+                            "actions": {}
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "runtimeConfiguration": {
+                        "concurrency": {
+                          "repetitions": 1
+                        }
+                      },
+                      "runAfter": {
+                        "Preview_scoped_locators": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {}
+                }
+              },
+              "runtimeConfiguration": {
+                "concurrency": {
+                  "repetitions": 1
+                }
+              },
+              "runAfter": {}
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Start_search_export": [
+              "Succeeded",
+              "Failed",
+              "TimedOut",
+              "Skipped"
+            ],
+            "Startup_failure": [
+              "Succeeded",
+              "Skipped"
+            ]
+          }
+        },
+        "Format_chat_result": {
+          "type": "Compose",
+          "inputs": "@if(and(equals(variables('Started'),true),greater(length(variables('PreviewRows')),0)),concat('## 🔎 SharePoint results',decodeUriComponent('%0A%0A'),'**Scope:** ',triggerBody()?['scope'],' · **Index estimate:** ',string(variables('IndexTotal')),decodeUriComponent('%0A%0A'),'> 📄 **Private Excel export started**',decodeUriComponent('%0A'),'> **Verified recipient:** ',replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(string(coalesce(body('Selected_profile')?['mail'],'')),decodeUriComponent('%0D'),' '),decodeUriComponent('%0A'),' '),decodeUriComponent('%5C'),concat(decodeUriComponent('%5C'),decodeUriComponent('%5C'))),'|',concat(decodeUriComponent('%5C'),'|')),'[',concat(decodeUriComponent('%5C'),'[')),']',concat(decodeUriComponent('%5C'),']')),'*',concat(decodeUriComponent('%5C'),'*')),'_',concat(decodeUriComponent('%5C'),'_')),'`',concat(decodeUriComponent('%5C'),'`')),'~',concat(decodeUriComponent('%5C'),'~')),'!',concat(decodeUriComponent('%5C'),'!')),'(',concat(decodeUriComponent('%5C'),'(')),')',concat(decodeUriComponent('%5C'),')')),'<','&lt;'),'>','&gt;'),decodeUriComponent('%0A'),'> Delivery is pending. A private workbook link will be emailed only after row and access verification.',decodeUriComponent('%0A%0A'),'### Verified matches',decodeUriComponent('%0A%0A'),'Created and last modified dates are UTC (YYYY-MM-DD).',decodeUriComponent('%0A%0A'),'| File or page | Created (UTC) | Modified (UTC) | Stored tags |',decodeUriComponent('%0A'),'| --- | :---: | :---: | --- |',decodeUriComponent('%0A'),join(variables('PreviewLines'),decodeUriComponent('%0A')),decodeUriComponent('%0A%0A'),'---',decodeUriComponent('%0A%0A'),'**Preview:** up to 10 results from at most 20 checked candidates.',decodeUriComponent('%0A'),'**Export bounds:** 1000 rows · 2000 candidates · 40 search pages · 12 batches of 20 sites.',decodeUriComponent('%0A%0A'),'Source permissions still apply. Excel includes these matches and the remaining verified results within those bounds. Exports may be partial; the index estimate can differ from the final exported-row count. Completion and omission details are recorded in Excel.'),concat(variables('Result'),if(equals(variables('Started'),true),concat(decodeUriComponent('%0A%0A'),'A verified chat preview is unavailable. The private export will still verify its results before delivery.'),'')))",
+          "runAfter": {
+            "Build_chat_preview": [
+              "Succeeded",
+              "Failed",
+              "TimedOut",
+              "Skipped"
+            ]
+          }
+        },
+        "Respond_to_agent": {
+          "type": "Response",
+          "kind": "Skills",
+          "inputs": {
+            "statusCode": 200,
+            "body": {
+              "result": "@outputs('Format_chat_result')"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "string",
+                  "title": "Search/export status",
+                  "x-ms-content-hint": "TEXT"
+                }
+              }
+            }
+          },
+          "runAfter": {
+            "Format_chat_result": [
+              "Succeeded"
+            ]
+          }
+        },
+        "Continue_private_export": {
+          "type": "If",
+          "expression": "@equals(variables('Started'),true)",
+          "actions": {
+            "Load_first_batch": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "CurrentBatch",
+                "value": "@first(variables('Batches'))"
+              },
+              "runAfter": {}
+            },
+            "Load_first_page": {
+              "type": "SetVariable",
+              "inputs": {
+                "name": "PageRows",
+                "value": "@variables('CurrentBatch')?['Rows']"
+              },
+              "runAfter": {
+                "Load_first_batch": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Export_rows": {
+              "type": "Until",
+              "expression": "@or(greaterOrEquals(variables('BatchIndex'),length(variables('Batches'))),greaterOrEquals(variables('Exported'),1000),greaterOrEquals(variables('Checked'),2000),greaterOrEquals(variables('ProcessedPages'),40),equals(variables('StopExport'),true))",
+              "limit": {
+                "count": 41,
+                "timeout": "PT45M"
+              },
+              "actions": {
+                "Bounded_candidates": {
+                  "type": "Compose",
+                  "inputs": "@take(variables('PageRows'),max(0,sub(2000,variables('Checked'))))",
+                  "runAfter": {}
+                },
+                "Count_checked": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "Checked",
+                    "value": "@length(outputs('Bounded_candidates'))"
+                  },
+                  "runAfter": {
+                    "Bounded_candidates": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Detect_candidate_cap": {
+                  "type": "If",
+                  "expression": "@less(length(outputs('Bounded_candidates')),length(variables('PageRows')))",
+                  "actions": {
+                    "Mark_candidate_cap": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "Capped",
+                        "value": true
+                      },
+                      "runAfter": {}
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {
+                    "Count_checked": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Select_locators": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@outputs('Bounded_candidates')",
+                    "select": {
+                      "WebUrl": "@xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"spweburl\"]/Value)')",
+                      "SiteId": "@toLower(replace(replace(xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"siteid\"]/Value)'),'{',''),'}',''))",
+                      "ListId": "@toLower(replace(replace(xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"listid\"]/Value)'),'{',''),'}',''))",
+                      "ItemId": "@xpath(xml(addProperty(json('{}'),'row',item())),'string(/row/Cells[translate(Key,\"ABCDEFGHIJKLMNOPQRSTUVWXYZ\",\"abcdefghijklmnopqrstuvwxyz\")=\"listitemid\"]/Value)')"
+                    }
+                  },
+                  "runAfter": {
+                    "Detect_candidate_cap": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Basic_locators": {
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@body('Select_locators')",
+                    "where": "@and(contains(variables('CurrentBatch')?['Sites'],item()?['SiteId']),equals(length(item()?['ListId']),36),empty(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(replace(item()?['ListId'],'0',''),'1',''),'2',''),'3',''),'4',''),'5',''),'6',''),'7',''),'8',''),'9',''),'a',''),'b',''),'c',''),'d',''),'e',''),'f',''),'-','')),equals(length(replace(item()?['ListId'],'-','')),32),equals(length(split(item()?['ListId'],'-')),5),isInt(item()?['ItemId']),startsWith(toLower(item()?['WebUrl']),'https://contoso.sharepoint.com/'),not(contains(item()?['WebUrl'],'?')),not(contains(item()?['WebUrl'],'#')))"
+                  },
+                  "runAfter": {
+                    "Select_locators": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Scoped_locators": {
+                  "type": "Query",
+                  "inputs": {
+                    "from": "@body('Basic_locators')",
+                    "where": "@and(greater(int(item()?['ItemId']),0),lessOrEquals(int(item()?['ItemId']),2147483647),or(equals(toLower(item()?['WebUrl']),toLower(variables('CurrentBatch')?['Sites']?[item()?['SiteId']]?['url'])),startsWith(toLower(decodeUriComponent(uriPath(item()?['WebUrl']))),concat(toLower(decodeUriComponent(uriPath(variables('CurrentBatch')?['Sites']?[item()?['SiteId']]?['url']))),'/'))))"
+                  },
+                  "runAfter": {
+                    "Basic_locators": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Count_invalid_locators": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "Omitted",
+                    "value": "@sub(length(body('Select_locators')),length(body('Scoped_locators')))"
+                  },
+                  "runAfter": {
+                    "Scoped_locators": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Metadata_groups": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@body('Scoped_locators')",
+                    "select": {
+                      "SiteId": "@item()?['SiteId']",
+                      "ListId": "@item()?['ListId']",
+                      "WebUrl": "@item()?['WebUrl']"
+                    }
+                  },
+                  "runAfter": {
+                    "Count_invalid_locators": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Distinct_metadata_groups": {
+                  "type": "Compose",
+                  "inputs": "@union(body('Metadata_groups'),body('Metadata_groups'))",
+                  "runAfter": {
+                    "Metadata_groups": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Each_metadata_group": {
+                  "type": "Foreach",
+                  "foreach": "@outputs('Distinct_metadata_groups')",
+                  "actions": {
+                    "Group_budget": {
+                      "type": "If",
+                      "expression": "@and(less(variables('Exported'),1000),equals(variables('StopExport'),false))",
+                      "actions": {
+                        "Group_candidates": {
+                          "type": "Query",
+                          "inputs": {
+                            "from": "@body('Scoped_locators')",
+                            "where": "@and(equals(item()?['SiteId'],items('Each_metadata_group')?['SiteId']),equals(item()?['ListId'],items('Each_metadata_group')?['ListId']),equals(item()?['WebUrl'],items('Each_metadata_group')?['WebUrl']))"
+                          },
+                          "runAfter": {}
+                        },
+                        "Group_ids": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@body('Group_candidates')",
+                            "select": "@int(item()?['ItemId'])"
+                          },
+                          "runAfter": {
+                            "Group_candidates": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Group_filter_parts": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@body('Group_candidates')",
+                            "select": "@concat('Id eq ',string(int(item()?['ItemId'])))"
+                          },
+                          "runAfter": {
+                            "Group_ids": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Available_metadata_fields": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "HttpRequest"
+                            },
+                            "parameters": {
+                              "dataset": "@items('Each_metadata_group')?['WebUrl']",
+                              "parameters/method": "GET",
+                              "parameters/uri": "@concat('_api/web/lists(guid',decodeUriComponent('%27'),items('Each_metadata_group')?['ListId'],decodeUriComponent('%27'),')/fields?$select=InternalName&$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27')",
+                              "parameters/headers": {
+                                "Accept": "application/json;odata=nometadata"
+                              }
+                            },
+                            "retryPolicy": {
+                              "type": "none"
+                            }
+                          },
+                          "runAfter": {
+                            "Group_filter_parts": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Metadata_field_names": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@body('Available_metadata_fields')?['value']",
+                            "select": "@item()?['InternalName']"
+                          },
+                          "runAfter": {
+                            "Available_metadata_fields": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Read_current_items": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                              "connectionName": "shared_sharepointonline",
+                              "operationId": "HttpRequest"
+                            },
+                            "parameters": {
+                              "dataset": "@items('Each_metadata_group')?['WebUrl']",
+                              "parameters/method": "GET",
+                              "parameters/uri": "@concat('_api/web/lists(guid',decodeUriComponent('%27'),items('Each_metadata_group')?['ListId'],decodeUriComponent('%27'),')/items?$top=100&$filter=',uriComponent(join(body('Group_filter_parts'),' or ')),'&$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated',if(empty(body('Metadata_field_names')),'',concat(',',join(body('Metadata_field_names'),','))),'&$expand=File')",
+                              "parameters/headers": {
+                                "Accept": "application/json;odata=nometadata"
+                              }
+                            },
+                            "retryPolicy": {
+                              "type": "none"
+                            }
+                          },
+                          "runAfter": {
+                            "Metadata_field_names": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Valid_current_items": {
+                          "type": "Query",
+                          "inputs": {
+                            "from": "@body('Read_current_items')?['value']",
+                            "where": "@and(contains(body('Group_ids'),item()?['Id']),not(empty(item()?['File']?['ServerRelativeUrl'])),startsWith(toLower(coalesce(item()?['File']?['ServerRelativeUrl'],'')),concat(toLower(decodeUriComponent(uriPath(variables('CurrentBatch')?['Sites']?[items('Each_metadata_group')?['SiteId']]?['url']))),'/')))"
+                          },
+                          "runAfter": {
+                            "Read_current_items": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Count_unverified_ids": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "Omitted",
+                            "value": "@sub(length(union(body('Group_ids'),body('Group_ids'))),length(body('Valid_current_items')))"
+                          },
+                          "runAfter": {
+                            "Valid_current_items": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Count_duplicate_ids": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "Duplicates",
+                            "value": "@sub(length(body('Group_ids')),length(union(body('Group_ids'),body('Group_ids'))))"
+                          },
+                          "runAfter": {
+                            "Count_unverified_ids": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Select_verified_rows": {
+                          "type": "Select",
+                          "inputs": {
+                            "from": "@body('Valid_current_items')",
+                            "select": {
+                              "Title": "@if(empty(item()?['Title']),item()?['File']?['Name'],item()?['Title'])",
+                              "Department": "@if(empty(item()?['Department']),variables('CurrentBatch')?['Sites']?[items('Each_metadata_group')?['SiteId']]?['department'],item()?['Department'])",
+                              "Tags": "@coalesce(item()?['TopicTags'],'')",
+                              "Type": "@if(endsWith(toLower(item()?['File']?['Name']),'.aspx'),'Page',if(empty(item()?['DocumentType']),toUpper(last(split(item()?['File']?['Name'],'.'))),item()?['DocumentType']))",
+                              "ModifiedUTC": "@coalesce(item()?['File']?['TimeLastModified'],'')",
+                              "SourceSite": "@variables('CurrentBatch')?['Sites']?[items('Each_metadata_group')?['SiteId']]?['url']",
+                              "URL": "@concat('https://contoso.sharepoint.com',replace(replace(uriComponent(item()?['File']?['ServerRelativeUrl']),'%2F','/'),'%2f','/'))",
+                              "CreatedUTC": "@coalesce(item()?['File']?['TimeCreated'],'')",
+                              "Created (UTC)": "@if(empty(item()?['File']?['TimeCreated']),'Not supplied',formatDateTime(item()?['File']?['TimeCreated'],'yyyy-MM-dd'))",
+                              "Modified (UTC)": "@if(empty(item()?['File']?['TimeLastModified']),'Not supplied',formatDateTime(item()?['File']?['TimeLastModified'],'yyyy-MM-dd'))"
+                            }
+                          },
+                          "runAfter": {
+                            "Count_duplicate_ids": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Each_verified_row": {
+                          "type": "Foreach",
+                          "foreach": "@body('Select_verified_rows')",
+                          "actions": {
+                            "Write_unique_result": {
+                              "type": "If",
+                              "expression": "@and(not(contains(variables('SeenUrls'),toLower(items('Each_verified_row')?['URL']))),less(variables('Exported'),1000),equals(variables('StopExport'),false))",
+                              "actions": {
+                                "Remember_verified_row": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "ExpectedRows",
+                                    "value": "@items('Each_verified_row')"
+                                  },
+                                  "runAfter": {}
+                                },
+                                "Write_result": {
+                                  "type": "If",
+                                  "expression": "@equals(variables('Exported'),0)",
+                                  "actions": {
+                                    "Replace_placeholder": {
+                                      "type": "OpenApiConnection",
+                                      "inputs": {
+                                        "host": {
+                                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                                          "connectionName": "shared_excelonlinebusiness",
+                                          "operationId": "PatchItem"
+                                        },
+                                        "parameters": {
+                                          "source": "me",
+                                          "drive": "@body('Personal_drive')?['id']",
+                                          "file": "@last(split(variables('FileId'),'.'))",
+                                          "table": "SearchResults",
+                                          "idColumn": "Title",
+                                          "id": "__CORPNET_EMPTY_EXPORT__",
+                                          "item": {
+                                            "Title": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Title']))",
+                                            "Department": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Department']))",
+                                            "Tags": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Tags']))",
+                                            "Type": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Type']))",
+                                            "ModifiedUTC": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['ModifiedUTC']))",
+                                            "SourceSite": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['SourceSite']))",
+                                            "URL": "=IF(SearchResults[[#This Row],[SourceURL]]=\"\",\"\",HYPERLINK(SearchResults[[#This Row],[SourceURL]],SearchResults[[#This Row],[SourceURL]]))",
+                                            "CreatedUTC": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['CreatedUTC']))",
+                                            "SourceURL": "@concat(decodeUriComponent('%27'),items('Each_verified_row')?['URL'])",
+                                            "Created (UTC)": "=IF(SearchResults[[#This Row],[CreatedUTC]]=\"\",\"Not supplied\",DATE(VALUE(LEFT(SearchResults[[#This Row],[CreatedUTC]],4)),VALUE(MID(SearchResults[[#This Row],[CreatedUTC]],6,2)),VALUE(MID(SearchResults[[#This Row],[CreatedUTC]],9,2))))",
+                                            "Modified (UTC)": "=IF(SearchResults[[#This Row],[ModifiedUTC]]=\"\",\"Not supplied\",DATE(VALUE(LEFT(SearchResults[[#This Row],[ModifiedUTC]],4)),VALUE(MID(SearchResults[[#This Row],[ModifiedUTC]],6,2)),VALUE(MID(SearchResults[[#This Row],[ModifiedUTC]],9,2))))"
+                                          }
+                                        },
+                                        "retryPolicy": {
+                                          "type": "none"
+                                        }
+                                      },
+                                      "runAfter": {}
+                                    }
+                                  },
+                                  "else": {
+                                    "actions": {
+                                      "Append_result": {
+                                        "type": "OpenApiConnection",
+                                        "inputs": {
+                                          "host": {
+                                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                                            "connectionName": "shared_excelonlinebusiness",
+                                            "operationId": "AddRowV2"
+                                          },
+                                          "parameters": {
+                                            "source": "me",
+                                            "drive": "@body('Personal_drive')?['id']",
+                                            "file": "@last(split(variables('FileId'),'.'))",
+                                            "table": "SearchResults",
+                                            "item": {
+                                              "Title": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Title']))",
+                                              "Department": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Department']))",
+                                              "Tags": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Tags']))",
+                                              "Type": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['Type']))",
+                                              "ModifiedUTC": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['ModifiedUTC']))",
+                                              "SourceSite": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['SourceSite']))",
+                                              "URL": "=IF(SearchResults[[#This Row],[SourceURL]]=\"\",\"\",HYPERLINK(SearchResults[[#This Row],[SourceURL]],SearchResults[[#This Row],[SourceURL]]))",
+                                              "CreatedUTC": "@concat(decodeUriComponent('%27'),string(items('Each_verified_row')?['CreatedUTC']))",
+                                              "SourceURL": "@concat(decodeUriComponent('%27'),items('Each_verified_row')?['URL'])",
+                                              "Created (UTC)": "=IF(SearchResults[[#This Row],[CreatedUTC]]=\"\",\"Not supplied\",DATE(VALUE(LEFT(SearchResults[[#This Row],[CreatedUTC]],4)),VALUE(MID(SearchResults[[#This Row],[CreatedUTC]],6,2)),VALUE(MID(SearchResults[[#This Row],[CreatedUTC]],9,2))))",
+                                              "Modified (UTC)": "=IF(SearchResults[[#This Row],[ModifiedUTC]]=\"\",\"Not supplied\",DATE(VALUE(LEFT(SearchResults[[#This Row],[ModifiedUTC]],4)),VALUE(MID(SearchResults[[#This Row],[ModifiedUTC]],6,2)),VALUE(MID(SearchResults[[#This Row],[ModifiedUTC]],9,2))))"
+                                            },
+                                            "dateTimeFormat": "ISO 8601"
+                                          },
+                                          "retryPolicy": {
+                                            "type": "none"
+                                          }
+                                        },
+                                        "runAfter": {}
+                                      }
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "Remember_verified_row": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Remember_url": {
+                                  "type": "AppendToArrayVariable",
+                                  "inputs": {
+                                    "name": "SeenUrls",
+                                    "value": "@toLower(items('Each_verified_row')?['URL'])"
+                                  },
+                                  "runAfter": {
+                                    "Write_result": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Count_exported": {
+                                  "type": "IncrementVariable",
+                                  "inputs": {
+                                    "name": "Exported",
+                                    "value": 1
+                                  },
+                                  "runAfter": {
+                                    "Remember_url": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Count_content_type": {
+                                  "type": "If",
+                                  "expression": "@endsWith(toLower(items('Each_verified_row')?['URL']),'.aspx')",
+                                  "actions": {
+                                    "Count_page": {
+                                      "type": "IncrementVariable",
+                                      "inputs": {
+                                        "name": "PageCount",
+                                        "value": 1
+                                      },
+                                      "runAfter": {}
+                                    }
+                                  },
+                                  "else": {
+                                    "actions": {
+                                      "Count_file": {
+                                        "type": "IncrementVariable",
+                                        "inputs": {
+                                          "name": "FileCount",
+                                          "value": 1
+                                        },
+                                        "runAfter": {}
+                                      }
+                                    }
+                                  },
+                                  "runAfter": {
+                                    "Count_exported": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                },
+                                "Stop_after_write_error": {
+                                  "type": "SetVariable",
+                                  "inputs": {
+                                    "name": "StopExport",
+                                    "value": true
+                                  },
+                                  "runAfter": {
+                                    "Write_result": [
+                                      "Failed",
+                                      "TimedOut"
+                                    ]
+                                  }
+                                },
+                                "Count_write_error": {
+                                  "type": "IncrementVariable",
+                                  "inputs": {
+                                    "name": "Failures",
+                                    "value": 1
+                                  },
+                                  "runAfter": {
+                                    "Stop_after_write_error": [
+                                      "Succeeded"
+                                    ]
+                                  }
+                                }
+                              },
+                              "else": {
+                                "actions": {
+                                  "Duplicate_or_limit": {
+                                    "type": "If",
+                                    "expression": "@contains(variables('SeenUrls'),toLower(items('Each_verified_row')?['URL']))",
+                                    "actions": {
+                                      "Count_duplicate": {
+                                        "type": "IncrementVariable",
+                                        "inputs": {
+                                          "name": "Duplicates",
+                                          "value": 1
+                                        },
+                                        "runAfter": {}
+                                      }
+                                    },
+                                    "else": {
+                                      "actions": {
+                                        "Mark_row_cap": {
+                                          "type": "SetVariable",
+                                          "inputs": {
+                                            "name": "Capped",
+                                            "value": true
+                                          },
+                                          "runAfter": {}
+                                        }
+                                      }
+                                    },
+                                    "runAfter": {}
+                                  }
+                                }
+                              },
+                              "runAfter": {}
+                            }
+                          },
+                          "runtimeConfiguration": {
+                            "concurrency": {
+                              "repetitions": 1
+                            }
+                          },
+                          "runAfter": {
+                            "Select_verified_rows": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Count_group_failure": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "Failures",
+                            "value": 1
+                          },
+                          "runAfter": {
+                            "Read_current_items": [
+                              "Failed",
+                              "TimedOut"
+                            ]
+                          }
+                        },
+                        "Count_failed_items": {
+                          "type": "IncrementVariable",
+                          "inputs": {
+                            "name": "Omitted",
+                            "value": "@length(union(body('Group_ids'),body('Group_ids')))"
+                          },
+                          "runAfter": {
+                            "Count_group_failure": [
+                              "Succeeded"
+                            ]
+                          }
+                        },
+                        "Stop_failed_group": {
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "StopExport",
+                            "value": true
+                          },
+                          "runAfter": {
+                            "Count_failed_items": [
+                              "Succeeded"
+                            ]
+                          }
+                        }
+                      },
+                      "else": {
+                        "actions": {
+                          "Mark_group_cap": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "Capped",
+                              "value": true
+                            },
+                            "runAfter": {}
+                          }
+                        }
+                      },
+                      "runAfter": {}
+                    }
+                  },
+                  "runtimeConfiguration": {
+                    "concurrency": {
+                      "repetitions": 1
+                    }
+                  },
+                  "runAfter": {
+                    "Distinct_metadata_groups": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Stop_page_processing_error": {
+                  "type": "SetVariable",
+                  "inputs": {
+                    "name": "StopExport",
+                    "value": true
+                  },
+                  "runAfter": {
+                    "Each_metadata_group": [
+                      "Failed",
+                      "TimedOut"
+                    ]
+                  }
+                },
+                "Count_processing_error": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "Failures",
+                    "value": 1
+                  },
+                  "runAfter": {
+                    "Stop_page_processing_error": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Advance_start": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "PageStart",
+                    "value": "@length(variables('PageRows'))"
+                  },
+                  "runAfter": {
+                    "Each_metadata_group": [
+                      "Succeeded",
+                      "Failed",
+                      "TimedOut",
+                      "Skipped"
+                    ],
+                    "Count_processing_error": [
+                      "Succeeded",
+                      "Skipped"
+                    ]
+                  }
+                },
+                "Count_processed_page": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "ProcessedPages",
+                    "value": 1
+                  },
+                  "runAfter": {
+                    "Advance_start": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Need_next_page": {
+                  "type": "If",
+                  "expression": "@and(less(variables('PageStart'),variables('CurrentBatch')?['Total']),greater(length(variables('PageRows')),0),less(variables('Exported'),1000),less(variables('Checked'),2000),less(variables('ProcessedPages'),40),equals(variables('StopExport'),false))",
+                  "actions": {
+                    "Next_request": {
+                      "type": "Compose",
+                      "inputs": {
+                        "request": {
+                          "Querytext": "@concat('(', variables('CurrentBatch')?['Kql'], ') AND (', outputs('Literal_query'), ') AND (contentclass:\"STS_ListItem_DocumentLibrary\" OR contentclass:\"STS_ListItem_WebPageLibrary\") AND (IsDocument:1 OR FileExtension:aspx)')",
+                          "RowLimit": 100,
+                          "StartRow": "@variables('PageStart')",
+                          "TrimDuplicates": false,
+                          "EnableQueryRules": false,
+                          "SelectProperties": [
+                            "SPWebUrl",
+                            "SiteID",
+                            "ListID",
+                            "ListItemID"
+                          ]
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Next_search_page": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest"
+                        },
+                        "parameters": {
+                          "dataset": "https://contoso.sharepoint.com/sites/CorpNet",
+                          "parameters/method": "POST",
+                          "parameters/uri": "_api/search/postquery",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata",
+                            "Content-Type": "application/json;odata=nometadata"
+                          },
+                          "parameters/body": "@string(outputs('Next_request'))"
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {
+                        "Next_request": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Next_page_valid": {
+                      "type": "If",
+                      "expression": "@not(equals(body('Next_search_page')?['PrimaryQueryResult']?['RelevantResults']?['Table']?['Rows'],null))",
+                      "actions": {
+                        "Use_next_page": {
+                          "type": "SetVariable",
+                          "inputs": {
+                            "name": "PageRows",
+                            "value": "@body('Next_search_page')?['PrimaryQueryResult']?['RelevantResults']?['Table']?['Rows']"
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {
+                          "Count_bad_page": {
+                            "type": "IncrementVariable",
+                            "inputs": {
+                              "name": "Failures",
+                              "value": 1
+                            },
+                            "runAfter": {}
+                          },
+                          "Stop_bad_page": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "StopExport",
+                              "value": true
+                            },
+                            "runAfter": {
+                              "Count_bad_page": [
+                                "Succeeded"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Next_search_page": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Count_page_failure": {
+                      "type": "IncrementVariable",
+                      "inputs": {
+                        "name": "Failures",
+                        "value": 1
+                      },
+                      "runAfter": {
+                        "Next_search_page": [
+                          "Failed",
+                          "TimedOut"
+                        ]
+                      }
+                    },
+                    "Stop_failed_page": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "StopExport",
+                        "value": true
+                      },
+                      "runAfter": {
+                        "Count_page_failure": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Mark_remaining_matches": {
+                        "type": "If",
+                        "expression": "@less(variables('PageStart'),variables('CurrentBatch')?['Total'])",
+                        "actions": {
+                          "Mark_page_cap": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "Capped",
+                              "value": true
+                            },
+                            "runAfter": {}
+                          }
+                        },
+                        "else": {
+                          "actions": {}
+                        },
+                        "runAfter": {}
+                      },
+                      "Advance_batch": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                          "name": "BatchIndex",
+                          "value": 1
+                        },
+                        "runAfter": {
+                          "Mark_remaining_matches": [
+                            "Succeeded"
+                          ]
+                        }
+                      },
+                      "More_batches": {
+                        "type": "If",
+                        "expression": "@less(variables('BatchIndex'),length(variables('Batches')))",
+                        "actions": {
+                          "Use_next_batch": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "CurrentBatch",
+                              "value": "@variables('Batches')[variables('BatchIndex')]"
+                            },
+                            "runAfter": {}
+                          },
+                          "Use_batch_rows": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "PageRows",
+                              "value": "@variables('CurrentBatch')?['Rows']"
+                            },
+                            "runAfter": {
+                              "Use_next_batch": [
+                                "Succeeded"
+                              ]
+                            }
+                          },
+                          "Reset_page_offset": {
+                            "type": "SetVariable",
+                            "inputs": {
+                              "name": "PageStart",
+                              "value": 0
+                            },
+                            "runAfter": {
+                              "Use_batch_rows": [
+                                "Succeeded"
+                              ]
+                            }
+                          }
+                        },
+                        "else": {
+                          "actions": {}
+                        },
+                        "runAfter": {
+                          "Advance_batch": [
+                            "Succeeded"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Count_processed_page": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "Load_first_page": [
+                  "Succeeded"
+                ]
+              }
+            },
+            "Count_export_failure": {
+              "type": "IncrementVariable",
+              "inputs": {
+                "name": "Failures",
+                "value": 1
+              },
+              "runAfter": {
+                "Export_rows": [
+                  "Failed",
+                  "TimedOut"
+                ]
+              }
+            },
+            "Finalize_workbook": {
+              "type": "Scope",
+              "actions": {
+                "Incomplete_batches": {
+                  "type": "If",
+                  "expression": "@less(variables('BatchIndex'),length(variables('Batches')))",
+                  "actions": {
+                    "Mark_incomplete_batches": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "Capped",
+                        "value": true
+                      },
+                      "runAfter": {}
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {}
+                },
+                "Remove_unused_placeholder": {
+                  "type": "If",
+                  "expression": "@equals(variables('Exported'),0)",
+                  "actions": {
+                    "Delete_empty_placeholder": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                          "connectionName": "shared_excelonlinebusiness",
+                          "operationId": "DeleteItem"
+                        },
+                        "parameters": {
+                          "source": "me",
+                          "drive": "@body('Personal_drive')?['id']",
+                          "file": "@last(split(variables('FileId'),'.'))",
+                          "table": "SearchResults",
+                          "idColumn": "Title",
+                          "id": "__CORPNET_EMPTY_EXPORT__"
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {}
+                    }
+                  },
+                  "else": {
+                    "actions": {}
+                  },
+                  "runAfter": {
+                    "Incomplete_batches": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Read_back_written_rows": {
+                  "type": "Until",
+                  "expression": "@or(equals(variables('VerifyMore'),false),greater(length(variables('ActualRows')),1000))",
+                  "limit": {
+                    "count": 6,
+                    "timeout": "PT5M"
+                  },
+                  "actions": {
+                    "Read_written_page": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                          "connectionName": "shared_excelonlinebusiness",
+                          "operationId": "GetItems"
+                        },
+                        "parameters": {
+                          "source": "me",
+                          "drive": "@body('Personal_drive')?['id']",
+                          "file": "@last(split(variables('FileId'),'.'))",
+                          "table": "SearchResults",
+                          "$top": 250,
+                          "$skip": "@variables('VerifyStart')",
+                          "dateTimeFormat": "ISO 8601"
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {}
+                    },
+                    "Combine_written_rows": {
+                      "type": "Compose",
+                      "inputs": "@union(variables('ActualRows'),body('Read_written_page')?['value'])",
+                      "runAfter": {
+                        "Read_written_page": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Remember_written_rows": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "ActualRows",
+                        "value": "@outputs('Combine_written_rows')"
+                      },
+                      "runAfter": {
+                        "Combine_written_rows": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Advance_verification": {
+                      "type": "IncrementVariable",
+                      "inputs": {
+                        "name": "VerifyStart",
+                        "value": "@length(body('Read_written_page')?['value'])"
+                      },
+                      "runAfter": {
+                        "Remember_written_rows": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "More_written_rows": {
+                      "type": "SetVariable",
+                      "inputs": {
+                        "name": "VerifyMore",
+                        "value": "@equals(length(body('Read_written_page')?['value']),250)"
+                      },
+                      "runAfter": {
+                        "Advance_verification": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Remove_unused_placeholder": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Written_projection": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@variables('ActualRows')",
+                    "select": {
+                      "Title": "@coalesce(item()?['Title'],'')",
+                      "Department": "@coalesce(item()?['Department'],'')",
+                      "Tags": "@coalesce(item()?['Tags'],'')",
+                      "Type": "@coalesce(item()?['Type'],'')",
+                      "ModifiedUTC": "@coalesce(item()?['ModifiedUTC'],'')",
+                      "SourceSite": "@coalesce(item()?['SourceSite'],'')",
+                      "URL": "@coalesce(item()?['URL'],'')",
+                      "CreatedUTC": "@coalesce(item()?['CreatedUTC'],'')",
+                      "Created (UTC)": "@if(or(empty(string(coalesce(item()?['Created (UTC)'],''))),equals(string(coalesce(item()?['Created (UTC)'],'')),'Not supplied')),string(coalesce(item()?['Created (UTC)'],'')),if(isFloat(string(coalesce(item()?['Created (UTC)'],''))),addDays('1899-12-30T00:00:00Z',int(first(split(string(coalesce(item()?['Created (UTC)'],'')),'.'))),'yyyy-MM-dd'),formatDateTime(string(coalesce(item()?['Created (UTC)'],'')),'yyyy-MM-dd')))",
+                      "Modified (UTC)": "@if(or(empty(string(coalesce(item()?['Modified (UTC)'],''))),equals(string(coalesce(item()?['Modified (UTC)'],'')),'Not supplied')),string(coalesce(item()?['Modified (UTC)'],'')),if(isFloat(string(coalesce(item()?['Modified (UTC)'],''))),addDays('1899-12-30T00:00:00Z',int(first(split(string(coalesce(item()?['Modified (UTC)'],'')),'.'))),'yyyy-MM-dd'),formatDateTime(string(coalesce(item()?['Modified (UTC)'],'')),'yyyy-MM-dd')))"
+                    }
+                  },
+                  "runAfter": {
+                    "Read_back_written_rows": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Written_urls": {
+                  "type": "Select",
+                  "inputs": {
+                    "from": "@variables('ActualRows')",
+                    "select": "@toLower(item()?['URL'])"
+                  },
+                  "runAfter": {
+                    "Written_projection": [
+                      "Succeeded"
+                    ]
+                  }
+                },
+                "Written_rows_verified": {
+                  "type": "If",
+                  "expression": "@and(equals(length(variables('ActualRows')),variables('Exported')),equals(length(union(body('Written_urls'),body('Written_urls'))),variables('Exported')),equals(length(intersection(body('Written_projection'),variables('ExpectedRows'))),variables('Exported')))",
+                  "actions": {
+                    "Complete_metadata_values": {
+                      "type": "Compose",
+                      "inputs": [
+                        {
+                          "Field": "CompletionStatus",
+                          "Value": "@if(or(variables('Capped'),greater(variables('Failures'),0),greater(variables('Omitted'),0),variables('StopExport')),'Partial','Complete')"
+                        },
+                        {
+                          "Field": "ExportedRowCount",
+                          "Value": "@variables('Exported')"
+                        },
+                        {
+                          "Field": "FileCount",
+                          "Value": "@variables('FileCount')"
+                        },
+                        {
+                          "Field": "PageCount",
+                          "Value": "@variables('PageCount')"
+                        },
+                        {
+                          "Field": "OmittedRowCount",
+                          "Value": "@variables('Omitted')"
+                        },
+                        {
+                          "Field": "ProcessingErrors",
+                          "Value": "@greater(variables('Failures'),0)"
+                        },
+                        {
+                          "Field": "DuplicateIndexHits",
+                          "Value": "@variables('Duplicates')"
+                        },
+                        {
+                          "Field": "TruncatedUpstream",
+                          "Value": "@variables('Capped')"
+                        },
+                        {
+                          "Field": "UpstreamComplete",
+                          "Value": "@not(or(variables('Capped'),greater(variables('Failures'),0),greater(variables('Omitted'),0),variables('StopExport')))"
+                        },
+                        {
+                          "Field": "CountSemantics",
+                          "Value": "@concat(string(variables('Exported')),' actual verified workbook rows. Index estimate: ',string(variables('IndexTotal')),'. These counts are not interchangeable.')"
+                        },
+                        {
+                          "Field": "CompletionDetail",
+                          "Value": "@concat('Files: ',string(variables('FileCount')),'. Pages: ',string(variables('PageCount')),'. Unverified/omitted: ',string(variables('Omitted')),'. Processing errors: ',string(greater(variables('Failures'),0)),'. Export cap: 1000; candidate cap: 2000; search-page cap: 40. Truncated: ',string(variables('Capped')),'.')"
+                        }
+                      ],
+                      "runAfter": {}
+                    },
+                    "Complete_metadata": {
+                      "type": "Foreach",
+                      "foreach": "@outputs('Complete_metadata_values')",
+                      "actions": {
+                        "Complete_metadata_write": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness",
+                              "connectionName": "shared_excelonlinebusiness",
+                              "operationId": "PatchItem"
+                            },
+                            "parameters": {
+                              "source": "me",
+                              "drive": "@body('Personal_drive')?['id']",
+                              "file": "@last(split(variables('FileId'),'.'))",
+                              "table": "ExportMetadata",
+                              "idColumn": "Field",
+                              "id": "@item()?['Field']",
+                              "item": {
+                                "Value": "@concat(decodeUriComponent('%27'),string(item()?['Value']))"
+                              }
+                            },
+                            "retryPolicy": {
+                              "type": "none"
+                            }
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "runtimeConfiguration": {
+                        "concurrency": {
+                          "repetitions": 1
+                        }
+                      },
+                      "runAfter": {
+                        "Complete_metadata_values": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Final_file_acl": {
+                      "type": "OpenApiConnection",
+                      "inputs": {
+                        "host": {
+                          "apiId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline",
+                          "connectionName": "shared_sharepointonline",
+                          "operationId": "HttpRequest"
+                        },
+                        "parameters": {
+                          "dataset": "@body('SharePoint_profile')?['PersonalUrl']",
+                          "parameters/method": "GET",
+                          "parameters/uri": "@concat(outputs('Report_item_uri'),'/RoleAssignments?$select=Member/Id,RoleDefinitionBindings/RoleTypeKind&$expand=Member,RoleDefinitionBindings')",
+                          "parameters/headers": {
+                            "Accept": "application/json;odata=nometadata"
+                          }
+                        },
+                        "retryPolicy": {
+                          "type": "none"
+                        }
+                      },
+                      "runAfter": {
+                        "Complete_metadata": [
+                          "Succeeded"
+                        ]
+                      }
+                    },
+                    "Delivery_acl_verified": {
+                      "type": "If",
+                      "expression": "@and(equals(length(body('Final_file_acl')?['value']),1),equals(first(body('Final_file_acl')?['value'])?['Member']?['Id'],body('Personal_site_user')?['Id']),equals(first(first(body('Final_file_acl')?['value'])?['RoleDefinitionBindings'])?['RoleTypeKind'],5))",
+                      "actions": {
+                        "Send_private_workbook": {
+                          "type": "OpenApiConnection",
+                          "inputs": {
+                            "host": {
+                              "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                              "connectionName": "shared_office365",
+                              "operationId": "SendEmailV2"
+                            },
+                            "parameters": {
+                              "emailMessage/To": "@body('Selected_profile')?['mail']",
+                              "emailMessage/Subject": "@concat('CorpNet search: ',string(variables('Exported')),' files/pages - ',triggerBody()?['scope'])",
+                              "emailMessage/Body": "@concat('<p>Your CorpNet search export is ready.</p><p><strong>',string(variables('Exported')),' actual results: ',string(variables('FileCount')),' files and ',string(variables('PageCount')),' pages.</strong></p><p>Status: ',if(or(variables('Capped'),greater(variables('Failures'),0),greater(variables('Omitted'),0),variables('StopExport')),'PARTIAL - not all matches','Complete for the retrieved results'),'. Index estimate: ',string(variables('IndexTotal')),'. Omitted/unverified: ',string(variables('Omitted')),'.</p><p><a href=\"',variables('ReportUrl'),'\">Open your private, filterable workbook</a></p><p>Source links and stored tags are in the workbook. Source permissions still apply. Limits and completion details are on ExportInfo.</p>')",
+                              "emailMessage/Importance": "Normal"
+                            },
+                            "retryPolicy": {
+                              "type": "none"
+                            }
+                          },
+                          "runAfter": {}
+                        }
+                      },
+                      "else": {
+                        "actions": {
+                          "Notify_changed_acl": {
+                            "type": "OpenApiConnection",
+                            "inputs": {
+                              "host": {
+                                "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                                "connectionName": "shared_office365",
+                                "operationId": "SendEmailV2"
+                              },
+                              "parameters": {
+                                "emailMessage/To": "@body('Selected_profile')?['mail']",
+                                "emailMessage/Subject": "CorpNet search export could not be verified",
+                                "emailMessage/Body": "@concat('<p>Your search export could not be completed and verified. No finished workbook link is being reported.</p><p>Reason: ReportPrivacyChanged. Job reference: ',variables('JobId'),'. Please retry the search or contact the agent owner.</p>')",
+                                "emailMessage/Importance": "Normal"
+                              },
+                              "retryPolicy": {
+                                "type": "none"
+                              }
+                            },
+                            "runAfter": {}
+                          },
+                          "Stop_changed_acl": {
+                            "type": "Terminate",
+                            "inputs": {
+                              "runStatus": "Failed",
+                              "runError": {
+                                "code": "ReportPrivacyChanged",
+                                "message": "No workbook link sent: private access changed."
+                              }
+                            },
+                            "runAfter": {
+                              "Notify_changed_acl": [
+                                "Succeeded",
+                                "Failed",
+                                "TimedOut",
+                                "Skipped"
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      "runAfter": {
+                        "Final_file_acl": [
+                          "Succeeded"
+                        ]
+                      }
+                    }
+                  },
+                  "else": {
+                    "actions": {
+                      "Notify_unverified_output": {
+                        "type": "OpenApiConnection",
+                        "inputs": {
+                          "host": {
+                            "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                            "connectionName": "shared_office365",
+                            "operationId": "SendEmailV2"
+                          },
+                          "parameters": {
+                            "emailMessage/To": "@body('Selected_profile')?['mail']",
+                            "emailMessage/Subject": "CorpNet search export could not be verified",
+                            "emailMessage/Body": "@concat('<p>Your search export could not be completed and verified. No finished workbook link is being reported.</p><p>Reason: WorkbookVerificationFailed. Job reference: ',variables('JobId'),'. Please retry the search or contact the agent owner.</p>')",
+                            "emailMessage/Importance": "Normal"
+                          },
+                          "retryPolicy": {
+                            "type": "none"
+                          }
+                        },
+                        "runAfter": {}
+                      },
+                      "Stop_unverified_output": {
+                        "type": "Terminate",
+                        "inputs": {
+                          "runStatus": "Failed",
+                          "runError": {
+                            "code": "WorkbookVerificationFailed",
+                            "message": "No workbook link sent: actual rows do not match verified source records."
+                          }
+                        },
+                        "runAfter": {
+                          "Notify_unverified_output": [
+                            "Succeeded",
+                            "Failed",
+                            "TimedOut",
+                            "Skipped"
+                          ]
+                        }
+                      }
+                    }
+                  },
+                  "runAfter": {
+                    "Written_urls": [
+                      "Succeeded"
+                    ]
+                  }
+                }
+              },
+              "runAfter": {
+                "Export_rows": [
+                  "Succeeded",
+                  "Failed",
+                  "TimedOut",
+                  "Skipped"
+                ],
+                "Count_export_failure": [
+                  "Succeeded",
+                  "Skipped"
+                ]
+              }
+            },
+            "Notify_export_failure": {
+              "type": "OpenApiConnection",
+              "inputs": {
+                "host": {
+                  "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365",
+                  "connectionName": "shared_office365",
+                  "operationId": "SendEmailV2"
+                },
+                "parameters": {
+                  "emailMessage/To": "@body('Selected_profile')?['mail']",
+                  "emailMessage/Subject": "CorpNet search export could not be completed",
+                  "emailMessage/Body": "@concat('<p>Your search export could not be completed and verified. No finished workbook link is being reported.</p><p>Job reference: ',variables('JobId'),'. Please retry your search or ask the agent owner to check the failed run.</p>')",
+                  "emailMessage/Importance": "Normal"
+                },
+                "retryPolicy": {
+                  "type": "none"
+                }
+              },
+              "runAfter": {
+                "Finalize_workbook": [
+                  "Failed",
+                  "TimedOut"
+                ]
+              }
+            }
+          },
+          "else": {
+            "actions": {}
+          },
+          "runAfter": {
+            "Respond_to_agent": [
+              "Succeeded"
+            ]
+          }
+        }
+      },
+      "outputs": {}
+    },
+    "templateName": null
+  },
+  "schemaVersion": "1.0.0.0"
+}

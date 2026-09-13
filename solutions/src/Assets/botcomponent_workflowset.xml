@@ -1,0 +1,5 @@
+<botcomponent_workflowset>
+  <botcomponent_workflow botcomponentid.schemaname="cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions" workflowid.workflowid="96794fbd-20ae-f111-aaab-002248403bef">
+    <iscustomizable>1</iscustomizable>
+  </botcomponent_workflow>
+</botcomponent_workflowset>

@@ -1,8 +1,32 @@
 # Setup and safe adaptation
 
-This is a **source reference**, not a one-click deployment package. It does not
-contain a live tenant connection, a complete exported Dataverse solution ZIP,
-or permission to publish an agent into another environment.
+This is a **customizable reference**, not a one-click production deployment.
+It includes an [unmanaged solution ZIP and complete unpacked source](../solutions/README.md),
+but no live tenant connections or permission to publish into another environment.
+Package consistency is checked; **new-tenant import and runtime are unverified**.
+
+## Solution package route
+
+Follow the [solution-specific guide](../solutions/README.md) before importing
+the package into a separate development environment. It contains the agent,
+current native runtime flow and required references, with fictional target
+configuration, unbound connections, no auto-publication and a stopped workflow.
+The [deployment-settings template](../solutions/deployment-settings.template.json)
+does not retarget the embedded SharePoint policy by itself.
+
+HR, IT, Finance and CorpNet are sample departments. Adapt their topics, scope
+validation, instructions and banner mappings together with the site/hub
+inventory, metadata, account connections and model availability. The
+[512-item fixture corpus](../fixtures/corpnet-demo/README.md#500-plus-scale-fixture)
+is separate: importing the agent does not create SharePoint content or index it.
+Its ten collection targets also require an explicitly approved ten-site
+inventory; the packaged default deliberately has only four fictional entries.
+
+Do not import this unmanaged reference into the original demonstration
+environment, or over existing matching component identities, without a
+reviewed upgrade plan. It can merge into existing components. Check actual
+disabled/unpublished state, bindings and sharing after import rather than
+assuming package defaults were applied.
 
 ## Prerequisites
 
@@ -21,7 +45,7 @@ those conditions for another environment.
 
 ## Adaptation sequence
 
-1. **Create or clone a real agent in the intended environment.** Work against
+1. **Import the reviewed solution, or create/clone a real agent in the intended environment.** Work against
    that connected agent, not a folder of unbound YAML. Place the agent and
    native flow in a dedicated solution.
 2. **Review the portable source.** Follow the component instructions in
@@ -70,9 +94,10 @@ publication as a separate release decision.
 
 ## Teams publication is a separate check
 
-The owner subsequently published the agent and supplied an M365 Copilot
-screenshot. That two-row visual is documented in [screenshots](screenshots.md);
-it is not a Teams rendering test. No Teams publication or successful Teams
+The owner subsequently published the agent, and actual M365 conversations
+verified HR/IT banners and the polished four-row table as documented in
+[screenshots](screenshots.md). Those are source-environment checks, not tests
+of this solution in another tenant or in Teams. No Teams publication or successful Teams
 rendering is established by Studio draft screenshots.
 After publication, check desktop and mobile rendering, all ten source links,
 date/tag readability, caller connector sign-in and the private workbook/email
@@ -85,7 +110,10 @@ Live connection IDs, connection references bound to specific accounts,
 environment/agent/workflow IDs, source inventory IDs, owner identities, callback
 URLs, populated exports and management-run evidence are deployment state.
 The repository uses reference values rather than carrying that state into a
-future public release.
+future public release. One narrowly classified intrinsic workflow component
+identity is retained in the solution's manifest, bindings and relationship so
+the package remains consistent; it is not a tenant/site/connection locator.
+Its exact occurrences are listed in the [component inventory](../solutions/component-inventory.json).
 
 Do not remove required connection/tool components simply to make an incomplete
 package pass an export command. A source reference and a verified importable

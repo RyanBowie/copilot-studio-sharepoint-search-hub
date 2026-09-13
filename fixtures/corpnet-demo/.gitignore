@@ -11,3 +11,8 @@ paging-content.json
 paging-documents-manifest.json
 paging-deployment.json
 paging-expected-results.json
+scale-documents/
+scale-content.json
+scale-documents-manifest.json
+scale-deployment.json
+scale-expected-results.json

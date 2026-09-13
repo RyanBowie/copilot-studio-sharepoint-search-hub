@@ -9,8 +9,8 @@ preview with real source links, source dates and stored tags, and continues the 
 into a filterable workbook delivered through the selected account's mailbox.
 
 > **Private preview, prepared for future public review.**
-> This repository contains publication-safe reference source, not a
-> tenant-connected solution export or a production-ready release. Keep it
+> This repository contains portable source, a synthetic test corpus and an
+> unmanaged reference solution—not live tenant connections or a production-ready release. Keep it
 > private until the [public-release checklist](docs/public-release-checklist.md)
 > is complete. GitHub Pages is not enabled.
 
@@ -55,6 +55,34 @@ general knowledge or fall back to an unrestricted web search.
 [Example prompts and outputs](docs/examples.md) ·
 [Setup and adaptation](docs/setup.md) ·
 [Evidence and limitations](docs/validation.md)
+
+## Agent solution and new-tenant customization
+
+**[Download the unmanaged agent solution](solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip)**
+
+This is a real Power Platform solution package containing the agent, 16 active
+bot components, the native search/export flow, five connection references,
+blank workbook and banners. Complete unpacked source and an offline rebuild
+script are included under [`solutions/`](solutions/).
+
+**HR, IT, Finance and CorpNet are test departments, not universal business
+configuration.** A new tenant requires coordinated customization of scopes,
+topics, instructions, banner mappings, SharePoint sites/hub IDs, metadata,
+connections, authentication and model availability. The package starts with
+four fictional Contoso site references, empty connection bindings, no channels,
+no automatic publication and a stopped workflow.
+
+**New-tenant import/runtime remain unverified.** PAC packing, 12 package tests
+and a 39-file semantic roundtrip are not proof of successful import or target
+permissions. Use an isolated development environment and the
+[solution setup guide](solutions/README.md); do not import it back over the
+original demonstration agent without a separate upgrade plan.
+
+The SharePoint corpus is separate from the solution. The
+[512-item fixture blueprint](fixtures/corpnet-demo/scale-expected-results.example.json)
+and [generator](fixtures/corpnet-demo/README.md#500-plus-scale-fixture) define
+499 documents and 13 pages across ten collection targets. Creating, indexing
+and actually retrieving those items are separate checks.
 
 ## Quick demonstration
 
@@ -237,6 +265,8 @@ record the crop boundaries.
 | Area | Purpose |
 |---|---|
 | [`agent/`](agent/) | Portable agent/source reference and component-specific instructions. |
+| [`solutions/`](solutions/) | Actual unmanaged reference ZIP, complete unpacked source, unbound settings and customization/validation guidance. |
+| [`fixtures/corpnet-demo/`](fixtures/corpnet-demo/) | Reproducible 512-item common-marker blueprint and synthetic DOCX/page generators; not a runtime data feed. |
 | [`agent/topics/SearchSharePoint.mcs.yml`](agent/topics/SearchSharePoint.mcs.yml) | Actual guided input and native-flow invocation source. |
 | [`agent/actions/SearchAndExport.mcs.yml`](agent/actions/SearchAndExport.mcs.yml) | Portable native-tool binding and caller-authentication contract. |
 | [`agent/flows/search-export/definition.json`](agent/flows/search-export/definition.json) | Complete generated native agent-flow definition. |

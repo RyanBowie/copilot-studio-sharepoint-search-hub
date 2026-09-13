@@ -1,0 +1,11 @@
+<botcomponent schemaname="cnh_corpnetSearchHub.topic.Search">
+  <componenttype>9</componenttype>
+  <description>Route unmatched requests to the approved search topic without ungrounded answers.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Scoped search fallback</name>
+  <parentbotid>
+    <schemaname>cnh_corpnetSearchHub</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

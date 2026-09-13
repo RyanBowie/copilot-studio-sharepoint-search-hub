@@ -1,0 +1,12 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnConversationStart
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_M0LuhV
+      activity:
+        text:
+          - Hello, I'm {System.Bot.Name}. Say Search SharePoint to search files and pages across approved CorpNet, HR, Finance and IT sites. See up to ten links with stored tags and UTC source dates here, then receive a private Excel workbook of the verified results by email. Use your own connector accounts; export limits apply.
+        speak:
+          - Hello, I'm {System.Bot.Name}. Say Search SharePoint to search files and pages. See up to ten links with stored tags and UTC source dates, then receive the verified results in private Excel by email.

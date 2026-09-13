@@ -1,0 +1,10 @@
+<botcomponent schemaname="cnh_corpnetSearchHub.action.CorpNetSearchCount-CallerPermissions">
+  <componenttype>9</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>CorpNet Search - Files, Pages and Private Export</name>
+  <parentbotid>
+    <schemaname>cnh_corpnetSearchHub</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

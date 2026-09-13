@@ -1,0 +1,12 @@
+kind: TaskDialog
+outputs:
+  - propertyName: result
+action:
+  kind: InvokeFlowTaskAction
+  flowId: 96794fbd-20ae-f111-aaab-002248403bef
+  connectionProperties:
+    $kind: ConnectionProperties
+    diagnostics: null
+    mode: Invoker
+outputMode: All
+modelDescription: 'Search approved hub/spoke sites; show up to ten verified rows in four separate columns: File or page, Created (UTC), Modified (UTC), Stored tags. The first cell contains only the working title link. Use verified source Created/Modified UTC dates, checking at most twenty candidates. Missing preview dates say Not supplied. Export the full verified results to compact private Excel with real UTC date cells and preserved full source timestamps; email its link using the selected caller accounts. Limits and partial completion are explicit.'

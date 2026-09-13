@@ -1,0 +1,36 @@
+{
+  "EnvironmentVariables": [],
+  "ConnectionReferences": [
+    {
+      "LogicalName": "cnh_corpnetexport_r3_excel",
+      "ConnectionId": "",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness"
+    },
+    {
+      "LogicalName": "cnh_corpnetexport_r3_onedrive",
+      "ConnectionId": "",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness"
+    },
+    {
+      "LogicalName": "cnh_corpnetexport_r3_outlook",
+      "ConnectionId": "",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+    },
+    {
+      "LogicalName": "cnh_corpnetexport_r3_profile",
+      "ConnectionId": "",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_office365users"
+    },
+    {
+      "LogicalName": "cnh_corpnetsearch_sharepoint",
+      "ConnectionId": "",
+      "ConnectorId": "/providers/Microsoft.PowerApps/apis/shared_sharepointonline"
+    }
+  ],
+  "CopilotAgents": [
+    {
+      "AadGroupId": "00000000-0000-0000-0000-000000000000",
+      "Name": "cnh_corpnetSearchHub"
+    }
+  ]
+}

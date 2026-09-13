@@ -51,6 +51,46 @@ The example target hostname is `contoso.sharepoint.com`. Replace it with an
 approved target in your private deployment configuration; it is not a live
 fixture endpoint supplied by this repository.
 
+## 500-plus scale fixture
+
+After generating the expansion and paging definitions, run:
+
+```powershell
+npm run generate:scale
+npm run test:scale
+```
+
+The scale generator adds **400 genuine Word documents**, 40 per existing
+collection: 20 in the library root and 20 in `Runbooks/Quarter One`.
+The combined common-marker corpus is **512 distinct items: 499 documents and
+13 pages**. Including the original non-marker examples, all four source corpora
+define **528 authored artifacts**.
+
+The checked-in [512-item blueprint](scale-expected-results.example.json)
+contains every expected source ID, type, metadata record and example target
+URL. It uses fictional Contoso locations. It is not an uploaded-data manifest
+and must never be supplied to the runtime instead of actual SharePoint reads.
+The generated document files and machine-specific upload manifests are ignored.
+
+Use **`All` / `hubspokeverify`** for the greater-than-500 paging case. The
+`scaleverify` marker matches only the 400 additions. `bodyonlyscaleverify`
+occurs in their paragraph content but not their names, titles or stored tags,
+so it provides a separate 400-item body-indexing check. New content avoids
+changing the smaller `annual leave` and `devices` examples.
+
+The unchanged native RowLimit 100 should yield six pages:
+**100, 100, 100, 100, 100, 12**. Verify the exact 512-URL union, current source
+reads, preview inclusion, full private workbook and delivery outcome. A generated
+blueprint, uploaded file count or diagnostic index query is not an agent test.
+Earlier 112-item evidence remains a separate historical snapshot.
+
+**Tenant setup is required.** These are ten collection targets, while the
+portable agent's default policy deliberately retains four fictional references.
+Approve and verify the actual ten sites/hub association before updating that
+inventory; generation does not expand authorization. Rebind metadata and
+selected-user connections, and preserve existing permissions. Importing an
+agent solution does not provision or index this SharePoint content.
+
 ## Coverage cases
 
 | Fixture feature | Purpose |

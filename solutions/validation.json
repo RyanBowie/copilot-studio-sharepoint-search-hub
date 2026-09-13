@@ -1,0 +1,50 @@
+{
+  "validatedUtc": "2026-09-13T01:02:30.212754+00:00",
+  "artifact": "CorpNetSearchHubReference_1_0_0_0_unmanaged.zip",
+  "artifactSha256": "6ee4789b7818085fe6f89a71d178d83f7ca039c91ae30682498a06c8d054b64b",
+  "artifactBytes": 64070,
+  "packageType": "Unmanaged",
+  "exportMethod": "Supported Dataverse ExportSolution, Managed=false; packaging-only container",
+  "packager": "Microsoft PowerPlatform CLI 1.47.1+gc5a7855 / SolutionPackager",
+  "solutionTests": {
+    "passed": 12,
+    "failed": 0
+  },
+  "portableAgentTests": {
+    "passed": 63,
+    "failed": 0,
+    "jsonschemaVersion": "4.25.1"
+  },
+  "dependencyNote": "The first full-agent attempt used an incompatible pre-existing global jsonschema; rerunning with the already-installed isolated pinned 4.25.1 passed all 63 tests.",
+  "roundtrip": {
+    "sequence": "PAC unpack -> pack -> unpack",
+    "sourceFilesCompared": 39,
+    "allXmlJsonYamlSemanticsEqual": true,
+    "missingOrAdditionalFiles": 0,
+    "repackedZipSha256": "79af508248a2649723ad1f5794a62c9a76d087e7fec1bc6c6864b5eba80a479e"
+  },
+  "zipCrcPassed": true,
+  "zipEntryCount": 39,
+  "knownSourceLocatorScanIssues": 0,
+  "undeclaredDependenciesInExportManifest": 0,
+  "sourceComponentRecordsAndPublicationUnchanged": true,
+  "sourceConnectionReferencesUnchanged": true,
+  "portableDefinitionCanonicalSha256": "c8984bd2776d77a808344eadac8bc759405dc042e9433d664c9354647ee53810",
+  "importSafetySettings": {
+    "publishOnImport": false,
+    "channels": [],
+    "workflowStateCode": 0,
+    "workflowStatusCode": 1
+  },
+  "newTenantImport": "UNVERIFIED",
+  "newTenantRuntime": "UNVERIFIED",
+  "runtimeInvocationsDuringPackaging": 0,
+  "agentPublicationsDuringPackaging": 0,
+  "limitations": [
+    "PAC pack/roundtrip is not an import or runtime test.",
+    "Target platform/model/connector/DLP prerequisites and identities require owner verification.",
+    "Fictional four-collection inventory must be replaced and verified before activation.",
+    "Generated connection/security-group settings are unbound placeholders.",
+    "No fixture content, production-scale, cross-user, Teams or inbox validation is established by this package."
+  ]
+}

@@ -10,6 +10,34 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## Unmanaged reference solution - 13 September 2026
+
+The repository now includes a real unmanaged package derived from a supported
+Dataverse export and rebuilt with Microsoft PAC 1.47.1 SolutionPackager.
+It contains one agent, 16 active bot components, one current runtime workflow,
+five connection references and the required tool/workflow relationship.
+Provisioning, retired flows and disabled diagnostic components are excluded.
+
+**12 package tests and 63 portable-agent tests passed.** ZIP CRC/integrity and
+an official unpack/pack/unpack roundtrip preserved all 39 source files
+semantically. The source agent, flow, connections and publication were unchanged;
+only a packaging-only solution container/membership was added.
+
+The neutral package contains fictional site/hub targets and no source-tenant
+connection bindings or fixture data. Publication is disabled, channels are empty,
+and the packaged workflow is stopped. Those requested defaults still require
+verification after an actual import. A narrowly retained intrinsic workflow
+identity maintains internal references; all tenant/account locators remain excluded.
+
+**New-tenant import and runtime are UNVERIFIED.** HR/IT-like departments and
+topics require customization, as do inventory, metadata, connections,
+authentication, model availability and sharing. Packing is not evidence that
+those target prerequisites are satisfied.
+
+[Solution and customization guide](../solutions/README.md) ·
+[Package validation snapshot](../solutions/validation.json) ·
+[Component/identifier inventory](../solutions/component-inventory.json)
+
 ## Published M365 table polish - 12 September 2026
 
 One actual **Search SharePoint -> IT -> devices** request against flow revision

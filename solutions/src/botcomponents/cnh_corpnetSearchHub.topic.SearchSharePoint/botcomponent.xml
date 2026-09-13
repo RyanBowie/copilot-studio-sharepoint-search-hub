@@ -1,0 +1,11 @@
+<botcomponent schemaname="cnh_corpnetSearchHub.topic.SearchSharePoint">
+  <componenttype>9</componenttype>
+  <description>Show up to ten permission-checked rows with separate File or page, Created (UTC), Modified (UTC), and Stored tags columns, then email a private Excel workbook of the full verified results and source timestamps.</description>
+  <iscustomizable>0</iscustomizable>
+  <name>Search approved SharePoint sites</name>
+  <parentbotid>
+    <schemaname>cnh_corpnetSearchHub</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

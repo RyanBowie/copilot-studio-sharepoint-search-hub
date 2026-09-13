@@ -1,0 +1,10 @@
+kind: AdaptiveDialog
+beginDialog:
+  kind: OnUnknownIntent
+  id: main
+  actions:
+    - kind: SendActivity
+      id: sendMessage_QZreqo
+      activity: I could not return verified SharePoint results for this request. Please try again later.
+    - kind: CancelAllDialogs
+      id: cancel-unverified-fallback

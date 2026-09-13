@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ImportExportXml OrganizationVersion="9.2.26084.149" OrganizationSchemaType="Standard" CRMServerServiceabilityVersion="9.2.26084.00149">
+  <Entities />
+  <Roles />
+  <Workflows />
+  <FieldSecurityProfiles />
+  <Templates />
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <CustomControls />
+  <EntityDataProviders />
+  <connectionreferences>
+    <connectionreference connectionreferencelogicalname="cnh_corpnetexport_r3_excel">
+      <connectionreferencedisplayname>CorpNet caller - shared_excelonlinebusiness</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness</connectorid>
+      <description>Target-tenant connection reference. Runtime remains caller-provided (Invoker); never use maker-source fallback.</description>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="cnh_corpnetexport_r3_onedrive">
+      <connectionreferencedisplayname>CorpNet caller - shared_onedriveforbusiness</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_onedriveforbusiness</connectorid>
+      <description>Target-tenant connection reference. Runtime remains caller-provided (Invoker); never use maker-source fallback.</description>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="cnh_corpnetexport_r3_outlook">
+      <connectionreferencedisplayname>CorpNet caller - shared_office365</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_office365</connectorid>
+      <description>Target-tenant connection reference. Runtime remains caller-provided (Invoker); never use maker-source fallback.</description>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="cnh_corpnetexport_r3_profile">
+      <connectionreferencedisplayname>CorpNet caller - shared_office365users</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_office365users</connectorid>
+      <description>Target-tenant connection reference. Runtime remains caller-provided (Invoker); never use maker-source fallback.</description>
+      <iscustomizable>1</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+    </connectionreference>
+    <connectionreference connectionreferencelogicalname="cnh_corpnetsearch_sharepoint">
+      <connectionreferencedisplayname>CorpNet caller - shared_sharepointonline</connectionreferencedisplayname>
+      <connectorid>/providers/Microsoft.PowerApps/apis/shared_sharepointonline</connectorid>
+      <iscustomizable>0</iscustomizable>
+      <promptingbehavior>0</promptingbehavior>
+      <statecode>0</statecode>
+      <statuscode>1</statuscode>
+      <description>Target-tenant connection reference. Runtime remains caller-provided (Invoker); never use maker-source fallback.</description>
+    </connectionreference>
+  </connectionreferences>
+  <Languages>
+    <Language>1033</Language>
+  </Languages>
+</ImportExportXml>

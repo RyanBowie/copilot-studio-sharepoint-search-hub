@@ -1,0 +1,23 @@
+{
+  "$kind": "BotConfiguration",
+  "channels": [],
+  "settings": {
+    "GenerativeActionsEnabled": false
+  },
+  "isAgentConnectable": false,
+  "publishOnImport": false,
+  "gPTSettings": {
+    "$kind": "GPTSettings",
+    "defaultSchemaName": "cnh_corpnetSearchHub.gpt.default"
+  },
+  "isLightweightBot": false,
+  "aISettings": {
+    "$kind": "AISettings",
+    "useModelKnowledge": false,
+    "isFileAnalysisEnabled": false,
+    "isSemanticSearchEnabled": true,
+    "contentModeration": "High",
+    "optInUseLatestModels": false
+  },
+  "deferredProvisioning": false
+}

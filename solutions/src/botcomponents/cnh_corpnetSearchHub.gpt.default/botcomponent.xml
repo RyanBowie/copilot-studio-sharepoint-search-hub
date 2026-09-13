@@ -1,0 +1,10 @@
+<botcomponent schemaname="cnh_corpnetSearchHub.gpt.default">
+  <componenttype>15</componenttype>
+  <iscustomizable>0</iscustomizable>
+  <name>CorpNet Search Hub</name>
+  <parentbotid>
+    <schemaname>cnh_corpnetSearchHub</schemaname>
+  </parentbotid>
+  <statecode>0</statecode>
+  <statuscode>1</statuscode>
+</botcomponent>

@@ -16,6 +16,9 @@ a public GitHub Pages site just because documentation and images are present.
 - [ ] Confirm every example is synthetic and not real company guidance.
 - [ ] Remove internal hostnames, emails, tenant/environment/agent/site/flow/
       connection identifiers, local paths and organization-specific details.
+- [ ] Review the solution's one narrowly retained intrinsic workflow identity
+      and exact path allowlist; do not expand that exception to tenant locators,
+      account bindings or credentials.
 - [ ] Scan both text and binary content, including ZIP-based Office files and
       image metadata, for secrets and sensitive data.
 - [ ] Inspect every screenshot at full resolution. Masking must actually remove
@@ -27,6 +30,9 @@ a public GitHub Pages site just because documentation and images are present.
 - [ ] Reproduce the local checks from a clean checkout.
 - [ ] Recreate/rebind the reference in a separate target environment using the
       documented supported product workflow.
+- [ ] Actually import the unmanaged solution into a separate target environment;
+      PAC packing/roundtrip is not an import test. Customize the sample
+      departments/topics, target inventory, metadata, accounts and security group.
 - [ ] Confirm native flow registration and Studio topic loading.
 - [ ] Exercise all five runtime connectors as caller-provided connections.
 - [ ] Verify the populated private workbook and verified-recipient email path.

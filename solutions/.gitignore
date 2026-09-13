@@ -1,0 +1,6 @@
+deployment-settings.local.json
+*.local.json
+*.local.zip
+.roundtrip/
+__pycache__/
+*.log
