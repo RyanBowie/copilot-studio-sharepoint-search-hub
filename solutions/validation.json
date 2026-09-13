@@ -1,35 +1,35 @@
 {
-  "validatedUtc": "2026-09-13T01:02:30.212754+00:00",
+  "validatedUtc": "2026-09-13T01:55:25.583558+00:00",
   "artifact": "CorpNetSearchHubReference_1_0_0_0_unmanaged.zip",
-  "artifactSha256": "6ee4789b7818085fe6f89a71d178d83f7ca039c91ae30682498a06c8d054b64b",
-  "artifactBytes": 64070,
+  "artifactSha256": "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272",
+  "artifactBytes": 64159,
   "packageType": "Unmanaged",
   "exportMethod": "Supported Dataverse ExportSolution, Managed=false; packaging-only container",
   "packager": "Microsoft PowerPlatform CLI 1.47.1+gc5a7855 / SolutionPackager",
   "solutionTests": {
-    "passed": 12,
+    "passed": 13,
     "failed": 0
   },
   "portableAgentTests": {
-    "passed": 63,
+    "passed": 68,
     "failed": 0,
     "jsonschemaVersion": "4.25.1"
   },
-  "dependencyNote": "The first full-agent attempt used an incompatible pre-existing global jsonschema; rerunning with the already-installed isolated pinned 4.25.1 passed all 63 tests.",
+  "dependencyNote": "Pinned jsonschema 4.25.1 from the already-installed isolated validation dependencies; no global dependency changes.",
   "roundtrip": {
     "sequence": "PAC unpack -> pack -> unpack",
     "sourceFilesCompared": 39,
     "allXmlJsonYamlSemanticsEqual": true,
     "missingOrAdditionalFiles": 0,
-    "repackedZipSha256": "79af508248a2649723ad1f5794a62c9a76d087e7fec1bc6c6864b5eba80a479e"
+    "repackedZipSha256": "482e750c16e16172a88e51ea96cd0d7a23bc51740ffcd98b012655c54605c371"
   },
   "zipCrcPassed": true,
   "zipEntryCount": 39,
   "knownSourceLocatorScanIssues": 0,
   "undeclaredDependenciesInExportManifest": 0,
-  "sourceComponentRecordsAndPublicationUnchanged": true,
+  "sourceComponentRecordsAndPublicationUnchanged": false,
   "sourceConnectionReferencesUnchanged": true,
-  "portableDefinitionCanonicalSha256": "c8984bd2776d77a808344eadac8bc759405dc042e9433d664c9354647ee53810",
+  "portableDefinitionCanonicalSha256": "5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3",
   "importSafetySettings": {
     "publishOnImport": false,
     "channels": [],
@@ -46,5 +46,57 @@
     "Fictional four-collection inventory must be replaced and verified before activation.",
     "Generated connection/security-group settings are unbound placeholders.",
     "No fixture content, production-scale, cross-user, Teams or inbox validation is established by this package."
-  ]
+  ],
+  "previousArtifactSha256": "6ee4789b7818085fe6f89a71d178d83f7ca039c91ae30682498a06c8d054b64b",
+  "previousPortableDefinitionCanonicalSha256": "c8984bd2776d77a808344eadac8bc759405dc042e9433d664c9354647ee53810",
+  "nativeRelevantTests": {
+    "passed": 88,
+    "failed": 0
+  },
+  "nativeSourceSchemas": {
+    "passed": 15,
+    "failed": 0
+  },
+  "sourceComponentGuard": {
+    "intentionalChange": "Two native workflow SortList leaves only; normal lifecycle metadata changed during ETag-guarded stop/update/start.",
+    "beforeDefinitionSha256": "3a4b9ca0d8e8781d258a54c9239cc021ba87cdbd3f3aa87ccf6d47b0a7f11460",
+    "afterDefinitionSha256": "80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a",
+    "agentTopicModelConnectionRecordsAndOwnerPublicationUnchanged": true,
+    "allRecordsUnchangedAfterDeployment": true
+  },
+  "sourceNativePostChangeRuntime": "PENDING_PARENT_AUTHORIZED_TEST",
+  "ordering": {
+    "sortList": [
+      {
+        "Property": "[docid]",
+        "Direction": 0
+      }
+    ],
+    "relevanceRankedPreview": false,
+    "globalTopTenGuarantee": false,
+    "indexSnapshotGuarantee": false
+  },
+  "sourceDiagnosticOnly": {
+    "scope": "Source-owner read-only index probes, not native agent/export execution.",
+    "docidOnly": {
+      "combinedUnique": 512,
+      "combinedExpected": 512,
+      "bodyUnique": 400,
+      "bodyExpected": 400,
+      "crossPageOverlap": 0
+    },
+    "rankThenDocid": {
+      "combinedUnique": 478,
+      "combinedExpected": 512,
+      "bodyUnique": 383,
+      "bodyExpected": 400
+    }
+  },
+  "packagedDelta": {
+    "changedZipEntries": [
+      "Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json"
+    ],
+    "onlyTwoAddedSortListLeaves": true,
+    "allOtherZipEntryContentsIdentical": true
+  }
 }

@@ -877,6 +877,12 @@
                                   "StartRow": 0,
                                   "TrimDuplicates": false,
                                   "EnableQueryRules": false,
+                                  "SortList": [
+                                    {
+                                      "Property": "[docid]",
+                                      "Direction": 0
+                                    }
+                                  ],
                                   "SelectProperties": [
                                     "SPWebUrl",
                                     "SiteID",
@@ -2303,6 +2309,12 @@
                           "StartRow": "@variables('PageStart')",
                           "TrimDuplicates": false,
                           "EnableQueryRules": false,
+                          "SortList": [
+                            {
+                              "Property": "[docid]",
+                              "Direction": 0
+                            }
+                          ],
                           "SelectProperties": [
                             "SPWebUrl",
                             "SiteID",

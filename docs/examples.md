@@ -20,6 +20,11 @@ populate every input or that the agent is a free-form policy-answering system.
 `hubspokeverify` is a deliberately fictional fixture marker, not a product
 keyword. New content may need time to appear in SharePoint's index.
 
+The stable-paging revision returns up to ten verified matches in document-ID
+traversal order within each approved site batch. This is intentionally not a
+relevance-ranked best-ten list: the larger fixture showed that relevance-based
+pages could overlap and omit expected results from the complete traversal.
+
 ## Observed polished M365 table
 
 The actual **IT / devices** request returned four verified results: one page

@@ -275,6 +275,7 @@ def search_request(scope, start):
             "Querytext": "@concat('(', " + scope + ", ') AND (', outputs('Literal_query'), ') AND " + CONTENT_SCOPE + " AND (IsDocument:1 OR FileExtension:aspx)')",
             "RowLimit": PAGE_SIZE, "StartRow": start, "TrimDuplicates": False,
             "EnableQueryRules": False,
+            "SortList": [{"Property": "[docid]", "Direction": 0}],
             "SelectProperties": ["SPWebUrl", "SiteID", "ListID", "ListItemID"],
         },
     }

@@ -1,0 +1,134 @@
+{
+  "state": "SOURCE_AND_INDEX_VERIFIED_NATIVE_SCALE_RUN_PENDING",
+  "sourceVerifiedUtc": "2026-09-13T01:09:01.067705+00:00",
+  "query": "hubspokeverify",
+  "scope": "All",
+  "matchingSources": 512,
+  "documents": 499,
+  "pages": 13,
+  "newDocuments": 400,
+  "existingMarkerSources": 112,
+  "siteCollections": 10,
+  "newRootDocuments": 200,
+  "newNestedDocuments": 200,
+  "matchesByDepartment": {
+    "CorpNet": 50,
+    "Finance": 154,
+    "HR": 154,
+    "IT": 154
+  },
+  "matchesBySiteKey": {
+    "corpnet-main": 50,
+    "finance-fieldteam": 49,
+    "finance-main": 50,
+    "finance-operations": 55,
+    "hr-fieldteam": 49,
+    "hr-main": 50,
+    "hr-operations": 55,
+    "it-fieldteam": 49,
+    "it-main": 50,
+    "it-operations": 55
+  },
+  "newDocumentsPerSite": {
+    "corpnet-main": 40,
+    "finance-fieldteam": 40,
+    "finance-main": 40,
+    "finance-operations": 40,
+    "hr-fieldteam": 40,
+    "hr-main": 40,
+    "hr-operations": 40,
+    "it-fieldteam": 40,
+    "it-main": 40,
+    "it-operations": 40
+  },
+  "localPackages": {
+    "count": 400,
+    "bytes": 4156373,
+    "allOfficeSchemasValid": true,
+    "allBodyTextMatchesDefinitions": true,
+    "windowsValidationRequiresUtf8Mode": true
+  },
+  "sourceVerification": [
+    "Exact new-file metadata and target URLs checked.",
+    "All 400 uploaded Word packages downloaded; ZIP integrity and exact body text checked.",
+    "Current source timestamps recorded for the 512-item comparison oracle.",
+    "Existing owner audience, inherited library/folder/file permissions and published state checked.",
+    "Original 112-item oracle retained unchanged as historical evidence.",
+    "Provisioning-only flow stopped after stages; it never supplies runtime result rows."
+  ],
+  "indexReadiness": {
+    "checkedUtc": "2026-09-13T01:34:25.774871+00:00",
+    "diagnosticSort": "[docid]:ascending",
+    "rowLimit": 100,
+    "results": {
+      "Combined": {
+        "expected": 512,
+        "uniqueURLs": 512,
+        "pageCounts": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          12
+        ],
+        "duplicateRowsAcrossPages": 0,
+        "ready": true
+      },
+      "Body": {
+        "expected": 400,
+        "uniqueURLs": 400,
+        "pageCounts": [
+          100,
+          100,
+          100,
+          100
+        ],
+        "duplicateRowsAcrossPages": 0,
+        "ready": true
+      }
+    },
+    "bodyOnlyMarker": "bodyonlyscaleverify",
+    "bodyMarkerNotInNamesTitlesOrTags": true,
+    "notAnAgentRuntimeTest": true
+  },
+  "pagingFinding": {
+    "relevanceFirstSort": "rank:descending,[docid]:ascending",
+    "results": {
+      "Combined": {
+        "expected": 512,
+        "uniqueURLs": 478,
+        "pageCounts": [
+          100,
+          100,
+          100,
+          100,
+          100,
+          12
+        ],
+        "duplicateRowsAcrossPages": 34,
+        "ready": false
+      },
+      "Body": {
+        "expected": 400,
+        "uniqueURLs": 383,
+        "pageCounts": [
+          100,
+          100,
+          100,
+          100
+        ],
+        "duplicateRowsAcrossPages": 17,
+        "ready": false
+      }
+    },
+    "finding": "Relevance-ordered pages overlap on the large fixture even with a document-ID tie-break. Document-ID-only ascending pages form exact disjoint sets.",
+    "requiredRuntimeBehavior": "Use the same stable document-ID ordering for initial and subsequent pages; preview is a bounded verified sample, not relevance-ranked best ten."
+  },
+  "boundaries": [
+    "Creation and index diagnostics do not prove a 512-row agent export.",
+    "Owner-account checks are not non-owner denial or revocation tests.",
+    "No permissions, source runtime configuration or agent publication were changed by provisioning.",
+    "Fixture content is separate from the unmanaged solution package."
+  ]
+}

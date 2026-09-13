@@ -272,8 +272,8 @@
     },
     {
       "path": "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
-      "bytes": 158731,
-      "sha256": "98dae735168a8d8955f9b5011916bf3c4775e02582abcc0bd5a2525b23b56330"
+      "bytes": 159245,
+      "sha256": "4c695dc94f6507bb409dd19e9a5b13fc78efe30c0c4bdc5fc32c5c279defd2bb"
     },
     {
       "path": "Workflows\\CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json.data.xml",
@@ -294,8 +294,8 @@
     },
     {
       "path": "Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json",
-      "bytes": 158731,
-      "sha256": "98dae735168a8d8955f9b5011916bf3c4775e02582abcc0bd5a2525b23b56330"
+      "bytes": 159245,
+      "sha256": "4c695dc94f6507bb409dd19e9a5b13fc78efe30c0c4bdc5fc32c5c279defd2bb"
     },
     {
       "path": "Assets/botcomponent_workflowset.xml",
@@ -477,5 +477,18 @@
       "bytes": 4544,
       "sha256": "101e6aca4599c0e69d2ee37ffc06f3d7d732a837ae70010ca6ef7c6bda9f07aa"
     }
-  ]
+  ],
+  "searchOrdering": {
+    "sortList": [
+      {
+        "Property": "[docid]",
+        "Direction": 0
+      }
+    ],
+    "meaning": "Document-ID index order within bounded batches; not relevance-ranked best ten or global top ten.",
+    "changedZipEntriesSincePreviousSnapshot": [
+      "Workflows/CorpNetSearch-FilesPagesandPrivateExport-96794FBD-20AE-F111-AAAB-002248403BEF.json"
+    ],
+    "twoLeafRestoreProof": true
+  }
 }

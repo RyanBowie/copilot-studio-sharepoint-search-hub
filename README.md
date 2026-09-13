@@ -37,8 +37,9 @@ Long or unsafe labels remain escaped wrapping text; tags are not discarded.
 M365/Teams controls the grid's colors, fonts and borders.
 The actual M365 host renders the new bold glyph links and monospace tag labels,
 but **ignores the centering markers: dates remain left-aligned**.
-Ten preview rows are selected through bounded
-retrieval, not a guarantee of a globally ranked top ten across the estate.
+The stable-paging revision orders initial and subsequent search pages by
+document ID ascending within each approved site batch. The preview is up to
+ten verified matches from that bounded traversal—not a relevance-ranked best ten.
 Historical screenshots retain their original five-row presentation; current
 four-column captures explicitly show the narrow-pane wrapping limitation.
 
@@ -72,7 +73,7 @@ connections, authentication and model availability. The package starts with
 four fictional Contoso site references, empty connection bindings, no channels,
 no automatic publication and a stopped workflow.
 
-**New-tenant import/runtime remain unverified.** PAC packing, 12 package tests
+**New-tenant import/runtime remain unverified.** PAC packing, 13 package tests
 and a 39-file semantic roundtrip are not proof of successful import or target
 permissions. Use an isolated development environment and the
 [solution setup guide](solutions/README.md); do not import it back over the

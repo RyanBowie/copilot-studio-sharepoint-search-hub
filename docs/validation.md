@@ -10,6 +10,35 @@ not proof of non-owner permission trimming.
 Live tenant identifiers, account details, connection IDs, populated exports
 and raw run links remain outside this publication-oriented repository.
 
+## 512-source creation and indexing - 13 September 2026
+
+The scale fixture adds **400 real Word documents**, 40 in each of the ten
+existing approved collections. Together with the prior marker corpus it has
+**512 distinct matching sources: 499 documents and 13 pages**. New files are
+evenly divided between library roots and existing nested folders.
+
+All 400 local packages passed Office Open XML/schema and exact body-text
+validation. Every uploaded file was downloaded and its body/package integrity,
+metadata, path, publication and inherited access checked. Fresh topology/audience
+audits surrounded provisioning; no broader access was granted. The dedicated
+provisioner was stopped after each stage and is not a runtime result source.
+
+A document-ID-ordered diagnostic query returned the exact 512-source set in
+**100, 100, 100, 100, 100, 12** rows with no page overlap. A separate content-only
+marker returned all 400 new documents; that marker is absent from names, titles
+and stored tags. These are index-readiness checks, **not an agent export test**.
+
+**Scale finding:** relevance-ordered pages overlapped even after the index count
+reached 512. Adding document ID only as a secondary rank tie-break still returned
+478 unique sources across 512 rows. Document-ID-only ascending order returned all
+512 exactly. The subsequent stable-paging change adds document-ID ascending
+sorting to both native request paths, with no other search/export change.
+The actual 512-row native run is a separate gate; its preview is a bounded
+verified sample, not the best ten by rank.
+
+[Source/index checkpoint and counts](scale-source-validation-summary.json) ·
+[Reproducible corpus and 512-item blueprint](../fixtures/corpnet-demo/README.md#500-plus-scale-fixture)
+
 ## Unmanaged reference solution - 13 September 2026
 
 The repository now includes a real unmanaged package derived from a supported
@@ -18,10 +47,13 @@ It contains one agent, 16 active bot components, one current runtime workflow,
 five connection references and the required tool/workflow relationship.
 Provisioning, retired flows and disabled diagnostic components are excluded.
 
-**12 package tests and 63 portable-agent tests passed.** ZIP CRC/integrity and
+**13 package tests and 68 portable-agent tests passed.** ZIP CRC/integrity and
 an official unpack/pack/unpack roundtrip preserved all 39 source files
-semantically. The source agent, flow, connections and publication were unchanged;
-only a packaging-only solution container/membership was added.
+semantically. The initial package export added only a packaging container and
+membership, without modifying source components. The subsequent scale fix
+intentionally added two native-flow `SortList` leaves and synchronized the
+package: only its workflow JSON entry changed. Agent/topic/model, connections,
+workbook bytes and owner publication were preserved.
 
 The neutral package contains fictional site/hub targets and no source-tenant
 connection bindings or fixture data. Publication is disabled, channels are empty,
@@ -347,7 +379,7 @@ The actual two-page verification above establishes continuation for this
 
 ## Portable-source checks
 
-The publication-safe agent package builds offline and its **63 focused tests
+The publication-safe agent package builds offline and its **68 focused tests
 pass**, covering ten-row bounds, source dates, workbook formatting/contracts
 and authoring serialization, plus the success-message wrapper, recipient
 escaping, verbatim non-success output and retained caveats. Ten banner tests
@@ -356,6 +388,9 @@ the existing result contract. Eleven table-formatting tests cover verified
 glyphs, bold source links, separate date alignment, safe/unsafe tag labels,
 length limits and metadata fidelity, including 100 deterministic injection-fuzz
 cases parsed with Markdown-it. These are offline checks, not client screenshots.
+Five stable-paging checks cover identical document-ID-only ascending ordering,
+the two-leaf change boundary and a tie-heavy 512-item paging case. They do not
+replace the actual native-run evidence.
 The original and expansion fixture generation
 commands previously ran successfully, and their **47 generated Word documents**
 passed document-package validation. The separate connected paging fixture

@@ -1,5 +1,11 @@
 # Contextual SharePoint banners
 
+The later document-ID-only paging change does not alter this topic, its images
+or output contract. Existing HR/IT M365 image evidence remains valid historical
+rendering evidence; it is not a native runtime test of the new paging definition.
+Preview candidates now follow index document-ID order, not relevance-ranked best
+ten. See [stable paging](../flows/search-export/stable-paging.md).
+
 This is a **banner-only** Adaptive Card 1.5 presentation. It does not replace the
 results table, parse Markdown, carry result rows, change the native flow output,
 or claim that a search/export succeeded.

@@ -126,12 +126,19 @@ Content must be indexed and remain accessible to the caller.
    exported-row count.
 2. **Verified result:** a candidate whose current source access and metadata
    passed the controlled flow's checks.
-3. **Preview:** at most ten verified rows, ordered by the bounded retrieval
-   path; not a promise of a globally ranked top ten across a large estate.
+3. **Preview:** at most ten verified rows, ordered by stable document-ID traversal
+   within approved site batches; not a relevance-ranked best ten.
 4. **Export:** the rows actually written and verified, subject to changing
    permissions, explicit bounds and connector failures.
 5. **Delivery:** the successful email action, distinct from the initial chat
    acknowledgement and from a human confirming receipt.
+
+The 512-source fixture exposed overlapping pages under relevance ordering,
+including rank-first ordering with a document-ID tie-break. The stable-paging
+revision uses `[docid]:ascending` on both initial and next-page requests, keeping
+RowLimit 100. This prioritizes complete deterministic traversal rather than
+ranking the preview. It does not create a transactional snapshot: source/index
+changes and permission revocation can still affect a running export.
 
 Verified metadata includes title, business department, tags, document type
 and core source/file locators. Created and modified dates come from current

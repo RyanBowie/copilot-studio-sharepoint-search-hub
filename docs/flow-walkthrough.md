@@ -161,8 +161,9 @@ Bold glyph links and short monospace tags did render. See the
 [formatter contract and limits](../agent/flows/search-export/formatting.md).
 Dates use UTC calendar values. Long preview
 tags can be shortened at 200 characters with a notice that Excel retains the
-full value. Preview ordering follows bounded retrieval, not a guarantee of a
-globally ranked top ten across a large estate.
+full value. The stable-paging revision selects preview rows from document-ID
+ascending traversal within each approved site batch. It is a verified sample,
+not a relevance-ranked best ten.
 
 The response announces **export startup**, not completion or inbox delivery.
 There is no second queue or independent background worker in this reference:
@@ -194,6 +195,13 @@ An owner republish is required for a changed topic to reach published callers.
 
 `Export_rows` drives bounded continuation. `Next_search_page` advances source
 search paging while preserving the same approved scope and 100-row page size.
+Both initial and next-page requests use the same `[docid]:ascending` ordering.
+Relevance-based ordering overlapped pages in the 512-source fixture, even with
+a secondary document-ID tie-break; mixing sort modes between pages is not safe.
+Microsoft documents [SortList](https://learn.microsoft.com/sharepoint/dev/general-development/sharepoint-search-rest-api-overview#sortlist)
+and the [`[docid]` sorting syntax](https://learn.microsoft.com/sharepoint/dev/general-development/pagination-for-large-result-sets).
+This bounded reference keeps StartRow paging; it does not implement the separate
+IndexDocId keyset approach recommended for very large result sets.
 Current source verification, duplicate handling and omission/error accounting
 apply before rows are disclosed or written.
 

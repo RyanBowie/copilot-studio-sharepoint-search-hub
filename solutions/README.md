@@ -81,6 +81,15 @@ Index estimates are not verified-export counts. Chat confirms export startup,
 not completion or inbox delivery. Private workbook checks precede verified-profile
 email. These limits do not constitute production coverage or load validation.
 
+Both packaged search request paths now sort **document-ID ascending**, not by
+relevance. Preview candidates follow index order within each bounded batch;
+up to ten verified results are not the relevance-ranked “best ten” or a globally
+ranked top ten. Metadata hydration may reorder workbook rows. The change was
+selected after source-owner read-only diagnostics covered 512 combined and 400
+body-only matches without overlap, while rank-first requests still overlapped.
+Those probes are **not native agent/export proof**; post-change native validation
+is pending. See [stable paging](../agent/flows/search-export/stable-paging.md).
+
 ## Import safety defaults
 
 The package sets **`publishOnImport: false`**, requests an empty channel list,
@@ -135,7 +144,7 @@ The build performs no cloud operation. It:
 2. Copies the exact portable native flow definition into its exported workflow
    wrapper; it does not regenerate or alter the standing agent source.
 3. Uses `pac solution pack --packagetype Unmanaged`, regenerates the unbound
-   deployment-settings template and runs the 12 solution tests.
+   deployment-settings template and runs the 13 solution tests.
 
 The build writes its current hash/entry inventory to ignored `build.local.json`.
 ZIP timestamps can change the archive hash even when every component is identical.
@@ -166,11 +175,14 @@ flow. It is not the retired count-only workflow.
 
 ## Validation boundary and rights
 
-The package has ZIP CRC/integrity checks, 12 package/reference tests, 63 complete
+The package has ZIP CRC/integrity checks, 13 package/reference tests, 68 complete
 portable-agent tests and a supported PAC **unpack → pack → unpack** semantic
 roundtrip. See [`validation.json`](validation.json) for the artifact hashes and
-precise proof. No import, runtime query, export/email test, agent publication or
-source-component mutation was performed to produce this package.
+precise proof. No import, runtime query, export/email test or agent publication
+was performed in this release. The related source-environment deployment
+intentionally changed only two native-flow `SortList` properties using fresh
+ETag guards. Agent/topic/model/connection records and owner publication were
+preserved; the reference package was then synchronized offline.
 
 Current M365 rendering evidence for the connected source shows readable bold
 linked glyphs and monospace/wrapped tags; M365 ignores date-centering markers

@@ -64,6 +64,19 @@ class SolutionReferenceTests(unittest.TestCase):
         portable = json.loads((AGENT / "flows" / "search-export" / "definition.json").read_text(encoding="utf-8"))
         self.assertEqual(self.definition, portable)
 
+    def test_both_packaged_search_requests_use_document_id_only_order(self):
+        requests = []
+        for node in walk(self.definition):
+            if isinstance(node, dict):
+                for name in ("Initial_request", "Next_request"):
+                    action = node.get(name)
+                    if isinstance(action, dict) and action.get("type") == "Compose":
+                        requests.append(action["inputs"]["request"])
+        self.assertEqual(len(requests), 2)
+        for request in requests:
+            self.assertEqual(request["SortList"], [{"Property": "[docid]", "Direction": 0}])
+            self.assertEqual(request["RowLimit"], 100)
+
     def test_every_flow_reference_resolves_to_the_single_packaged_flow(self):
         refs = [node["flowId"] for component in self.components.values()
                 for node in walk(component) if isinstance(node, dict) and "flowId" in node]

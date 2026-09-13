@@ -1,5 +1,11 @@
 # Native Markdown preview formatting
 
+Candidate search pages use `[docid]` ascending within each bounded batch.
+The preview is not relevance-ranked best ten. This paging change leaves every
+formatter expression and workbook byte unchanged; the M365 observations below
+are historical `3a4b9ca0...` evidence, not a post-change native run.
+See [stable paging](stable-paging.md).
+
 The result keeps four separate columns:
 **File or page | Created (UTC) | Modified (UTC) | Stored tags**.
 Titles are bold links, with a small glyph inside the same link. Date columns use

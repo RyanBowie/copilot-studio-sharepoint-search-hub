@@ -78,6 +78,15 @@ an old connected test tab can retain stale content.
 
 ## Current source contract
 
+Search requests now use **document-ID ascending order**, not relevance order,
+on both the initial and subsequent pages. Preview candidates follow index order
+within each bounded batch; up to ten verified matches are not the “best ten”
+or a globally ranked top ten. The portable definition is
+`5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3`.
+The preceding M365 formatting evidence remains historical; native caller
+validation after this paging change is pending. See
+[stable paging](flows/search-export/stable-paging.md) for the diagnostic boundary.
+
 - Flow inputs: `query` and `scope` strings only. Supported topic areas are `All`,
   `CorpNet`, `HR`, `Finance`, `IT`; department is relevance, not authorization.
   Queries accept a single `*`, or 1–12 plain ASCII alphanumeric/hyphen-separated
