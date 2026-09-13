@@ -1,0 +1,86 @@
+[
+  {
+    "name": "SharePoint_profile",
+    "purpose": "Resolve the effective SharePoint connector account's personal-site URL and claims account name from the configured corporate site. This is the SharePoint connector's identity, not a directory identity supplied by the chat channel.",
+    "response": "PersonalUrl feeds Personal_site_available, which checks the configured personal-site URL prefix before using it as a Site Address. AccountName is split at the final | by Source_directory_profile, an Office 365 Users action, to resolve the source directory profile for account alignment.",
+    "notes": "A GET with no body. The configured Contoso corporate site and personal-site prefix are portable placeholders requiring coordinated replacement. Failed startup processing reaches Startup_failure; there is no unscoped search fallback.",
+    "helpers": ["Personal_site_available", "Source_directory_profile"]
+  },
+  {
+    "name": "Personal_drive",
+    "purpose": "Use the verified PersonalUrl as the Site Address and call SharePoint's v2.0 drive endpoint to obtain the personal drive id, owner and webUrl. This is still a SharePoint connector HTTP request, not a separate Microsoft Graph agent tool.",
+    "response": "Accounts_aligned compares owner.user.id with Selected_profile.id and Source_directory_profile.id, checks a nonempty drive id, and checks that OneDrive_root.Id begins with that drive id plus a period. The drive identity is also used by later workbook operations.",
+    "notes": "A GET with no body. The check aligns the selected profile, SharePoint source and private destination. It does not attest channel sign-in or independently attest the Excel/Outlook connection principals.",
+    "helpers": ["Accounts_aligned"]
+  },
+  {
+    "name": "Personal_site_user",
+    "purpose": "Read the current user's SharePoint site-local principal Id and LoginName from the selected account's personal site.",
+    "response": "Private_report_verified and Delivery_acl_verified compare the report role-assignment Member.Id against this Id. A SharePoint principal integer is not the Entra directory GUID returned by Office 365 Users.",
+    "notes": "A GET with no body. It provides the ACL comparison principal; it does not create a user, grant access or send a recipient address to the flow.",
+    "helpers": []
+  },
+  {
+    "name": "Initial_search",
+    "purpose": "POST the Initial_request object to SharePoint Search REST. The endpoint is on the configured corporate site, but the KQL restricts the search to explicit approved SiteIDs AND the configured hub DepartmentId; Site Address alone is not that restriction.",
+    "response": "Initial_response_valid requires non-null PrimaryQueryResult.RelevantResults.TotalRows and Table.Rows. Count_index_matches adds the index estimate; Remember_batch retains the batch KQL, approved site map, estimate and rows for later processing. Rows contain locator cells, not permission-checked display rows.",
+    "notes": "This POST is a read-only search, not a content write. The body requests 100 rows at StartRow 0, disables query rules and duplicate trimming, selects four locator properties, and sorts only by [docid] ascending. A failed/malformed startup does not fall back to another search.",
+    "helpers": ["Initial_request", "Literal_query", "Initial_response_valid", "Remember_batch"]
+  },
+  {
+    "name": "Make_report_private",
+    "purpose": "Break role inheritance on the newly created report's backing list item, using copyRoleAssignments=false and clearSubscopes=true. Unlike the search POSTs, this action changes permissions.",
+    "response": "No response fields are used as proof of privacy. Successful completion permits Private_file_acl to read the actual resulting assignments; Private_report_verified must pass before the positive report path proceeds.",
+    "notes": "The target is the new export workbook, not a source library or source document. Report_item_uri derives its server-relative path from ReportUrl, decodes the URI path and doubles apostrophes inside the OData string. Do not repurpose this mutation for existing documents or libraries without a separate access-management design.",
+    "helpers": ["Report_item_uri"]
+  },
+  {
+    "name": "Private_file_acl",
+    "purpose": "GET the report list item's HasUniqueRoleAssignments and expanded role-assignment members and role definitions after the inheritance change.",
+    "response": "Private_report_verified requires unique permissions, exactly one role assignment, the same Member.Id as Personal_site_user.Id, and RoleTypeKind 5 on the first role binding (Administrator/Full Control). Merely succeeding at breakroleinheritance is not accepted as proof.",
+    "notes": "This initial check explicitly selects HasUniqueRoleAssignments. The later final check uses the RoleAssignments collection instead and does not select this property again. The positive owner-account proof is not a comprehensive permission-denial or tenant-administrator-access audit.",
+    "helpers": ["Private_report_verified"]
+  },
+  {
+    "name": "Preview_metadata_fields",
+    "purpose": "Use the current preview candidate's validated WebUrl and ListId to discover which optional stored metadata fields exist on that source list.",
+    "response": "The endpoint returns value entries with InternalName. Preview_field_names selects those names; Read_preview_item appends them to its $select only when the result is nonempty. The filter requests only Department, TopicTags and DocumentType.",
+    "notes": "This avoids requesting nonexistent optional columns across heterogeneous lists. An absent optional column is not the same as an HTTP failure. This is a field-schema read, not tag filtering, taxonomy expansion or metadata inferred by the model.",
+    "helpers": ["Preview_field_names"]
+  },
+  {
+    "name": "Read_preview_item",
+    "purpose": "GET one current source list item by integer ItemId, with $expand=File and an explicit $select for title, filename, source URL and source timestamps, plus optional fields discovered in the preceding action.",
+    "response": "Preview_item_verified checks the returned Id, a nonempty File.ServerRelativeUrl, the approved collection path prefix and absence from PreviewUrls. Preview_row and Remember_preview_line consume current source values only after the guard passes.",
+    "notes": "The source request runs through the caller's SharePoint connection. File.TimeCreated and File.TimeLastModified supply dates; stored TopicTags supply tags. A denied, missing or unverifiable item is not replaced with raw index metadata. The preview has a 20-candidate budget and can contain fewer than ten rows.",
+    "helpers": ["Preview_item_verified"]
+  },
+  {
+    "name": "Available_metadata_fields",
+    "purpose": "Perform the export-stage optional-field discovery for each grouped source WebUrl/ListId, rather than assuming every list has the same columns or reusing the preview's metadata.",
+    "response": "Metadata_field_names extracts returned InternalName values for the export GET's $select. Group_filter_parts separately constructs numeric Id eq N predicates from the current group's indexed candidates.",
+    "notes": "Only Department, TopicTags and DocumentType are requested here. PolicyStatus and ReviewDate are not selected, exported or used to filter approved content. This action does not filter results by stored tag values.",
+    "helpers": ["Metadata_field_names", "Group_filter_parts"]
+  },
+  {
+    "name": "Read_current_items",
+    "purpose": "Read current source items in a group using one list REST GET: $top=100, a URL-encoded OR filter of integer item IDs, explicit selected fields and $expand=File. This is grouped hydration, not another SharePoint Search query.",
+    "response": "Valid_current_items reads the response's value array and keeps only requested Group_ids with a nonempty File.ServerRelativeUrl under the approved collection path. Later unique-result and export-limit checks govern writing. Count_group_failure increments Failures if this request fails or times out.",
+    "notes": "The $top=100 limit here is distinct from Search REST RowLimit and StartRow paging. Preview results are re-read for export; source content or permissions may have changed. A successful list request does not establish that every originally indexed item was returned.",
+    "helpers": ["Valid_current_items", "Count_group_failure"]
+  },
+  {
+    "name": "Next_search_page",
+    "purpose": "POST Next_request to the same Search REST endpoint when Need_next_page permits continuation. It retains CurrentBatch.Kql and Literal_query while taking StartRow from PageStart.",
+    "response": "Next_page_valid requires a non-null PrimaryQueryResult.RelevantResults.Table.Rows. Use_next_page assigns those rows to PageRows. Unlike the initial response guard, it does not require TotalRows again. Count_page_failure increments Failures on a failed or timed-out request.",
+    "notes": "RowLimit stays 100 and [docid] ascending remains the only sort on every page. The verified run used offsets 0, 100, 200, 300, 400 and 500. This is bounded offset paging, not Graph nextLink, an index snapshot or a relevance-ranked best-ten preview.",
+    "helpers": ["Next_request", "Next_page_valid", "Use_next_page", "Count_page_failure"]
+  },
+  {
+    "name": "Final_file_acl",
+    "purpose": "After actual Excel readback has passed Written_rows_verified, GET the report item's RoleAssignments collection again, selecting and expanding member IDs and role-binding kinds.",
+    "response": "Delivery_acl_verified requires the returned value array to contain exactly one assignment for Personal_site_user.Id, with RoleTypeKind 5 on its first role binding. Only the guarded branch sends the workbook link; changed access has explicit notification/stop paths.",
+    "notes": "This checks the observed ACL at delivery time; it is not an atomic lock preventing later access changes. Unlike Private_file_acl, this URI returns the role collection and does not re-read HasUniqueRoleAssignments. Outlook performs the email action, not this SharePoint GET.",
+    "helpers": ["Delivery_acl_verified"]
+  }
+]

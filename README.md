@@ -2,6 +2,18 @@
 
 **One Copilot Studio agent. Multiple approved SharePoint sites. Source-linked results and a private Excel export.**
 
+[Download solution ZIP](solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip) ·
+[Import and configure](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup) ·
+[View repository](https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub)
+
+| Actual M365 prompt | Matching output |
+|---|---|
+| ![Actual M365 prompt: Search SharePoint, IT, devices typed before submission](docs/images/table-polish/published-m365-it-devices-inputs.png) | ![Matching real four-result IT devices output with verified source links, dates and tags](docs/images/table-polish/published-m365-polished-table-100.png) |
+
+Genuine 12 September table-polish captures: one page and three documents.
+These illustrate the IT query, not the later 512-row scenario. Full-resolution
+images open from the previews. **New-tenant solution import remains unverified.**
+
 SharePoint Search Hub is a reference implementation for searching a corporate
 hub-and-spoke estate without creating a separate agent for every department.
 The agent guides the user through a scope and keyword search, shows a compact
@@ -55,6 +67,10 @@ The website includes the [full, source-derived agent instructions](https://ryanb
 [agent configuration and actual conversation screenshots](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent),
 [tools and all five runtime connectors](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#tools),
 and an [eight-stage native-flow walkthrough with genuine designer screenshots](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent-flow).
+The [SharePoint request catalogue](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#sharepoint-actions)
+documents all twelve actual HTTP actions, including request payloads, endpoints
+and response checks. The [empty-tenant checklist](docs/setup.md#from-an-empty-sharepoint-tenant)
+explains the required SharePoint setup and exact customization locations.
 These are presented directly on the page, with full-resolution image links and
 downloadable instructions, settings, topic, tool and flow source. Historical
 designer captures are explicitly separated from current JSON and later runtime proof.

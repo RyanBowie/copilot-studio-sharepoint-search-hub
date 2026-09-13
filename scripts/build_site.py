@@ -62,6 +62,7 @@ ASSETS = {
     "flow-access": ("docs/images/styled-hr/native-delivery-guard.png", "images/styled-hr/native-delivery-guard.png"),
     "flow-email": ("docs/images/styled-hr/native-verified-recipient-email.png", "images/styled-hr/native-verified-recipient-email.png"),
     "flow-provenance": ("docs/styled-capture-provenance.json", "evidence/styled-capture-provenance.json"),
+    "search-policy": ("agent/runtime/search-policy.json", "downloads/search-policy.json"),
 }
 
 
@@ -118,6 +119,7 @@ def render(staged):
     proof, package_proof = load_evidence()
     coverage = load_coverage(proof)
     agent = load_agent_details()
+    sharepoint = load_sharepoint_reference()
     facts = {
         "ROWS": str(proof["actualExcelRows"]),
         "FILES": str(proof["files"]),
@@ -137,10 +139,13 @@ def render(staged):
         "AGENT_SETTINGS": agent["settings"],
         "TOPIC_BINDING": agent["binding"],
         "TOOL_SOURCE": agent["tool"],
+        "SP_ACTION_COUNT": str(len(sharepoint["entries"])),
+        "SP_SCOPE_KQL": sharepoint["kql"],
     }
     coverage_html = {
         "COVERAGE_DEPARTMENTS": coverage_rows(coverage["departments"], include_sites=True),
         "COVERAGE_SITES": coverage_rows(coverage["sites"]),
+        "SHAREPOINT_ACTIONS": sharepoint_reference_html(sharepoint),
     }
 
     def substitute(match):
@@ -221,6 +226,118 @@ def load_agent_details():
     if operations != expected:
         raise ValueError("Review the five-connector operation catalogue against the current flow.")
     return {"instructions": instructions, "settings": settings, "binding": binding, "tool": tool}
+
+
+def load_sharepoint_reference():
+    definition = json.loads(source_path(ASSETS["definition"][0]).read_text(encoding="utf-8"))
+    descriptions = json.loads(source_path("site/sharepoint-actions.json").read_text(encoding="utf-8"))
+    actions = {}
+
+    def visit(value, path=""):
+        if isinstance(value, dict):
+            children = value.get("actions")
+            if isinstance(children, dict):
+                for name, action in children.items():
+                    if name in actions:
+                        raise ValueError("Ambiguous action name in SharePoint reference: " + name)
+                    actions[name] = (path + "/actions/" + name, action)
+            for key, child in value.items():
+                visit(child, path + "/" + key.replace("~", "~0").replace("/", "~1"))
+        elif isinstance(value, list):
+            for index, child in enumerate(value):
+                visit(child, path + "/" + str(index))
+
+    visit(definition)
+    selected = {}
+    for name, (path, action) in actions.items():
+        inputs = action.get("inputs")
+        host = inputs.get("host", {}) if isinstance(inputs, dict) else {}
+        if host.get("connectionName") == "shared_sharepointonline":
+            if host.get("operationId") != "HttpRequest":
+                raise ValueError("Review the SharePoint action type: " + name)
+            selected[name] = (path, action)
+    names = [entry["name"] for entry in descriptions]
+    if len(names) != len(set(names)) or set(names) != set(selected):
+        raise ValueError("SharePoint descriptions must cover every actual action exactly once.")
+    entries = []
+    for entry in descriptions:
+        path, action = selected[entry["name"]]
+        helpers = []
+        for name in entry["helpers"]:
+            if name not in actions:
+                raise ValueError("Unknown SharePoint reference helper: " + name)
+            helper = actions[name][1]
+            helpers.append((name, {k: v for k, v in helper.items()
+                                   if k not in {"actions", "else", "cases", "default"}}))
+        entries.append({**entry, "path": path, "action": action, "helpers": helpers})
+    kql = actions["Approved_scopes"][1]["inputs"]["All"][0]["Kql"]
+    return {"entries": entries, "kql": kql}
+
+
+def sharepoint_reference_html(reference):
+    escape = html.escape
+    blocks = ['<nav class="guide-jumps" aria-label="SharePoint action index">']
+    for entry in reference["entries"]:
+        name = escape(entry["name"], quote=True)
+        blocks.append(f'<a href="#sp-{name}">{name.replace("_", " ")}</a>')
+    blocks.append("</nav>")
+    for entry in reference["entries"]:
+        name = escape(entry["name"], quote=True)
+        action = entry["action"]
+        parameters = action["inputs"]["parameters"]
+        blocks.append(f'<article class="card flow-step sp-action" id="sp-{name}">'
+                      f'<span class="tag">{escape(parameters["parameters/method"])} / SharePoint HTTP</span>'
+                      f'<h3>{name}</h3>')
+        for label, key in (("Purpose", "purpose"), ("Response and downstream use", "response"),
+                           ("Behavior and boundaries", "notes")):
+            blocks.append(f'<p><strong>{label}.</strong> {escape(entry[key])}</p>')
+        blocks.append('<h4 class="flow-step">Exact request configuration</h4>'
+                      '<p class="small">Source expressions, not an executed request or sample response. '
+                      'Site Address is <code>dataset</code>; URI is relative to that site.</p>'
+                      f'<pre class="guide-source" id="sp-config-{name}" tabindex="0" '
+                      f'aria-label="{name} request parameters"><code>'
+                      f'{escape(json.dumps(parameters, indent=2))}</code></pre>')
+        blocks.append(f'<p class="small">Action retry policy: '
+                      f'<code>{escape(json.dumps(action["inputs"].get("retryPolicy")))}</code>. '
+                      f'Run-after dependencies: <code>{escape(json.dumps(action.get("runAfter", {})))}</code>. '
+                      'An empty object does not mean unconditional execution: enclosing scopes, '
+                      'conditions and loop budgets still apply.</p>')
+        blocks.append(f'<details class="sp-definition"><summary>Full action JSON and source location</summary>'
+                      f'<p>JSON pointer in the complete definition:</p><code class="checksum">{escape(entry["path"])}</code>'
+                      f'<pre class="guide-source" tabindex="0" aria-label="{name} complete action">'
+                      f'<code>{escape(json.dumps(action, indent=2))}</code></pre></details>')
+        for helper_name, helper in entry["helpers"]:
+            title = escape(helper_name)
+            snippet = (f'<pre class="guide-source" tabindex="0" aria-label="{title} source excerpt">'
+                       f'<code>{escape(json.dumps(helper, indent=2))}</code></pre>')
+            if helper_name in {"Initial_request", "Next_request"}:
+                blocks.append(f'<h4 class="flow-step">Body-building Compose: {title}</h4>{snippet}')
+            else:
+                blocks.append(f'<details><summary>{title}: exact supporting expression</summary>'
+                              f'<p class="small">Control excerpt; nested branches omitted.</p>{snippet}</details>')
+        blocks.append("</article>")
+    return "\n".join(blocks)
+
+
+def sharepoint_reference_markdown(reference):
+    lines = ["# SharePoint action request reference", "",
+             "Generated from the current portable flow by `scripts/build_site.py`.",
+             "Descriptions are maintained in `site/sharepoint-actions.json`; request JSON is read directly from source.",
+             "All 12 definitions use SharePoint **Send an HTTP request to SharePoint** (`HttpRequest`).",
+             "Loops can call an action repeatedly; this is not a count of requests in one run.",
+             "Contoso addresses and zero-pattern site IDs are placeholders, not live settings.", "",
+             "[On-page request catalogue](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#sharepoint-actions) · "
+             "[Complete definition](../agent/flows/search-export/definition.json) · "
+             "[New-tenant setup](setup.md#from-an-empty-sharepoint-tenant)", "",
+             "## Actual portable All-scope KQL", "", "```text", reference["kql"], "```", ""]
+    for entry in reference["entries"]:
+        lines.extend(["## " + entry["name"], "", entry["purpose"], "", "**Response use:** " + entry["response"],
+                      "", "**Boundaries:** " + entry["notes"], "", "**Source JSON pointer:** `" + entry["path"] + "`",
+                      "", "```json", json.dumps(entry["action"], indent=2), "```", ""])
+        for name, helper in entry["helpers"]:
+            lines.extend(["### " + name, "", "Supporting source excerpt; nested branches omitted.", "",
+                          "```json", json.dumps(helper, indent=2), "```", ""])
+    return "\n".join(lines)
 
 
 def load_coverage(proof):
@@ -343,6 +460,8 @@ def build(output="_site", write_docs=True):
     (staging / MARKER).write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     if write_docs:
         (ROOT / "docs" / "index.html").write_text(docs_html, encoding="utf-8")
+        (ROOT / "docs" / "sharepoint-actions.md").write_text(
+            sharepoint_reference_markdown(load_sharepoint_reference()), encoding="utf-8")
     return staging
 
 

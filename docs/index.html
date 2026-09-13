@@ -124,6 +124,13 @@ pre code { background: none; padding: 0; }
 .button.primary:hover { background: var(--cp-accent-hover); color: var(--cp-accent-fg); }
 .small { font-size: .82rem; color: var(--cp-text-soft); }
 .hero .small { margin-top: 20px; max-width: 58ch; }
+.showcase { padding: 36px 0 40px; }
+.showcase h1 { font-size: clamp(2rem, 4vw, 3rem); }
+.showcase .actions { margin-top: 20px; }
+.showcase > .small { margin-top: 16px; max-width: 90ch; }
+.showcase-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; align-items: start; }
+.sp-action { overflow-wrap: anywhere; }
+.sp-action details { margin-top: 16px; }
 .shot-card { overflow: hidden; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px; box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border); }
 .shot-bar { padding: 16px 20px; border-bottom: 1px solid var(--cp-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .78rem; }
 .status { color: var(--cp-accent); font-weight: 600; }
@@ -223,7 +230,7 @@ details[open] summary { margin-bottom: 20px; }
 details p, details li { color: var(--cp-text-soft); }
 .setup { counter-reset: setup; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0; list-style: none; }
 .setup li { counter-increment: setup; margin: 0; }
-.setup li::before { content: "0" counter(setup); font: .8rem Consolas, "Courier New", Courier, monospace; color: var(--cp-accent); }
+.setup li::before { content: counter(setup, decimal-leading-zero); font: .8rem Consolas, "Courier New", Courier, monospace; color: var(--cp-accent); }
 .downloads { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
 .download-main { border-color: var(--cp-accent); }
 .checksum { display: block; font-size: .74rem; word-break: break-all; background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: 10px; padding: 16px; margin-top: 12px; }
@@ -265,7 +272,7 @@ details p, details li { color: var(--cp-text-soft); }
   .coverage-sites th:first-child { width: 44%; }
   .coverage-table thead th:not(:first-child), .coverage-table td { white-space: nowrap; overflow-wrap: normal; }
   .section { padding-top: 64px; }
-  .architecture, .evidence, .contract, .downloads, .setup, .guide-grid { grid-template-columns: 1fr; }
+  .architecture, .evidence, .contract, .downloads, .setup, .guide-grid, .showcase-grid { grid-template-columns: 1fr; }
   .connector-table { font-size: .8rem; }
   .connector-table th, .connector-table td { padding: 12px 6px; }
   .connector-table th:first-child { width: 30%; }
@@ -295,19 +302,14 @@ details p, details li { color: var(--cp-text-soft); }
   </nav>
 </header>
 <main id="main" class="wrap" tabindex="-1">
-  <section class="hero" aria-labelledby="hero-title">
-    <div>
-      <p class="eyebrow">A practical agent blueprint</p>
-      <h1 id="hero-title">One search.<br>Every approved spoke.<br><span>Your permissions.</span></h1>
-      <p class="lead">Find files and pages across an approved SharePoint estate. Show verified links in Microsoft 365 Copilot, then collect the full verified result set in private Excel.</p>
-      <div class="actions"><a class="button primary" href="#architecture">Explore how it works <span aria-hidden="true">&nbsp;↓</span></a><a class="button" href="#downloads">Get the solution</a></div>
-      <p class="small">Caller-provided connections, not a maker-account fallback. The selected connector account is the effective identity; it is not independently proved equal to the channel sign-in.</p>
+  <section class="showcase" id="showcase" aria-labelledby="hero-title">
+    <h1 id="hero-title">SharePoint Search Hub</h1>
+    <div class="actions" id="primary-actions"><a class="button primary" href="../solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip" download>Download solution ZIP</a><a class="button" href="#setup">Import and configure</a><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub">View repository</a></div>
+    <p class="small">Experimental unmanaged reference; new-tenant import is unverified. Configure your own SharePoint estate and connections before publishing. This website is documentation, not a live agent or a connection to your data.</p>
+    <div class="showcase-grid">
+      <figure class="shot-card"><div class="shot-bar"><strong>The prompt</strong><span class="status">Actual published M365 Copilot</span></div><a class="image-link" href="images/table-polish/published-m365-it-devices-inputs.png" aria-label="Open the actual IT devices input screenshot at full resolution"><img src="images/table-polish/published-m365-it-devices-inputs.png" width="1255" height="1244" alt="Genuine M365 conversation: Search SharePoint, choose IT, and enter devices in the prompt box." fetchpriority="high"></a><figcaption><strong>Search SharePoint → IT → devices.</strong> Actual input capture, with the final keyword typed before submission. Select the image for full resolution.</figcaption></figure>
+      <figure class="shot-card"><div class="shot-bar"><strong>The output</strong><span class="status">Matching four-result scenario</span></div><a class="image-link" href="images/table-polish/published-m365-polished-table-100.png" aria-label="Open the matching four-result M365 output at full resolution"><img src="images/table-polish/published-m365-polished-table-100.png" width="1095" height="1059" alt="Genuine matching IT devices output with four verified file/page links, source dates, stored tags and the export-status footer." fetchpriority="high"></a><figcaption><strong>Four verified matches: one page and three documents.</strong> Genuine output from the 12 September table-polish validation, before the later paging revision. These four rows also matched the private workbook; this is not the 512-row scenario.</figcaption></figure>
     </div>
-    <figure class="shot-card">
-      <div class="shot-bar"><strong>Actual M365 Copilot output</strong><span class="status">Owner-provided · 13 Sep 2026</span></div>
-      <a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png" aria-label="Open the genuine All-scope preview excerpt at full resolution"><img src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Actual first four source-linked preview rows in the owner’s All-scope M365 response, with separate created, modified and tag columns." fetchpriority="high"></a>
-      <figcaption><strong>Pending at capture. Verified complete afterwards.</strong> This is a genuine four-row preview excerpt, not a fabricated chat or a screenshot of 512 rows. Completion was established from the same run’s connector evidence.</figcaption>
-    </figure>
   </section>
   <div class="metrics" aria-label="Verified demo search coverage for All / hubspokeverify">
     <div class="metric"><strong>10</strong><span>SharePoint site collections searched</span></div>
@@ -316,7 +318,7 @@ details p, details li { color: var(--cp-text-soft); }
     <div class="metric"><strong>512</strong><span>total verified results in Excel</span></div>
   </div>
   <p class="small">Verified demo snapshot: 13 September 2026 · <code>All / hubspokeverify</code> · not a live tenant-wide inventory.</p>
-  <nav class="guide-jumps" aria-label="Implementation guide"><a href="#screenshots">Published inputs and outputs</a><a href="#agent">Inside the agent</a><a href="#agent-instructions">Full agent instructions</a><a href="#tools">Tools and connectors</a><a href="#agent-flow">Flow screenshots and steps</a><a href="#evidence">512-row execution proof</a></nav>
+  <nav class="guide-jumps" aria-label="Implementation guide"><a href="#screenshots">More inputs and outputs</a><a href="#agent">Inside the agent</a><a href="#agent-instructions">Full agent instructions</a><a href="#tools">Tools and connectors</a><a href="#sharepoint-actions">SharePoint request details</a><a href="#agent-flow">Flow screenshots and steps</a><a href="#setup">New-tenant setup</a><a href="#evidence">512-row execution proof</a></nav>
 
   <section class="section" id="coverage" aria-labelledby="coverage-title">
     <div class="section-head"><div><p class="eyebrow">Search coverage / The actual test estate</p><h2 id="coverage-title">10 sites. 499 files.<br>13 SharePoint pages.</h2></div><p>One corporate hub and nine departmental spokes: a Main, Operations and Field Team collection for HR, Finance and IT. All ten were searched in the verified run.</p></div>
@@ -441,7 +443,7 @@ details p, details li { color: var(--cp-text-soft); }
         <button id="gallery-excel" role="tab" aria-controls="screen-excel" aria-selected="false">Excel · historical 112</button>
       </div>
       <section id="screen-all" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-all" tabindex="0">
-        <figure class="shot-card"><a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png"><img class="capture" src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Genuine first four rows of the owner-provided All-scope preview; this screenshot was captured while the export was pending." loading="lazy"></a><figcaption><strong>13 September · native revision 80f131a…</strong> Owner-provided preview excerpt, pending at capture. It is not a screenshot of a completed 512-row workbook.</figcaption></figure>
+        <figure class="shot-card"><a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png"><img class="capture" src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Genuine first four rows of the owner-provided All-scope preview; this screenshot was captured while the export was pending." loading="lazy"></a><figcaption><strong>13 September · native revision 80f131a… · Pending at capture.</strong> Owner-provided preview excerpt. It is not a screenshot of a completed 512-row workbook.</figcaption></figure>
         <div class="gallery-notes"><p class="eyebrow">Search SharePoint → All</p><h3><code>hubspokeverify</code></h3><p>The owner started this published M365 request. Ten preview rows were checked; the screenshot preserves the first four. The same run later completed with <strong>512 actual Excel rows</strong>.</p><p>499 documents, 13 pages, ten collections. Final verification used existing native connector evidence—not another invocation or a new workbook screenshot.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/scale-512/owner-m365-index-estimate.png"><img src="images/scale-512/owner-m365-index-estimate.png" width="787" height="139" alt="Owner-provided M365 crop showing the original 512 index estimate while export delivery was pending." loading="lazy"></a><figcaption>The same owner capture's index estimate. This was still pending, not a completed-export message.</figcaption></figure><div class="actions"><a href="images/scale-512/owner-m365-index-estimate.png">View the original index-estimate crop</a><a href="scale-runtime-validation-summary.json">Read the completed-run evidence</a><a href="scale-512-capture-provenance.json">Capture provenance</a></div></div>
       </section>
       <section id="screen-hr" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-hr" tabindex="0">
@@ -624,7 +626,772 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
       <article class="card"><span class="tag">Deliberately not used</span><h3>No parallel, unscoped search path.</h3><p>This route does not use a SharePoint knowledge-source generative answer, public web browsing, a separate Graph identity-attestation tool, or independent search/email tools selected by the model. Adding one would need a deliberate redesign of the scope, identity and grounding contracts, not just a new instruction.</p><p>Search indexes body content, but the flow returns source links and metadata. It does not retrieve answer passages for the model or summarize the inside of a policy document.</p></article>
       <article class="card"><span class="tag">Build-time versus runtime</span><h3>Python and fixtures are not agent tools.</h3><p>The Python builder generates the flow definition offline; fixture scripts create synthetic test content separately. Neither supplies runtime search rows. The provisioning-only flow is stopped and excluded from the downloadable runtime solution.</p><p>At runtime, the topic and native flow use the five caller-provided connectors above. The reference has no embedded maker/provisioning connection fallback. Channel sign-in and Excel/Outlook principal attestation remain separate, unverified identity boundaries.</p></article>
     </div>
-    <div class="actions"><a href="../agent/flows/search-export/definition.json" download>Download the complete flow JSON</a><a href="../solutions/deployment-settings.template.json" download>Download connection-binding template</a></div>
+    <div class="actions"><a class="button primary" href="#sharepoint-actions">Inspect all 12 SharePoint requests</a><a href="../agent/flows/search-export/definition.json" download>Download the complete flow JSON</a><a href="../solutions/deployment-settings.template.json" download>Download connection-binding template</a></div>
+  </section>
+
+  <section class="section" id="sharepoint-actions" aria-labelledby="sp-title">
+    <div class="section-head"><div><p class="eyebrow">SharePoint connector / Request-by-request reference</p><h2 id="sp-title">The actual HTTP actions.<br>Endpoints, payloads and checks.</h2></div><p>All 12 SharePoint action definitions are documented below. Their request parameters and supporting expressions are generated from the current flow JSON, not transcribed from old screenshots.</p></div>
+    <div class="contract">
+      <article class="card"><span class="tag">Which designer action?</span><h3>Send an HTTP request to SharePoint</h3><p>Each uses <code>OpenApiConnection</code>, connector <code>shared_sharepointonline</code>, operation <code>HttpRequest</code>. The connector provides the selected caller's authentication; there is no token or Authorization header supplied by the user or model.</p><p><strong>Why not just Get files (properties only)?</strong> This design needs cross-collection indexed body search, explicit KQL scope, search sorting/paging, selected current file properties and report-item permission endpoints. One ordinary library listing is not equivalent to that workflow.</p><p>All twelve exported actions specify <code>retryPolicy: {"type":"none"}</code>. Loops may invoke an action many times, so twelve definitions does not mean twelve HTTP calls per search.</p></article>
+      <article class="card"><span class="tag">How to read the parameters</span><h3>Site Address + relative URI</h3><p><code>dataset</code> is the designer's Site Address. <code>parameters/method</code>, <code>parameters/uri</code>, <code>parameters/headers</code> and optional <code>parameters/body</code> map to Method, Uri, Headers and Body.</p><p>Search uses the configured corporate site; source reads use a validated candidate/group WebUrl; personal-drive and report-permission reads use the verified PersonalUrl. Expressions remain visible below so the dynamic routing is explicit.</p><p>Nine actions are GETs and three are POSTs. The two Search POSTs retrieve data; <strong>Make_report_private changes permissions on the new report</strong>. This flow does not create or update the source SharePoint files/pages.</p></article>
+    </div>
+    <article class="card flow-step"><h3>The scope inside the search body</h3><p>This is the actual portable <code>Approved_scopes.All[0].Kql</code> value. It combines four explicit SiteIDs with the hub DepartmentId. These are fictional placeholder identifiers, not the live ten-site inventory.</p><pre class="guide-source" tabindex="0" aria-label="Exact portable All-scope KQL"><code>(SiteID:&quot;00000000-0000-4000-8000-000000000001&quot; OR SiteID:&quot;00000000-0000-4000-8000-000000000002&quot; OR SiteID:&quot;00000000-0000-4000-8000-000000000003&quot; OR SiteID:&quot;00000000-0000-4000-8000-000000000004&quot;) AND DepartmentId:00000000-0000-4000-8000-000000000001</code></pre><p><code>Read_index_batches</code> selects the configured scope's batches. <code>Initial_request</code> and <code>Next_request</code> append literal ANDed terms and file/page restrictions. Neither the corporate Site Address nor a user-selected department authorizes disclosure on its own.</p></article>
+    <aside class="notice"><strong>Configuration source, not a request runner.</strong> All endpoints below belong to the neutral Contoso reference. GETs have no request body unless shown; source responses are described, not invented as example live results. Preserve current-source checks, account alignment, paging bounds and permission gates when adapting these requests. See <a href="#setup">the empty-tenant setup checklist</a> before importing.</aside>
+    <nav class="guide-jumps" aria-label="SharePoint action index">
+<a href="#sp-SharePoint_profile">SharePoint profile</a>
+<a href="#sp-Personal_drive">Personal drive</a>
+<a href="#sp-Personal_site_user">Personal site user</a>
+<a href="#sp-Initial_search">Initial search</a>
+<a href="#sp-Make_report_private">Make report private</a>
+<a href="#sp-Private_file_acl">Private file acl</a>
+<a href="#sp-Preview_metadata_fields">Preview metadata fields</a>
+<a href="#sp-Read_preview_item">Read preview item</a>
+<a href="#sp-Available_metadata_fields">Available metadata fields</a>
+<a href="#sp-Read_current_items">Read current items</a>
+<a href="#sp-Next_search_page">Next search page</a>
+<a href="#sp-Final_file_acl">Final file acl</a>
+</nav>
+<article class="card flow-step sp-action" id="sp-SharePoint_profile"><span class="tag">GET / SharePoint HTTP</span><h3>SharePoint_profile</h3>
+<p><strong>Purpose.</strong> Resolve the effective SharePoint connector account&#x27;s personal-site URL and claims account name from the configured corporate site. This is the SharePoint connector&#x27;s identity, not a directory identity supplied by the chat channel.</p>
+<p><strong>Response and downstream use.</strong> PersonalUrl feeds Personal_site_available, which checks the configured personal-site URL prefix before using it as a Site Address. AccountName is split at the final | by Source_directory_profile, an Office 365 Users action, to resolve the source directory profile for account alignment.</p>
+<p><strong>Behavior and boundaries.</strong> A GET with no body. The configured Contoso corporate site and personal-site prefix are portable placeholders requiring coordinated replacement. Failed startup processing reaches Startup_failure; there is no unscoped search fallback.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-SharePoint_profile" tabindex="0" aria-label="SharePoint_profile request parameters"><code>{
+  &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;_api/SP.UserProfiles.PeopleManager/GetMyProperties?$select=PersonalUrl,AccountName&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Literal_query&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/SharePoint_profile</code><pre class="guide-source" tabindex="0" aria-label="SharePoint_profile complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;_api/SP.UserProfiles.PeopleManager/GetMyProperties?$select=PersonalUrl,AccountName&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Literal_query&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Personal_site_available: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Personal_site_available source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@startsWith(toLower(coalesce(body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;],&#x27;&#x27;)),&#x27;https://contoso-my.sharepoint.com/personal/&#x27;)&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Selected_profile&quot;: [
+      &quot;Succeeded&quot;
+    ],
+    &quot;SharePoint_profile&quot;: [
+      &quot;Succeeded&quot;
+    ],
+    &quot;OneDrive_root&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Source_directory_profile: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Source_directory_profile source excerpt"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_office365users&quot;,
+      &quot;connectionName&quot;: &quot;shared_office365users&quot;,
+      &quot;operationId&quot;: &quot;UserProfile_V2&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;id&quot;: &quot;@last(split(body(&#x27;SharePoint_profile&#x27;)?[&#x27;AccountName&#x27;],&#x27;|&#x27;))&quot;,
+      &quot;$select&quot;: &quot;id,mail,userPrincipalName&quot;
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Personal_drive"><span class="tag">GET / SharePoint HTTP</span><h3>Personal_drive</h3>
+<p><strong>Purpose.</strong> Use the verified PersonalUrl as the Site Address and call SharePoint&#x27;s v2.0 drive endpoint to obtain the personal drive id, owner and webUrl. This is still a SharePoint connector HTTP request, not a separate Microsoft Graph agent tool.</p>
+<p><strong>Response and downstream use.</strong> Accounts_aligned compares owner.user.id with Selected_profile.id and Source_directory_profile.id, checks a nonempty drive id, and checks that OneDrive_root.Id begins with that drive id plus a period. The drive identity is also used by later workbook operations.</p>
+<p><strong>Behavior and boundaries.</strong> A GET with no body. The check aligns the selected profile, SharePoint source and private destination. It does not attest channel sign-in or independently attest the Excel/Outlook connection principals.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Personal_drive" tabindex="0" aria-label="Personal_drive request parameters"><code>{
+  &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;_api/v2.0/drive?$select=id,owner,webUrl&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/Personal_site_available/actions/Personal_drive</code><pre class="guide-source" tabindex="0" aria-label="Personal_drive complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;_api/v2.0/drive?$select=id,owner,webUrl&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre></details>
+<details><summary>Accounts_aligned: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Accounts_aligned source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@and(not(empty(body(&#x27;Selected_profile&#x27;)?[&#x27;id&#x27;])),not(empty(body(&#x27;Selected_profile&#x27;)?[&#x27;mail&#x27;])),not(contains(body(&#x27;Selected_profile&#x27;)?[&#x27;mail&#x27;],&#x27;;&#x27;)),not(contains(body(&#x27;Selected_profile&#x27;)?[&#x27;mail&#x27;],&#x27;,&#x27;)),equals(body(&#x27;Selected_profile&#x27;)?[&#x27;id&#x27;],body(&#x27;Source_directory_profile&#x27;)?[&#x27;id&#x27;]),equals(body(&#x27;Selected_profile&#x27;)?[&#x27;id&#x27;],body(&#x27;Personal_drive&#x27;)?[&#x27;owner&#x27;]?[&#x27;user&#x27;]?[&#x27;id&#x27;]),not(empty(body(&#x27;Personal_drive&#x27;)?[&#x27;id&#x27;])),startsWith(body(&#x27;OneDrive_root&#x27;)?[&#x27;Id&#x27;],concat(body(&#x27;Personal_drive&#x27;)?[&#x27;id&#x27;],&#x27;.&#x27;)))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Personal_drive&quot;: [
+      &quot;Succeeded&quot;
+    ],
+    &quot;Personal_site_user&quot;: [
+      &quot;Succeeded&quot;
+    ],
+    &quot;Source_directory_profile&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Personal_site_user"><span class="tag">GET / SharePoint HTTP</span><h3>Personal_site_user</h3>
+<p><strong>Purpose.</strong> Read the current user&#x27;s SharePoint site-local principal Id and LoginName from the selected account&#x27;s personal site.</p>
+<p><strong>Response and downstream use.</strong> Private_report_verified and Delivery_acl_verified compare the report role-assignment Member.Id against this Id. A SharePoint principal integer is not the Entra directory GUID returned by Office 365 Users.</p>
+<p><strong>Behavior and boundaries.</strong> A GET with no body. It provides the ACL comparison principal; it does not create a user, grant access or send a recipient address to the flow.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Personal_site_user" tabindex="0" aria-label="Personal_site_user request parameters"><code>{
+  &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;_api/web/currentuser?$select=Id,LoginName&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/Personal_site_available/actions/Personal_site_user</code><pre class="guide-source" tabindex="0" aria-label="Personal_site_user complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;_api/web/currentuser?$select=Id,LoginName&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Initial_search"><span class="tag">POST / SharePoint HTTP</span><h3>Initial_search</h3>
+<p><strong>Purpose.</strong> POST the Initial_request object to SharePoint Search REST. The endpoint is on the configured corporate site, but the KQL restricts the search to explicit approved SiteIDs AND the configured hub DepartmentId; Site Address alone is not that restriction.</p>
+<p><strong>Response and downstream use.</strong> Initial_response_valid requires non-null PrimaryQueryResult.RelevantResults.TotalRows and Table.Rows. Count_index_matches adds the index estimate; Remember_batch retains the batch KQL, approved site map, estimate and rows for later processing. Rows contain locator cells, not permission-checked display rows.</p>
+<p><strong>Behavior and boundaries.</strong> This POST is a read-only search, not a content write. The body requests 100 rows at StartRow 0, disables query rules and duplicate trimming, selects four locator properties, and sorts only by [docid] ascending. A failed/malformed startup does not fall back to another search.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Initial_search" tabindex="0" aria-label="Initial_search request parameters"><code>{
+  &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+  &quot;parameters/method&quot;: &quot;POST&quot;,
+  &quot;parameters/uri&quot;: &quot;_api/search/postquery&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;,
+    &quot;Content-Type&quot;: &quot;application/json;odata=nometadata&quot;
+  },
+  &quot;parameters/body&quot;: &quot;@string(outputs(&#x27;Initial_request&#x27;))&quot;
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Initial_request&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/Personal_site_available/actions/Accounts_aligned/actions/Read_index_batches/actions/Initial_search</code><pre class="guide-source" tabindex="0" aria-label="Initial_search complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+      &quot;parameters/method&quot;: &quot;POST&quot;,
+      &quot;parameters/uri&quot;: &quot;_api/search/postquery&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;,
+        &quot;Content-Type&quot;: &quot;application/json;odata=nometadata&quot;
+      },
+      &quot;parameters/body&quot;: &quot;@string(outputs(&#x27;Initial_request&#x27;))&quot;
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Initial_request&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<h4 class="flow-step">Body-building Compose: Initial_request</h4><pre class="guide-source" tabindex="0" aria-label="Initial_request source excerpt"><code>{
+  &quot;type&quot;: &quot;Compose&quot;,
+  &quot;inputs&quot;: {
+    &quot;request&quot;: {
+      &quot;Querytext&quot;: &quot;@concat(&#x27;(&#x27;, item()?[&#x27;Kql&#x27;], &#x27;) AND (&#x27;, outputs(&#x27;Literal_query&#x27;), &#x27;) AND (contentclass:\&quot;STS_ListItem_DocumentLibrary\&quot; OR contentclass:\&quot;STS_ListItem_WebPageLibrary\&quot;) AND (IsDocument:1 OR FileExtension:aspx)&#x27;)&quot;,
+      &quot;RowLimit&quot;: 100,
+      &quot;StartRow&quot;: 0,
+      &quot;TrimDuplicates&quot;: false,
+      &quot;EnableQueryRules&quot;: false,
+      &quot;SortList&quot;: [
+        {
+          &quot;Property&quot;: &quot;[docid]&quot;,
+          &quot;Direction&quot;: 0
+        }
+      ],
+      &quot;SelectProperties&quot;: [
+        &quot;SPWebUrl&quot;,
+        &quot;SiteID&quot;,
+        &quot;ListID&quot;,
+        &quot;ListItemID&quot;
+      ]
+    }
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre>
+<details><summary>Literal_query: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Literal_query source excerpt"><code>{
+  &quot;type&quot;: &quot;Compose&quot;,
+  &quot;inputs&quot;: &quot;@if(equals(trim(coalesce(triggerBody()?[&#x27;query&#x27;],&#x27;&#x27;)),&#x27;*&#x27;),&#x27;*&#x27;,join(body(&#x27;Literal_tokens&#x27;),&#x27; AND &#x27;))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Literal_tokens&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Initial_response_valid: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Initial_response_valid source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@and(not(equals(body(&#x27;Initial_search&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;TotalRows&#x27;],null)),not(equals(body(&#x27;Initial_search&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;Table&#x27;]?[&#x27;Rows&#x27;],null)))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Initial_search&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Remember_batch: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Remember_batch source excerpt"><code>{
+  &quot;type&quot;: &quot;AppendToArrayVariable&quot;,
+  &quot;inputs&quot;: {
+    &quot;name&quot;: &quot;Batches&quot;,
+    &quot;value&quot;: {
+      &quot;Kql&quot;: &quot;@items(&#x27;Read_index_batches&#x27;)?[&#x27;Kql&#x27;]&quot;,
+      &quot;Sites&quot;: &quot;@items(&#x27;Read_index_batches&#x27;)?[&#x27;Sites&#x27;]&quot;,
+      &quot;Total&quot;: &quot;@body(&#x27;Initial_search&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;TotalRows&#x27;]&quot;,
+      &quot;Rows&quot;: &quot;@body(&#x27;Initial_search&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;Table&#x27;]?[&#x27;Rows&#x27;]&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Count_index_matches&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Make_report_private"><span class="tag">POST / SharePoint HTTP</span><h3>Make_report_private</h3>
+<p><strong>Purpose.</strong> Break role inheritance on the newly created report&#x27;s backing list item, using copyRoleAssignments=false and clearSubscopes=true. Unlike the search POSTs, this action changes permissions.</p>
+<p><strong>Response and downstream use.</strong> No response fields are used as proof of privacy. Successful completion permits Private_file_acl to read the actual resulting assignments; Private_report_verified must pass before the positive report path proceeds.</p>
+<p><strong>Behavior and boundaries.</strong> The target is the new export workbook, not a source library or source document. Report_item_uri derives its server-relative path from ReportUrl, decodes the URI path and doubles apostrophes inside the OData string. Do not repurpose this mutation for existing documents or libraries without a separate access-management design.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Make_report_private" tabindex="0" aria-label="Make_report_private request parameters"><code>{
+  &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;POST&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;/breakroleinheritance(copyRoleAssignments=false,clearSubscopes=true)&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Report_item_uri&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/Personal_site_available/actions/Accounts_aligned/actions/Matching_content/actions/Make_report_private</code><pre class="guide-source" tabindex="0" aria-label="Make_report_private complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;POST&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;/breakroleinheritance(copyRoleAssignments=false,clearSubscopes=true)&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Report_item_uri&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Report_item_uri: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Report_item_uri source excerpt"><code>{
+  &quot;type&quot;: &quot;Compose&quot;,
+  &quot;inputs&quot;: &quot;@concat(&#x27;_api/web/GetFileByServerRelativePath(decodedurl=&#x27;,decodeUriComponent(&#x27;%27&#x27;),replace(decodeUriComponent(uriPath(variables(&#x27;ReportUrl&#x27;))),decodeUriComponent(&#x27;%27&#x27;),concat(decodeUriComponent(&#x27;%27&#x27;),decodeUriComponent(&#x27;%27&#x27;))),decodeUriComponent(&#x27;%27&#x27;),&#x27;)/ListItemAllFields&#x27;)&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Remember_report_url&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Private_file_acl"><span class="tag">GET / SharePoint HTTP</span><h3>Private_file_acl</h3>
+<p><strong>Purpose.</strong> GET the report list item&#x27;s HasUniqueRoleAssignments and expanded role-assignment members and role definitions after the inheritance change.</p>
+<p><strong>Response and downstream use.</strong> Private_report_verified requires unique permissions, exactly one role assignment, the same Member.Id as Personal_site_user.Id, and RoleTypeKind 5 on the first role binding (Administrator/Full Control). Merely succeeding at breakroleinheritance is not accepted as proof.</p>
+<p><strong>Behavior and boundaries.</strong> This initial check explicitly selects HasUniqueRoleAssignments. The later final check uses the RoleAssignments collection instead and does not select this property again. The positive owner-account proof is not a comprehensive permission-denial or tenant-administrator-access audit.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Private_file_acl" tabindex="0" aria-label="Private_file_acl request parameters"><code>{
+  &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;?$select=HasUniqueRoleAssignments,RoleAssignments/Member/Id,RoleAssignments/RoleDefinitionBindings/RoleTypeKind&amp;$expand=RoleAssignments/Member,RoleAssignments/RoleDefinitionBindings&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Make_report_private&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Start_search_export/actions/Valid_input/actions/Personal_site_available/actions/Accounts_aligned/actions/Matching_content/actions/Private_file_acl</code><pre class="guide-source" tabindex="0" aria-label="Private_file_acl complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;?$select=HasUniqueRoleAssignments,RoleAssignments/Member/Id,RoleAssignments/RoleDefinitionBindings/RoleTypeKind&amp;$expand=RoleAssignments/Member,RoleAssignments/RoleDefinitionBindings&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Make_report_private&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Private_report_verified: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Private_report_verified source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@and(equals(body(&#x27;Private_file_acl&#x27;)?[&#x27;HasUniqueRoleAssignments&#x27;],true),equals(length(body(&#x27;Private_file_acl&#x27;)?[&#x27;RoleAssignments&#x27;]),1),equals(first(body(&#x27;Private_file_acl&#x27;)?[&#x27;RoleAssignments&#x27;])?[&#x27;Member&#x27;]?[&#x27;Id&#x27;],body(&#x27;Personal_site_user&#x27;)?[&#x27;Id&#x27;]),equals(first(first(body(&#x27;Private_file_acl&#x27;)?[&#x27;RoleAssignments&#x27;])?[&#x27;RoleDefinitionBindings&#x27;])?[&#x27;RoleTypeKind&#x27;],5))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Private_file_acl&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Preview_metadata_fields"><span class="tag">GET / SharePoint HTTP</span><h3>Preview_metadata_fields</h3>
+<p><strong>Purpose.</strong> Use the current preview candidate&#x27;s validated WebUrl and ListId to discover which optional stored metadata fields exist on that source list.</p>
+<p><strong>Response and downstream use.</strong> The endpoint returns value entries with InternalName. Preview_field_names selects those names; Read_preview_item appends them to its $select only when the result is nonempty. The filter requests only Department, TopicTags and DocumentType.</p>
+<p><strong>Behavior and boundaries.</strong> This avoids requesting nonexistent optional columns across heterogeneous lists. An absent optional column is not the same as an HTTP failure. This is a field-schema read, not tag filtering, taxonomy expansion or metadata inferred by the model.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Preview_metadata_fields" tabindex="0" aria-label="Preview_metadata_fields request parameters"><code>{
+  &quot;dataset&quot;: &quot;@items(&#x27;Each_preview_candidate&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/fields?$select=InternalName&amp;$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Count_preview_checked&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Build_chat_preview/actions/Preview_batches/actions/Preview_batch_budget/actions/Each_preview_candidate/actions/Preview_candidate_budget/actions/Preview_metadata_fields</code><pre class="guide-source" tabindex="0" aria-label="Preview_metadata_fields complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@items(&#x27;Each_preview_candidate&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/fields?$select=InternalName&amp;$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Count_preview_checked&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Preview_field_names: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Preview_field_names source excerpt"><code>{
+  &quot;type&quot;: &quot;Select&quot;,
+  &quot;inputs&quot;: {
+    &quot;from&quot;: &quot;@body(&#x27;Preview_metadata_fields&#x27;)?[&#x27;value&#x27;]&quot;,
+    &quot;select&quot;: &quot;@item()?[&#x27;InternalName&#x27;]&quot;
+  },
+  &quot;runAfter&quot;: {
+    &quot;Preview_metadata_fields&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Read_preview_item"><span class="tag">GET / SharePoint HTTP</span><h3>Read_preview_item</h3>
+<p><strong>Purpose.</strong> GET one current source list item by integer ItemId, with $expand=File and an explicit $select for title, filename, source URL and source timestamps, plus optional fields discovered in the preceding action.</p>
+<p><strong>Response and downstream use.</strong> Preview_item_verified checks the returned Id, a nonempty File.ServerRelativeUrl, the approved collection path prefix and absence from PreviewUrls. Preview_row and Remember_preview_line consume current source values only after the guard passes.</p>
+<p><strong>Behavior and boundaries.</strong> The source request runs through the caller&#x27;s SharePoint connection. File.TimeCreated and File.TimeLastModified supply dates; stored TopicTags supply tags. A denied, missing or unverifiable item is not replaced with raw index metadata. The preview has a 20-candidate budget and can contain fewer than ten rows.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Read_preview_item" tabindex="0" aria-label="Read_preview_item request parameters"><code>{
+  &quot;dataset&quot;: &quot;@items(&#x27;Each_preview_candidate&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/items(&#x27;,string(int(items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ItemId&#x27;])),&#x27;)?$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated&#x27;,if(empty(body(&#x27;Preview_field_names&#x27;)),&#x27;&#x27;,concat(&#x27;,&#x27;,join(body(&#x27;Preview_field_names&#x27;),&#x27;,&#x27;))),&#x27;&amp;$expand=File&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Preview_field_names&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Build_chat_preview/actions/Preview_batches/actions/Preview_batch_budget/actions/Each_preview_candidate/actions/Preview_candidate_budget/actions/Read_preview_item</code><pre class="guide-source" tabindex="0" aria-label="Read_preview_item complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@items(&#x27;Each_preview_candidate&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/items(&#x27;,string(int(items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ItemId&#x27;])),&#x27;)?$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated&#x27;,if(empty(body(&#x27;Preview_field_names&#x27;)),&#x27;&#x27;,concat(&#x27;,&#x27;,join(body(&#x27;Preview_field_names&#x27;),&#x27;,&#x27;))),&#x27;&amp;$expand=File&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Preview_field_names&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Preview_item_verified: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Preview_item_verified source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@and(equals(body(&#x27;Read_preview_item&#x27;)?[&#x27;Id&#x27;],int(items(&#x27;Each_preview_candidate&#x27;)?[&#x27;ItemId&#x27;])),not(empty(body(&#x27;Read_preview_item&#x27;)?[&#x27;File&#x27;]?[&#x27;ServerRelativeUrl&#x27;])),startsWith(toLower(coalesce(body(&#x27;Read_preview_item&#x27;)?[&#x27;File&#x27;]?[&#x27;ServerRelativeUrl&#x27;],&#x27;&#x27;)),concat(toLower(decodeUriComponent(uriPath(items(&#x27;Preview_batches&#x27;)?[&#x27;Sites&#x27;]?[items(&#x27;Each_preview_candidate&#x27;)?[&#x27;SiteId&#x27;]]?[&#x27;url&#x27;]))),&#x27;/&#x27;)),not(contains(variables(&#x27;PreviewUrls&#x27;),toLower(concat(&#x27;https://contoso.sharepoint.com&#x27;,replace(replace(uriComponent(coalesce(body(&#x27;Read_preview_item&#x27;)?[&#x27;File&#x27;]?[&#x27;ServerRelativeUrl&#x27;],&#x27;&#x27;)),&#x27;%2F&#x27;,&#x27;/&#x27;),&#x27;%2f&#x27;,&#x27;/&#x27;))))))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Read_preview_item&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Available_metadata_fields"><span class="tag">GET / SharePoint HTTP</span><h3>Available_metadata_fields</h3>
+<p><strong>Purpose.</strong> Perform the export-stage optional-field discovery for each grouped source WebUrl/ListId, rather than assuming every list has the same columns or reusing the preview&#x27;s metadata.</p>
+<p><strong>Response and downstream use.</strong> Metadata_field_names extracts returned InternalName values for the export GET&#x27;s $select. Group_filter_parts separately constructs numeric Id eq N predicates from the current group&#x27;s indexed candidates.</p>
+<p><strong>Behavior and boundaries.</strong> Only Department, TopicTags and DocumentType are requested here. PolicyStatus and ReviewDate are not selected, exported or used to filter approved content. This action does not filter results by stored tag values.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Available_metadata_fields" tabindex="0" aria-label="Available_metadata_fields request parameters"><code>{
+  &quot;dataset&quot;: &quot;@items(&#x27;Each_metadata_group&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_metadata_group&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/fields?$select=InternalName&amp;$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Group_filter_parts&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Continue_private_export/actions/Export_rows/actions/Each_metadata_group/actions/Group_budget/actions/Available_metadata_fields</code><pre class="guide-source" tabindex="0" aria-label="Available_metadata_fields complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@items(&#x27;Each_metadata_group&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_metadata_group&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/fields?$select=InternalName&amp;$filter=InternalName%20eq%20%27Department%27%20or%20InternalName%20eq%20%27TopicTags%27%20or%20InternalName%20eq%20%27DocumentType%27&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Group_filter_parts&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Metadata_field_names: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Metadata_field_names source excerpt"><code>{
+  &quot;type&quot;: &quot;Select&quot;,
+  &quot;inputs&quot;: {
+    &quot;from&quot;: &quot;@body(&#x27;Available_metadata_fields&#x27;)?[&#x27;value&#x27;]&quot;,
+    &quot;select&quot;: &quot;@item()?[&#x27;InternalName&#x27;]&quot;
+  },
+  &quot;runAfter&quot;: {
+    &quot;Available_metadata_fields&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Group_filter_parts: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Group_filter_parts source excerpt"><code>{
+  &quot;type&quot;: &quot;Select&quot;,
+  &quot;inputs&quot;: {
+    &quot;from&quot;: &quot;@body(&#x27;Group_candidates&#x27;)&quot;,
+    &quot;select&quot;: &quot;@concat(&#x27;Id eq &#x27;,string(int(item()?[&#x27;ItemId&#x27;])))&quot;
+  },
+  &quot;runAfter&quot;: {
+    &quot;Group_ids&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Read_current_items"><span class="tag">GET / SharePoint HTTP</span><h3>Read_current_items</h3>
+<p><strong>Purpose.</strong> Read current source items in a group using one list REST GET: $top=100, a URL-encoded OR filter of integer item IDs, explicit selected fields and $expand=File. This is grouped hydration, not another SharePoint Search query.</p>
+<p><strong>Response and downstream use.</strong> Valid_current_items reads the response&#x27;s value array and keeps only requested Group_ids with a nonempty File.ServerRelativeUrl under the approved collection path. Later unique-result and export-limit checks govern writing. Count_group_failure increments Failures if this request fails or times out.</p>
+<p><strong>Behavior and boundaries.</strong> The $top=100 limit here is distinct from Search REST RowLimit and StartRow paging. Preview results are re-read for export; source content or permissions may have changed. A successful list request does not establish that every originally indexed item was returned.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Read_current_items" tabindex="0" aria-label="Read_current_items request parameters"><code>{
+  &quot;dataset&quot;: &quot;@items(&#x27;Each_metadata_group&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_metadata_group&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/items?$top=100&amp;$filter=&#x27;,uriComponent(join(body(&#x27;Group_filter_parts&#x27;),&#x27; or &#x27;)),&#x27;&amp;$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated&#x27;,if(empty(body(&#x27;Metadata_field_names&#x27;)),&#x27;&#x27;,concat(&#x27;,&#x27;,join(body(&#x27;Metadata_field_names&#x27;),&#x27;,&#x27;))),&#x27;&amp;$expand=File&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Metadata_field_names&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Continue_private_export/actions/Export_rows/actions/Each_metadata_group/actions/Group_budget/actions/Read_current_items</code><pre class="guide-source" tabindex="0" aria-label="Read_current_items complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@items(&#x27;Each_metadata_group&#x27;)?[&#x27;WebUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(&#x27;_api/web/lists(guid&#x27;,decodeUriComponent(&#x27;%27&#x27;),items(&#x27;Each_metadata_group&#x27;)?[&#x27;ListId&#x27;],decodeUriComponent(&#x27;%27&#x27;),&#x27;)/items?$top=100&amp;$filter=&#x27;,uriComponent(join(body(&#x27;Group_filter_parts&#x27;),&#x27; or &#x27;)),&#x27;&amp;$select=Id,Title,File/Name,File/ServerRelativeUrl,File/TimeLastModified,File/TimeCreated&#x27;,if(empty(body(&#x27;Metadata_field_names&#x27;)),&#x27;&#x27;,concat(&#x27;,&#x27;,join(body(&#x27;Metadata_field_names&#x27;),&#x27;,&#x27;))),&#x27;&amp;$expand=File&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Metadata_field_names&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Valid_current_items: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Valid_current_items source excerpt"><code>{
+  &quot;type&quot;: &quot;Query&quot;,
+  &quot;inputs&quot;: {
+    &quot;from&quot;: &quot;@body(&#x27;Read_current_items&#x27;)?[&#x27;value&#x27;]&quot;,
+    &quot;where&quot;: &quot;@and(contains(body(&#x27;Group_ids&#x27;),item()?[&#x27;Id&#x27;]),not(empty(item()?[&#x27;File&#x27;]?[&#x27;ServerRelativeUrl&#x27;])),startsWith(toLower(coalesce(item()?[&#x27;File&#x27;]?[&#x27;ServerRelativeUrl&#x27;],&#x27;&#x27;)),concat(toLower(decodeUriComponent(uriPath(variables(&#x27;CurrentBatch&#x27;)?[&#x27;Sites&#x27;]?[items(&#x27;Each_metadata_group&#x27;)?[&#x27;SiteId&#x27;]]?[&#x27;url&#x27;]))),&#x27;/&#x27;)))&quot;
+  },
+  &quot;runAfter&quot;: {
+    &quot;Read_current_items&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Count_group_failure: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Count_group_failure source excerpt"><code>{
+  &quot;type&quot;: &quot;IncrementVariable&quot;,
+  &quot;inputs&quot;: {
+    &quot;name&quot;: &quot;Failures&quot;,
+    &quot;value&quot;: 1
+  },
+  &quot;runAfter&quot;: {
+    &quot;Read_current_items&quot;: [
+      &quot;Failed&quot;,
+      &quot;TimedOut&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Next_search_page"><span class="tag">POST / SharePoint HTTP</span><h3>Next_search_page</h3>
+<p><strong>Purpose.</strong> POST Next_request to the same Search REST endpoint when Need_next_page permits continuation. It retains CurrentBatch.Kql and Literal_query while taking StartRow from PageStart.</p>
+<p><strong>Response and downstream use.</strong> Next_page_valid requires a non-null PrimaryQueryResult.RelevantResults.Table.Rows. Use_next_page assigns those rows to PageRows. Unlike the initial response guard, it does not require TotalRows again. Count_page_failure increments Failures on a failed or timed-out request.</p>
+<p><strong>Behavior and boundaries.</strong> RowLimit stays 100 and [docid] ascending remains the only sort on every page. The verified run used offsets 0, 100, 200, 300, 400 and 500. This is bounded offset paging, not Graph nextLink, an index snapshot or a relevance-ranked best-ten preview.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Next_search_page" tabindex="0" aria-label="Next_search_page request parameters"><code>{
+  &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+  &quot;parameters/method&quot;: &quot;POST&quot;,
+  &quot;parameters/uri&quot;: &quot;_api/search/postquery&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;,
+    &quot;Content-Type&quot;: &quot;application/json;odata=nometadata&quot;
+  },
+  &quot;parameters/body&quot;: &quot;@string(outputs(&#x27;Next_request&#x27;))&quot;
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Next_request&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Continue_private_export/actions/Export_rows/actions/Need_next_page/actions/Next_search_page</code><pre class="guide-source" tabindex="0" aria-label="Next_search_page complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;https://contoso.sharepoint.com/sites/CorpNet&quot;,
+      &quot;parameters/method&quot;: &quot;POST&quot;,
+      &quot;parameters/uri&quot;: &quot;_api/search/postquery&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;,
+        &quot;Content-Type&quot;: &quot;application/json;odata=nometadata&quot;
+      },
+      &quot;parameters/body&quot;: &quot;@string(outputs(&#x27;Next_request&#x27;))&quot;
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Next_request&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<h4 class="flow-step">Body-building Compose: Next_request</h4><pre class="guide-source" tabindex="0" aria-label="Next_request source excerpt"><code>{
+  &quot;type&quot;: &quot;Compose&quot;,
+  &quot;inputs&quot;: {
+    &quot;request&quot;: {
+      &quot;Querytext&quot;: &quot;@concat(&#x27;(&#x27;, variables(&#x27;CurrentBatch&#x27;)?[&#x27;Kql&#x27;], &#x27;) AND (&#x27;, outputs(&#x27;Literal_query&#x27;), &#x27;) AND (contentclass:\&quot;STS_ListItem_DocumentLibrary\&quot; OR contentclass:\&quot;STS_ListItem_WebPageLibrary\&quot;) AND (IsDocument:1 OR FileExtension:aspx)&#x27;)&quot;,
+      &quot;RowLimit&quot;: 100,
+      &quot;StartRow&quot;: &quot;@variables(&#x27;PageStart&#x27;)&quot;,
+      &quot;TrimDuplicates&quot;: false,
+      &quot;EnableQueryRules&quot;: false,
+      &quot;SortList&quot;: [
+        {
+          &quot;Property&quot;: &quot;[docid]&quot;,
+          &quot;Direction&quot;: 0
+        }
+      ],
+      &quot;SelectProperties&quot;: [
+        &quot;SPWebUrl&quot;,
+        &quot;SiteID&quot;,
+        &quot;ListID&quot;,
+        &quot;ListItemID&quot;
+      ]
+    }
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre>
+<details><summary>Next_page_valid: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Next_page_valid source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@not(equals(body(&#x27;Next_search_page&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;Table&#x27;]?[&#x27;Rows&#x27;],null))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Next_search_page&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Use_next_page: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Use_next_page source excerpt"><code>{
+  &quot;type&quot;: &quot;SetVariable&quot;,
+  &quot;inputs&quot;: {
+    &quot;name&quot;: &quot;PageRows&quot;,
+    &quot;value&quot;: &quot;@body(&#x27;Next_search_page&#x27;)?[&#x27;PrimaryQueryResult&#x27;]?[&#x27;RelevantResults&#x27;]?[&#x27;Table&#x27;]?[&#x27;Rows&#x27;]&quot;
+  },
+  &quot;runAfter&quot;: {}
+}</code></pre></details>
+<details><summary>Count_page_failure: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Count_page_failure source excerpt"><code>{
+  &quot;type&quot;: &quot;IncrementVariable&quot;,
+  &quot;inputs&quot;: {
+    &quot;name&quot;: &quot;Failures&quot;,
+    &quot;value&quot;: 1
+  },
+  &quot;runAfter&quot;: {
+    &quot;Next_search_page&quot;: [
+      &quot;Failed&quot;,
+      &quot;TimedOut&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+<article class="card flow-step sp-action" id="sp-Final_file_acl"><span class="tag">GET / SharePoint HTTP</span><h3>Final_file_acl</h3>
+<p><strong>Purpose.</strong> After actual Excel readback has passed Written_rows_verified, GET the report item&#x27;s RoleAssignments collection again, selecting and expanding member IDs and role-binding kinds.</p>
+<p><strong>Response and downstream use.</strong> Delivery_acl_verified requires the returned value array to contain exactly one assignment for Personal_site_user.Id, with RoleTypeKind 5 on its first role binding. Only the guarded branch sends the workbook link; changed access has explicit notification/stop paths.</p>
+<p><strong>Behavior and boundaries.</strong> This checks the observed ACL at delivery time; it is not an atomic lock preventing later access changes. Unlike Private_file_acl, this URI returns the role collection and does not re-read HasUniqueRoleAssignments. Outlook performs the email action, not this SharePoint GET.</p>
+<h4 class="flow-step">Exact request configuration</h4><p class="small">Source expressions, not an executed request or sample response. Site Address is <code>dataset</code>; URI is relative to that site.</p><pre class="guide-source" id="sp-config-Final_file_acl" tabindex="0" aria-label="Final_file_acl request parameters"><code>{
+  &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+  &quot;parameters/method&quot;: &quot;GET&quot;,
+  &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;/RoleAssignments?$select=Member/Id,RoleDefinitionBindings/RoleTypeKind&amp;$expand=Member,RoleDefinitionBindings&#x27;)&quot;,
+  &quot;parameters/headers&quot;: {
+    &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+  }
+}</code></pre>
+<p class="small">Action retry policy: <code>{&quot;type&quot;: &quot;none&quot;}</code>. Run-after dependencies: <code>{&quot;Complete_metadata&quot;: [&quot;Succeeded&quot;]}</code>. An empty object does not mean unconditional execution: enclosing scopes, conditions and loop budgets still apply.</p>
+<details class="sp-definition"><summary>Full action JSON and source location</summary><p>JSON pointer in the complete definition:</p><code class="checksum">/actions/Continue_private_export/actions/Finalize_workbook/actions/Written_rows_verified/actions/Final_file_acl</code><pre class="guide-source" tabindex="0" aria-label="Final_file_acl complete action"><code>{
+  &quot;type&quot;: &quot;OpenApiConnection&quot;,
+  &quot;inputs&quot;: {
+    &quot;host&quot;: {
+      &quot;apiId&quot;: &quot;/providers/Microsoft.PowerApps/apis/shared_sharepointonline&quot;,
+      &quot;connectionName&quot;: &quot;shared_sharepointonline&quot;,
+      &quot;operationId&quot;: &quot;HttpRequest&quot;
+    },
+    &quot;parameters&quot;: {
+      &quot;dataset&quot;: &quot;@body(&#x27;SharePoint_profile&#x27;)?[&#x27;PersonalUrl&#x27;]&quot;,
+      &quot;parameters/method&quot;: &quot;GET&quot;,
+      &quot;parameters/uri&quot;: &quot;@concat(outputs(&#x27;Report_item_uri&#x27;),&#x27;/RoleAssignments?$select=Member/Id,RoleDefinitionBindings/RoleTypeKind&amp;$expand=Member,RoleDefinitionBindings&#x27;)&quot;,
+      &quot;parameters/headers&quot;: {
+        &quot;Accept&quot;: &quot;application/json;odata=nometadata&quot;
+      }
+    },
+    &quot;retryPolicy&quot;: {
+      &quot;type&quot;: &quot;none&quot;
+    }
+  },
+  &quot;runAfter&quot;: {
+    &quot;Complete_metadata&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+<details><summary>Delivery_acl_verified: exact supporting expression</summary><p class="small">Control excerpt; nested branches omitted.</p><pre class="guide-source" tabindex="0" aria-label="Delivery_acl_verified source excerpt"><code>{
+  &quot;type&quot;: &quot;If&quot;,
+  &quot;expression&quot;: &quot;@and(equals(length(body(&#x27;Final_file_acl&#x27;)?[&#x27;value&#x27;]),1),equals(first(body(&#x27;Final_file_acl&#x27;)?[&#x27;value&#x27;])?[&#x27;Member&#x27;]?[&#x27;Id&#x27;],body(&#x27;Personal_site_user&#x27;)?[&#x27;Id&#x27;]),equals(first(first(body(&#x27;Final_file_acl&#x27;)?[&#x27;value&#x27;])?[&#x27;RoleDefinitionBindings&#x27;])?[&#x27;RoleTypeKind&#x27;],5))&quot;,
+  &quot;runAfter&quot;: {
+    &quot;Final_file_acl&quot;: [
+      &quot;Succeeded&quot;
+    ]
+  }
+}</code></pre></details>
+</article>
+    <div class="actions"><a class="button" href="../agent/flows/search-export/definition.json" download>Download the full current flow JSON</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/sharepoint-actions.md">Read the same action reference in GitHub</a><a href="#agent-flow">See the genuine designer screenshots</a></div>
   </section>
 
   <section class="section" id="agent-flow" aria-labelledby="flow-title">
@@ -671,16 +1438,42 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
   </section>
 
   <section class="section" id="setup" aria-labelledby="setup-title">
-    <div class="section-head"><div><p class="eyebrow">06 / Adapt, bind, validate</p><h2 id="setup-title">Bring the pattern.<br>Configure your estate.</h2></div><p>A real unmanaged solution and complete source are included. Neither is turnkey proof for another tenant. HR/IT-like topics and scopes are examples that need adaptation.</p></div>
+    <div class="section-head"><div><p class="eyebrow">06 / Import and configure</p><h2 id="setup-title">A new tenant?<br>Build the SharePoint side first.</h2></div><p>Importing the ZIP does not create the hub, spokes, libraries, pages, metadata, permissions or index entries. Without that setup and retargeting, this agent is not ready to search your tenant.</p></div>
+    <div class="contract">
+      <article class="card"><span class="tag">What import supplies</span><h3>The agent and runtime components.</h3><p>One agent; 14 topics; one GPT instruction/model component; one native-flow tool; one search/export flow; five connection references; the blank workbook and contextual banners.</p><p>The default policy contains four fictional Contoso sites. Connection IDs are blank, the group ID is a scaffold, the flow is stopped and the agent is not automatically published. Verify those states in the target product after import.</p></article>
+      <article class="card"><span class="tag">What you must supply</span><h3>A real, approved source estate.</h3><p>Your SharePoint hub and approved associated site collections, actual documents/pages and access rules, indexing, target account connections, provisioned personal drives, directory mailboxes and agent audience.</p><p>The ten-site / 512-item demonstration is not provisioned by the solution. You do not need 512 items to start: use a small controlled pilot first. Fixture generation is optional and separate.</p></article>
+    </div>
     <ol class="setup">
-      <li class="card"><h3>Start in an isolated target</h3><p>Confirm Dataverse, Copilot Studio, connector licensing, DLP and target model availability. The <code>GPT5Chat</code> hint is not an availability guarantee. Read the package and rights notices first.</p></li>
-      <li class="card"><h3>Replace the fictional inventory</h3><p>The reference has <strong>four fictional Contoso collections</strong>, not the ten-site demo estate. Verify your tenant, hub registration/association, each allowed SiteID, source locators and metadata. No automatic tenant discovery.</p></li>
-      <li class="card"><h3>Import or wire manually</h3><p>Use the supported unmanaged import experience, or recreate the authenticated classic agent/native flow and apply the source. Bind both native flow references consistently. Keep <code>query, scope → result</code> and all five Invoker connections.</p></li>
-      <li class="card"><h3>Validate before publishing</h3><p>Adapt scope choices, topic instructions, inventory and fixed banner mappings together. Verify target security group, caller accounts, private destination, product-loaded topics and negative-access cases. Only the target owner activates and publishes.</p></li>
+      <li class="card"><h3>Choose an isolated development environment</h3><p>Confirm Dataverse, Copilot Studio, SharePoint Online, OneDrive, Exchange/Outlook, connector licensing and DLP support. Verify permissions to manage the solution, register/associate a hub and configure an agent audience. Read the rights notice. New-tenant import/runtime remain unverified.</p></li>
+      <li class="card"><h3>Create or select the hub and spokes</h3><p>The simplest pilot keeps the four example areas: one corporate hub plus HR, Finance and IT site collections. A SharePoint administrator registers the hub and associates the intended spokes. Existing approved sites can be used if they fit the supported shape.</p><p>The current validator accepts same-tenant commercial SharePoint HTTPS <code>/sites/&lt;name&gt;</code> collection roots, not <code>/teams/</code> roots, arbitrary subweb entries, sovereign-cloud or cross-tenant URLs. No hub means this hub-constrained configuration is not ready; do not simply remove its <code>DepartmentId</code> restriction.</p></li>
+      <li class="card"><h3>Add real content and permissions</h3><p>Create/select document libraries and Site Pages. Add a few safe pilot documents and published pages, and set intentional source permissions. A hub association does not grant access. Include at least one accessible item and one item denied to a separate authorized test account.</p><p>Wait for SharePoint Search to index the content and hub association. A direct file link working does not prove the index can find it. Search returns links/metadata, not generated answers from page bodies.</p></li>
+      <li class="card"><h3>Decide which optional metadata to use</h3><p>If needed, add compatible text columns with internal names <code>Department</code>, <code>TopicTags</code> and <code>DocumentType</code> on the relevant libraries/pages lists. <code>TopicTags</code> is semicolon-delimited text, not managed taxonomy.</p><p>These columns are discovered dynamically; absent tags remain <code>Not supplied</code>. Renaming a display label does not change its internal name. Do not create a list column named <code>DepartmentId</code> to imitate hub association. <code>PolicyStatus</code>/<code>ReviewDate</code> are not required or consumed.</p></li>
+      <li class="card"><h3>Record and verify target identifiers</h3><p>Record the tenant origin, corporate search-site URL, registered hub's collection GUID and every approved collection URL, SiteID and department. Obtain actual collection IDs using approved admin tooling or the site REST endpoint <code>_api/site?$select=Id</code>; verify hub association separately.</p><p>Confirm Search returns <code>SPWebUrl</code>, <code>SiteID</code>, <code>ListID</code>, <code>ListItemID</code>, then test current item/file access as the caller. A site name, URL slug or list ID is not its collection GUID.</p></li>
+      <li class="card"><h3>Retarget a private source copy</h3><p>Update <code>agent/runtime/search-policy.json</code> with approved values. Set <code>configurationMode</code> to <code>configured</code> and verification flags only after their checks have actually been performed. These flags are owner assertions, not automated provisioning.</p><p>Regenerate the flow with the supplied agent builder so all search datasets, approved KQL, path checks, tenant link origins and derived personal-site origin stay consistent. For a customized package, adapt the private reference-only validation policy and rebuild the solution. Stock packaging tests intentionally reject real tenant locators; do not disable runtime guards to make a build pass.</p></li>
+      <li class="card"><h3>Customize scope names consistently</h3><p>Keeping CorpNet/HR/Finance/IT avoids an unnecessary redesign. If changing the business areas, update inventory classifications, topic prompts/normalization/validation, flow-approved scopes, agent instructions, example phrases, banner mappings and related tests together.</p><p>Update actual imported components or a rebuilt private package; editing repository YAML alone does not update an already imported agent. Never blanket-replace every GUID: site/hub IDs and intrinsic solution-component identities serve different purposes.</p></li>
+      <li class="card"><h3>Import and bind the five connectors</h3><p>Use Power Apps Solutions → Import for the reviewed target package, or the supported PAC route described in the solution guide. Configure SharePoint, Office 365 Users, OneDrive for Business, Excel Online (Business) and Office 365 Outlook in the target environment.</p><p>Keep <code>runtimeSource: invoker</code>, tool <code>mode: Invoker</code>, no embedded fallback and <strong>Provided by run-only user</strong> for all five connections. Register/verify the native tool through Studio; both the topic and tool must resolve to the same imported flow.</p></li>
+      <li class="card"><h3>Prepare each caller and the audience</h3><p>Ensure pilot accounts have a provisioned OneDrive/personal site, supported connector consent, a nonempty directory mail value and access to the intended source items. Profile, SharePoint and private-drive identities must align.</p><p>The report is created in that personal drive's root (<code>folderPath: "/"</code>) as <code>CorpNetSearchResults-&lt;JobId&gt;.xlsx</code>. No pre-created shared export library or special report folder is required. Select a real allowed Entra security group; retain Integrated/Always authentication and classic orchestration. Verify target model availability rather than trusting the <code>GPT5Chat</code> hint.</p></li>
+      <li class="card"><h3>Run the target acceptance checks, then publish</h3><p>Check the loaded topic questions and tool binding, a small positive query, no-match and invalid input, source permission denial, connector failure, private workbook ACL, exact rows/dates/tags and mailbox delivery. Then test more than 100 matches, duplicate handling, partial/capped output and changed source access.</p><p>Only enable the correctly configured flow for controlled testing. Publish/share the agent after an explicit target-owner release decision; separately test the actual M365/Teams client and caller sign-in. Website deployment is not agent publication.</p></li>
     </ol>
+    <table class="connector-table" id="tenant-customization">
+      <caption>What to customize, and where the value is actually used</caption>
+      <thead><tr><th scope="col">Target setting</th><th scope="col">Source location and required change</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Tenant and search endpoint</th><td><code>agent/runtime/search-policy.json</code>: replace <code>tenantOrigin</code> and <code>searchSiteUrl</code>. Regeneration updates corporate SharePoint datasets, canonical source-link origins, source-path checks and the derived personal-site host/prefix. Changing only Initial_search.Site Address leaves other paths pointing at the reference.</td></tr>
+        <tr><th scope="row">Hub and approved sites</th><td>In that policy, replace <code>hubSiteCollectionId</code> and every <code>sites[].url</code>, <code>sites[].siteId</code> and <code>sites[].department</code>. The generated <code>Approved_scopes</code> KQL and site lookup maps must match real registration, association and indexing. <code>All</code> means this inventory, not the tenant.</td></tr>
+        <tr><th scope="row">Configuration assertions</th><td>Review <code>configurationMode</code>, <code>hubRegistrationVerified</code>, <code>hubSearchVerified</code>, <code>metadataFieldsVerified</code> and <code>searchLocatorFieldsVerified</code>. Set flags after checks, not to suppress a build error. Retain <code>scopeMode: approved-inventory</code>.</td></tr>
+        <tr><th scope="row">Business areas and banners</th><td><code>agent/topics/SearchSharePoint.mcs.yml</code>, <code>agent/agent.mcs.yml</code>, <code>agent/cards/</code>, the policy and generated flow. Update prompts, normalization, allowed values, intent examples and all fixed scope/banner switches together. An image rename alone does not introduce a new supported scope.</td></tr>
+        <tr><th scope="row">Metadata names or types</th><td>Keep the supported optional internal names, or deliberately adapt the flow builder's field-discovery filters, source selections, formatting and workbook mappings. A taxonomy/object field is not a drop-in replacement for semicolon-delimited <code>TopicTags</code> text.</td></tr>
+        <tr><th scope="row">Connections</th><td>Target connection references and <code>solutions/deployment-settings.local.json</code>, copied privately from the unbound template. For source wiring, also review <code>agent/runtime/connection-references.json</code> and <code>agent/connectionreferences.mcs.yml</code>. Import bindings do not replace per-caller Invoker settings.</td></tr>
+        <tr><th scope="row">Agent audience and model</th><td>Choose <code>CopilotAgents[].AadGroupId</code> in local deployment settings and verify sharing in the product. Review <code>agent/settings.mcs.yml</code> authentication/orchestration and <code>agent/agent.mcs.yml</code> model instructions. An all-zero group is not a safe configured audience.</td></tr>
+        <tr><th scope="row">Native flow binding</th><td><code>agent/actions/SearchAndExport.mcs.yml</code> and <code>agent/topics/SearchSharePoint.mcs.yml</code> refer to the same flow. Supported solution rebuild preserves its intrinsic relationship; manual recreation needs actual Studio registration and consistent rebinding. Do not substitute site IDs into workflow identity fields.</td></tr>
+        <tr><th scope="row">Workbook destination</th><td>The default is the verified caller's personal-drive root and the included blank template. A shared/team drive, alternate folder or changed table schema needs a reviewed redesign of creation, path resolution, identity checks, ACL checks, writes and readback—not just changing the output URL.</td></tr>
+      </tbody>
+    </table>
+    <aside class="notice"><strong>Already imported the untouched ZIP?</strong> Leave the flow stopped and the agent unpublished. Prepare/verify the SharePoint estate and all target configuration first. Apply a reviewed private rebuild as an intentional unmanaged update, or make coordinated changes through the supported editors and export your private target solution. Recheck bindings and all acceptance cases afterwards. Filling connection IDs alone will not make the Contoso policy search your sites.</aside>
     <aside class="notice"><strong>Unmanaged import can merge into existing components.</strong> Do not import the reference back into the original demo or another environment with matching component identities without a reviewed upgrade plan. The package requests a <strong>stopped flow, no automatic publication and empty channels</strong>; actual target import behavior remains unverified.</aside>
     <details><summary>Connection settings are not tenant retargeting</summary><p>The template has five empty connection IDs and an <strong>all-zero security-group scaffold</strong>. Select approved target bindings and an appropriate Entra group; never treat zeros as a verified sharing policy.</p><p>There are no environment-variable values that automatically retarget this flow. Updating deployment settings alone does not replace embedded SharePoint URLs, hub IDs or collection inventory. Never commit a filled settings file or connected export.</p><div class="actions"><a href="../solutions/deployment-settings.template.json" download>Download unbound settings template</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/README.md">Read all import prerequisites ↗</a></div></details>
-    <div class="actions"><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/setup.md">Step-by-step setup ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/README.md">Manual source wiring guide ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/fixtures/corpnet-demo/README.md">Reproducible fictional fixture guide ↗</a></div>
+    <div class="actions"><a class="button" href="../agent/runtime/search-policy.json" download>Download the fictional policy template</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/setup.md#from-an-empty-sharepoint-tenant">Empty-tenant setup in GitHub ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/README.md">Private source build/wiring guide ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/fixtures/corpnet-demo/README.md">Optional fixture guide ↗</a></div>
   </section>
 
   <section class="section" id="downloads" aria-labelledby="downloads-title">

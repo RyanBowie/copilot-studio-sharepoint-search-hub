@@ -237,6 +237,77 @@ class SiteTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "five-connector operation catalogue"):
                 BUILD.load_agent_details()
 
+    def test_showcase_is_first_and_top_actions_match_the_companion_pattern(self):
+        first = next(attrs for tag, attrs in self.document.elements if tag == "section")
+        self.assertEqual(first["id"], "showcase")
+        showcase = self.html.split('id="showcase"', 1)[1].split("</section>", 1)[0]
+        images = [attrs for tag, attrs in Document(showcase).elements if tag == "img"]
+        self.assertEqual([image["src"] for image in images],
+                         [BUILD.ASSETS["it-inputs"][1], BUILD.ASSETS["it"][1]])
+        primary = re.search(r'id="primary-actions">(.*?)</div>', showcase, re.S).group(1)
+        links = [attrs for tag, attrs in Document(primary).elements if tag == "a"]
+        self.assertEqual([a["href"] for a in links], [BUILD.ASSETS["solution"][1], "#setup", BUILD.REPOSITORY])
+        self.assertIn("download", links[0])
+        self.assertEqual(Document(primary).text, ["Download solution ZIP", "Import and configure", "View repository"])
+        self.assertIn("new-tenant import is unverified", showcase)
+        self.assertIn("typed before submission", showcase)
+
+    def test_all_sharepoint_requests_and_helpers_match_the_actual_definition(self):
+        reference = BUILD.load_sharepoint_reference()
+        self.assertEqual(len(reference["entries"]), 12)
+        methods = [entry["action"]["inputs"]["parameters"]["parameters/method"] for entry in reference["entries"]]
+        self.assertEqual(methods.count("GET"), 9)
+        self.assertEqual(methods.count("POST"), 3)
+        definition = json.loads((ROOT / BUILD.ASSETS["definition"][0]).read_text())
+        for entry in reference["entries"]:
+            value = definition
+            for part in entry["path"].strip("/").split("/"):
+                value = value[part.replace("~1", "/").replace("~0", "~")]
+            self.assertEqual(value, entry["action"])
+            body = re.search(rf'id="sp-config-{entry["name"]}"[^>]*><code>(.*?)</code></pre>',
+                             self.html, re.S).group(1)
+            self.assertEqual(json.loads(html.unescape(body)), value["inputs"]["parameters"])
+            self.assertIn(html.escape(json.dumps(value, indent=2)), self.html)
+            for _, helper in entry["helpers"]:
+                self.assertIn(html.escape(json.dumps(helper, indent=2)), self.html)
+        self.assertIn(html.escape(reference["kql"]), self.html)
+        self.assertEqual((ROOT / "docs" / "sharepoint-actions.md").read_text(encoding="utf-8"),
+                         BUILD.sharepoint_reference_markdown(reference))
+
+    def test_sharepoint_reference_fails_if_an_action_has_no_description(self):
+        definition = json.loads((ROOT / BUILD.ASSETS["definition"][0]).read_text())
+        descriptions = json.loads((ROOT / "site" / "sharepoint-actions.json").read_text())
+        example = BUILD.load_sharepoint_reference()["entries"][0]["action"]
+        definition["actions"]["Undocumented_sharepoint_action"] = copy.deepcopy(example)
+        with patch.object(BUILD.json, "loads", side_effect=[definition, descriptions]):
+            with self.assertRaisesRegex(ValueError, "cover every actual action"):
+                BUILD.load_sharepoint_reference()
+
+    def test_sharepoint_reference_escapes_parameters_and_descriptions(self):
+        reference = copy.deepcopy(BUILD.load_sharepoint_reference())
+        untrusted = '<script>alert("request")</script>'
+        reference["entries"][0]["purpose"] = untrusted
+        reference["entries"][0]["action"]["inputs"]["parameters"]["dataset"] = untrusted
+        rendered = BUILD.sharepoint_reference_html(reference)
+        self.assertIn(html.escape(untrusted), rendered)
+        self.assertNotIn(untrusted, rendered)
+
+    def test_empty_tenant_setup_identifies_real_customization_and_missing_resources(self):
+        setup = self.html.split('id="setup"', 1)[1].split('<section class="section" id="downloads"', 1)[0]
+        table = re.search(r'<table[^>]*id="tenant-customization".*?</table>', setup, re.S).group()
+        self.assertEqual(table.count('scope="row"'), 9)
+        self.assertEqual(setup.count('<li class="card">'), 10)
+        for key in ("tenantOrigin", "searchSiteUrl", "hubSiteCollectionId", "configurationMode",
+                    "hubRegistrationVerified", "hubSearchVerified", "metadataFieldsVerified",
+                    "searchLocatorFieldsVerified"):
+            self.assertIn(key, setup)
+        for boundary in ("does not create", "Already imported the untouched ZIP?",
+                         "folderPath:", "Provided by run-only user", "not managed taxonomy",
+                         "not provisioned by the solution", "Stock packaging tests intentionally reject",
+                         "No pre-created shared export library"):
+            self.assertIn(boundary, setup)
+        self.assertIn(BUILD.ASSETS["search-policy"][1], setup)
+
     def test_theme_and_no_remote_runtime_dependencies(self):
         scripts = re.findall(r"<script>(.*?)</script>", self.html, flags=re.S)
         self.assertIn('const param = new URLSearchParams(window.location.search).get("scoutTheme");', scripts[0])

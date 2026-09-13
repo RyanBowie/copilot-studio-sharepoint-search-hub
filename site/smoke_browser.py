@@ -52,6 +52,12 @@ def main():
                 response = page.goto(base + "?scoutTheme=light&keep=1", wait_until="networkidle")
                 assert response.status == 200
                 assert page.locator("html").get_attribute("data-theme") == "light"
+                assert page.locator("main > section").first.get_attribute("id") == "showcase"
+                assert page.locator("#primary-actions a").all_text_contents() == [
+                    "Download solution ZIP", "Import and configure", "View repository"]
+                for image in page.locator("#showcase img").all():
+                    image.evaluate("(image) => image.decode()")
+                page.screenshot(path=str(artifacts / "showcase-desktop.png"))
                 for i in range(1, 7):
                     page.locator(f"#step-{i}").click()
                     assert page.locator(f"#stage-{i}").is_visible()
@@ -79,8 +85,21 @@ def main():
                     assert image.get_attribute("src") == image.locator("..").get_attribute("href")
                     full = page.request.get(base + image.get_attribute("src"))
                     assert full.status == 200 and full.body().startswith(b"\x89PNG\r\n\x1a\n")
-                for section in ("agent-instructions", "tools", "flow-search", "flow-paging"):
+                for section in ("agent-instructions", "tools", "flow-search", "flow-paging",
+                                "sp-Initial_search", "sp-Read_current_items", "sp-Final_file_acl"):
                     page.locator("#" + section).screenshot(path=str(artifacts / (section + "-desktop.png")))
+                assert page.locator(".sp-action").count() == 12
+                assert page.locator("#tenant-customization tbody tr").count() == 9
+                expected_parameters = {"Initial_search": "_api/search/postquery",
+                                       "SharePoint_profile": "_api/SP.UserProfiles.PeopleManager/GetMyProperties?$select=PersonalUrl,AccountName"}
+                for action, uri in expected_parameters.items():
+                    data = json.loads(page.locator("#sp-config-" + action + " code").text_content())
+                    assert data["parameters/uri"] == uri
+                page.locator("#sp-Final_file_acl .sp-definition summary").click()
+                assert page.locator("#sp-Final_file_acl .sp-definition pre").is_visible()
+                results["sharePointActionsWithExactRequests"] = 12
+                results["newTenantCustomizationRows"] = 9
+                results["showcaseAndThreePrimaryActionsPassed"] = True
                 results["displayedInstructionsMatchSource"] = True
                 results["inlineNativeFlowScreenshots"] = page.locator("#agent-flow img").count()
                 results["uniqueEmbeddedProductScreenshots"] = page.locator("img").evaluate_all(
@@ -111,7 +130,7 @@ def main():
                         assert page.locator("#instruction-source code").text_content() == expected
                         if width == 390:
                             page.screenshot(path=str(artifacts / ("mobile-" + theme + ".png")))
-                            for section in ("agent-instructions", "tools", "flow-paging"):
+                            for section in ("agent-instructions", "sp-Initial_search", "sp-Final_file_acl"):
                                 page.locator("#" + section).screenshot(
                                     path=str(artifacts / (section + "-mobile-" + theme + ".png")))
                 results["noHorizontalOverflowAtWidthsBothThemes"] = [1440, 1024, 768, 390, 320]
@@ -130,6 +149,8 @@ def main():
                 assert page.goto(base).status == 200
                 assert page.locator("#instruction-source code").text_content() == expected
                 assert page.locator("#agent-flow img").count() == 9
+                assert page.locator(".sp-action").count() == 12
+                assert page.locator("#setup .setup > li").count() == 10
                 assert page.locator('[role="tabpanel"]:visible').count() == 10
                 assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
                 assert not blocked, blocked

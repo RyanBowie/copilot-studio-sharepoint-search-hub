@@ -43,6 +43,100 @@ Licensing, data policies, connector availability and channel support must be
 checked in the target tenant. A successful owner demonstration does not prove
 those conditions for another environment.
 
+## From an empty SharePoint tenant
+
+**Import creates agent/runtime components, not the SharePoint estate.** It does
+not register a hub, create sites/libraries/pages, seed the 512-item corpus, assign
+source permissions, provision user OneDrives or make SharePoint index content.
+The website presents this [new-tenant checklist directly on the page](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup).
+
+1. **Choose an isolated development environment and owners.** Confirm Dataverse,
+   Copilot Studio and the five connectors' licensing, consent and DLP support.
+   Identify a SharePoint administrator for hub registration/association and an
+   owner for agent access/sharing. Check model availability rather than assuming
+   `GPT5Chat` exists in the target environment.
+2. **Create or select the source sites.** A straightforward pilot retains one
+   corporate hub and HR, Finance and IT collections. Register the corporate site
+   as a hub and associate each approved spoke through supported administration.
+   Existing sites are acceptable within the current validator's supported shape:
+   same-tenant commercial SharePoint HTTPS `/sites/<name>` collection roots.
+   `/teams/` roots, arbitrary subweb inventory entries, sovereign-cloud and
+   cross-tenant targets need a deliberate redesign, not a placeholder swap.
+   If no hub is available, do not bypass the required `DepartmentId` restriction.
+3. **Add a small real pilot corpus and permissions.** Create/select document
+   libraries and Site Pages, add safe documents and published pages, and grant
+   intentional source access. Hub association is not authorization. You do not
+   need 512 items initially; fixture generation is optional and separate.
+   Include allowed and denied items for a separately authorized non-owner test.
+4. **Choose optional metadata.** For stored labels, use compatible text columns
+   with internal names `Department`, `TopicTags` and `DocumentType`.
+   `TopicTags` is semicolon-delimited text, not managed taxonomy. Discovery is
+   dynamic; missing tags remain `Not supplied`. A renamed display label does
+   not change the internal name. `DepartmentId` is the search hub-association
+   property, not a custom list column to create. `PolicyStatus` and `ReviewDate`
+   are not required or consumed by this flow.
+5. **Record identifiers and verify indexing.** Obtain actual collection IDs
+   through approved admin tooling or each site's `_api/site?$select=Id`; do not
+   substitute list IDs or URL slugs. Verify hub registration/association, then
+   allow indexing to catch up. Confirm search locators `SPWebUrl`, `SiteID`,
+   `ListID`, `ListItemID` and current file/page reads under the intended caller.
+   Working direct links alone do not establish indexed search coverage.
+6. **Retarget a private source copy and regenerate coherently.** Use the matrix
+   below. In `configured` mode, verification flags are owner assertions set only
+   after their checks—not automated proof or a workaround for missing setup.
+   Generate the target flow using the existing agent builder, then deliberately
+   adapt the private reference-only package validation policy and rebuild if
+   using the solution route. Stock package tests reject real tenant locators;
+   do not remove runtime identity/scope checks to satisfy them.
+7. **Import/bind without publishing.** Use the reviewed target package and
+   supported Solutions import/PAC route. Bind all five target connections and
+   keep every runtime connection **Provided by run-only user**, `invoker`,
+   tool `Invoker`, and no embedded maker fallback. Verify the native tool is
+   registered and both topic/tool references resolve to the same flow.
+8. **Prepare callers and audience.** Pilot users need provisioned personal
+   OneDrive sites, supported connection consent and nonempty directory mail.
+   Selected profile, source and private-drive identities must align. The
+   current flow writes `CorpNetSearchResults-<JobId>.xlsx` in the personal-drive
+   root (`folderPath: "/"`): no pre-created shared export library or special
+   folder is required. Select a real Entra audience group and retain
+   Integrated/Always authentication and classic orchestration.
+9. **Validate in the target before release.** Start small: topic questions,
+   tool binding, a positive query, no-match, invalid input, connector failure,
+   allowed/denied source access, exact workbook rows/dates/tags, private ACL and
+   mailbox delivery. Then exercise more than 100 matches, duplicates, caps,
+   partial processing and changed access. Enable the configured flow only for
+   controlled testing; the target owner publishes/shares after approval.
+   M365 and Teams rendering/sign-in are separate target checks.
+
+### Target customization matrix
+
+| Setting | Where and what to change |
+|---|---|
+| Tenant/search site | `agent/runtime/search-policy.json`: `tenantOrigin`, `searchSiteUrl`. Regenerate to update corporate datasets, canonical source URLs, path checks and the derived personal-site origin/prefix. Changing only `Initial_search` Site Address is incomplete. |
+| Hub/approved inventory | Same policy: `hubSiteCollectionId`, every `sites[].url`, `sites[].siteId`, `sites[].department`. Generated `Approved_scopes` KQL and site lookup maps must match verified target facts. `All` means that inventory. |
+| Configuration mode/assertions | `configurationMode: configured`; independently verify `hubRegistrationVerified`, `hubSearchVerified`, `metadataFieldsVerified`, `searchLocatorFieldsVerified`. Retain `scopeMode: approved-inventory`. Flags do not provision or test resources. |
+| Business areas | Policy, `agent/topics/SearchSharePoint.mcs.yml`, `agent/agent.mcs.yml`, `agent/cards/`, generated flow and tests. Update prompts, normalized choices, validation, intent examples and fixed banner switches together. |
+| Different metadata schema | Prefer the supported internal names/types; otherwise adapt builder field filters, selected fields, formatting and workbook mappings together. Taxonomy objects are not drop-in text tags. |
+| Connections | Target connection references and private `solutions/deployment-settings.local.json`. For source wiring, also review `agent/runtime/connection-references.json` and `agent/connectionreferences.mcs.yml`. Import binding does not configure every caller's runtime connection. |
+| Agent audience/model | Set real `CopilotAgents[].AadGroupId` in private deployment settings; check sharing in the product. Review `agent/settings.mcs.yml` and model/instructions in `agent/agent.mcs.yml`. The zero group is only a scaffold. |
+| Flow identity | `agent/actions/SearchAndExport.mcs.yml` and `agent/topics/SearchSharePoint.mcs.yml` must bind the same registered flow. Preserve intrinsic package relationships; do not blanket-replace GUIDs. |
+| Destination/template changes | The default uses a verified personal-drive root and included blank workbook. A shared drive, alternate folder or table-schema change needs coordinated creation, path, identity, ACL, write and readback changes, not only a replacement URL. |
+
+### If the unchanged ZIP is already imported
+
+Keep the flow stopped and agent unpublished. Provision/verify the source estate,
+then apply coordinated target configuration through supported editors or an
+intentional reviewed unmanaged update from a private rebuilt package. Recheck
+the actual loaded topic, tool relationships and runtime connections. Editing
+repository YAML does not modify imported components, and filling connection IDs
+alone does not replace the embedded Contoso policy. Export your configured
+target solution privately; do not publish tenant IDs, connections or real data
+back into this neutral reference.
+
+See the [request-by-request SharePoint action reference](sharepoint-actions.md)
+for the actual corporate-site, current-source and personal-site requests that
+must remain consistent.
+
 ## Adaptation sequence
 
 1. **Import the reviewed solution, or create/clone a real agent in the intended environment.** Work against

@@ -4,6 +4,13 @@ This guide connects the user experience to the actual source files and named
 actions in the native flow. Screenshots illustrate the product; the JSON and
 builder below are the implementation reference.
 
+For exact Site Address, method, URI, headers, body expressions and response
+consumers for **every SharePoint action**, use the
+[generated SharePoint request reference](sharepoint-actions.md), also
+[displayed directly on the website](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#sharepoint-actions).
+For a tenant without these resources, follow the
+[empty-tenant setup and customization matrix](setup.md#from-an-empty-sharepoint-tenant).
+
 ## Open the implementation
 
 | Artifact | Purpose |
