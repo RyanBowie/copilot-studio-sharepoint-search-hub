@@ -155,6 +155,14 @@ ZIP timestamps can change the archive hash even when every component is identica
 `validation.json` and `component-inventory.json` are the **shipped release snapshot**;
 a local rebuild does not silently renew that historical evidence.
 
+Git preserves PAC's CRLF line endings under `solutions/src/`, so a fresh
+checkout can satisfy the package's byte-for-byte source checks on every platform.
+Run the as-shipped solution tests **before regenerating the agent's workbooks**:
+regeneration changes ZIP metadata and the embedded template bytes. If you
+regenerate the agent source, run the solution rebuild too before comparing
+that new source with a package. Do not weaken the template-byte checks or treat
+the older shipped ZIP as a newly rebuilt artifact.
+
 To deliberately customize a **private local development copy**, follow the
 configuration guidance in [`agent/README.md`](../agent/README.md), rebuild that
 copy's generated flow with its existing builder, then run this solution build.

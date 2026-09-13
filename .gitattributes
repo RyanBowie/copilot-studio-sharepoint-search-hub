@@ -2,3 +2,6 @@
 *.png binary
 *.xlsx binary
 *.docx binary
+*.zip binary
+# Keep unpacked PAC text byte-identical to the shipped solution on checkout.
+solutions/src/** text eol=crlf
