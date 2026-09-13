@@ -51,6 +51,14 @@ general knowledge or fall back to an unrestricted web search.
 
 ## Architecture at a glance
 
+The website includes the [full, source-derived agent instructions](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent-instructions),
+[agent configuration and actual conversation screenshots](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent),
+[tools and all five runtime connectors](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#tools),
+and an [eight-stage native-flow walkthrough with genuine designer screenshots](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent-flow).
+These are presented directly on the page, with full-resolution image links and
+downloadable instructions, settings, topic, tool and flow source. Historical
+designer captures are explicitly separated from current JSON and later runtime proof.
+
 ![SharePoint Search Hub architecture](docs/images/architecture.svg)
 
 [Architecture and trust boundaries](docs/architecture.md) ·

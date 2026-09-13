@@ -43,6 +43,25 @@ ASSETS = {
     "package-proof": ("solutions/validation.json", "evidence/solution-validation.json"),
     "notice": ("NOTICE.md", "NOTICE.md"),
     "asset-notice": ("solutions/ASSET-NOTICE.md", "ASSET-NOTICE.md"),
+    "agent-source": ("agent/agent.mcs.yml", "downloads/agent.mcs.yml"),
+    "agent-settings": ("agent/settings.mcs.yml", "downloads/settings.mcs.yml"),
+    "topic-source": ("agent/topics/SearchSharePoint.mcs.yml", "downloads/SearchSharePoint.mcs.yml"),
+    "fallback-source": ("agent/topics/Search.mcs.yml", "downloads/Search.mcs.yml"),
+    "tool-source": ("agent/actions/SearchAndExport.mcs.yml", "downloads/SearchAndExport.mcs.yml"),
+    "studio-entry": ("docs/images/styled-hr/entrypoint-and-trigger.png", "images/styled-hr/entrypoint-and-trigger.png"),
+    "studio-inputs": ("docs/images/styled-hr/area-and-query-inputs.png", "images/styled-hr/area-and-query-inputs.png"),
+    "studio-output": ("docs/images/styled-hr/styled-result-rows-and-footer.png", "images/styled-hr/styled-result-rows-and-footer.png"),
+    "topic-banner": ("docs/images/department-banners/topic-message-order.png", "images/department-banners/topic-message-order.png"),
+    "flow-overview": ("docs/images/styled-hr/native-flow-overview.png", "images/styled-hr/native-flow-overview.png"),
+    "flow-entry": ("docs/images/styled-hr/native-flow-entry.png", "images/styled-hr/native-flow-entry.png"),
+    "flow-search": ("docs/images/styled-hr/native-initial-search.png", "images/styled-hr/native-initial-search.png"),
+    "flow-paging": ("docs/images/styled-hr/native-paging-request.png", "images/styled-hr/native-paging-request.png"),
+    "flow-source": ("docs/images/styled-hr/native-source-metadata-read.png", "images/styled-hr/native-source-metadata-read.png"),
+    "flow-response": ("docs/images/styled-hr/native-response-and-continuation.png", "images/styled-hr/native-response-and-continuation.png"),
+    "flow-excel": ("docs/images/styled-hr/native-excel-append.png", "images/styled-hr/native-excel-append.png"),
+    "flow-access": ("docs/images/styled-hr/native-delivery-guard.png", "images/styled-hr/native-delivery-guard.png"),
+    "flow-email": ("docs/images/styled-hr/native-verified-recipient-email.png", "images/styled-hr/native-verified-recipient-email.png"),
+    "flow-provenance": ("docs/styled-capture-provenance.json", "evidence/styled-capture-provenance.json"),
 }
 
 
@@ -98,6 +117,7 @@ def load_evidence():
 def render(staged):
     proof, package_proof = load_evidence()
     coverage = load_coverage(proof)
+    agent = load_agent_details()
     facts = {
         "ROWS": str(proof["actualExcelRows"]),
         "FILES": str(proof["files"]),
@@ -112,6 +132,11 @@ def render(staged):
         "NEW_DOCUMENTS": str(coverage["source"]["newDocuments"]),
         "ROOT_DOCUMENTS": str(coverage["source"]["newRootDocuments"]),
         "NESTED_DOCUMENTS": str(coverage["source"]["newNestedDocuments"]),
+        "AGENT_INSTRUCTIONS": agent["instructions"],
+        "INSTRUCTIONS_SHA": hashlib.sha256(agent["instructions"].encode()).hexdigest(),
+        "AGENT_SETTINGS": agent["settings"],
+        "TOPIC_BINDING": agent["binding"],
+        "TOOL_SOURCE": agent["tool"],
     }
     coverage_html = {
         "COVERAGE_DEPARTMENTS": coverage_rows(coverage["departments"], include_sites=True),
@@ -142,6 +167,60 @@ def render(staged):
     if "@@" in rendered:
         raise ValueError("Unresolved website template token.")
     return rendered
+
+
+def load_agent_details():
+    source = source_path(ASSETS["agent-source"][0]).read_text(encoding="utf-8")
+    lines = source.splitlines()
+    if lines.count("instructions: |-") != 1:
+        raise ValueError("Review the instructions renderer against changed agent YAML.")
+    block = []
+    for line in lines[lines.index("instructions: |-") + 1:]:
+        if line and not line.startswith("  "):
+            break
+        block.append(line[2:] if line else "")
+    instructions = "\n".join(block).rstrip("\n")
+    if not instructions or "modelNameHint: GPT5Chat" not in source:
+        raise ValueError("Review the agent/model explanation against changed source.")
+    topic = source_path(ASSETS["topic-source"][0]).read_text(encoding="utf-8")
+    marker = "    - kind: InvokeFlowAction\n"
+    if topic.count(marker) != 1:
+        raise ValueError("The walkthrough requires the single explicit topic flow invocation.")
+    binding = marker + topic.split(marker, 1)[1].split("\n    - kind:", 1)[0]
+    settings = source_path(ASSETS["agent-settings"][0]).read_text(encoding="utf-8")
+    for required in ("authenticationMode: Integrated", "authenticationTrigger: Always",
+                     "GenerativeActionsEnabled: false", "useModelKnowledge: false"):
+        if required not in settings:
+            raise ValueError("Review the configuration explanation: " + required)
+    tool = source_path(ASSETS["tool-source"][0]).read_text(encoding="utf-8")
+    if "kind: InvokeFlowTaskAction" not in tool or "mode: Invoker" not in tool:
+        raise ValueError("The native-flow tool explanation no longer matches its source.")
+    definition = json.loads(source_path(ASSETS["definition"][0]).read_text(encoding="utf-8"))
+    operations = {}
+
+    def inspect(value):
+        if isinstance(value, dict):
+            inputs = value.get("inputs")
+            host = inputs.get("host") if isinstance(inputs, dict) else None
+            if isinstance(host, dict) and "operationId" in host:
+                operations.setdefault(host["connectionName"], set()).add(host["operationId"])
+            for child in value.values():
+                inspect(child)
+        elif isinstance(value, list):
+            for child in value:
+                inspect(child)
+
+    inspect(definition)
+    expected = {
+        "shared_sharepointonline": {"HttpRequest"},
+        "shared_office365users": {"MyProfile_V2", "UserProfile_V2"},
+        "shared_onedriveforbusiness": {"GetFileMetadataByPath", "CreateFile"},
+        "shared_excelonlinebusiness": {"PatchItem", "AddRowV2", "DeleteItem", "GetItems"},
+        "shared_office365": {"SendEmailV2"},
+    }
+    if operations != expected:
+        raise ValueError("Review the five-connector operation catalogue against the current flow.")
+    return {"instructions": instructions, "settings": settings, "binding": binding, "tool": tool}
 
 
 def load_coverage(proof):

@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import shutil
 import threading
+import textwrap
 
 from preview import ROOT, DEFAULT_PREFIX, create_server
 
@@ -63,15 +64,31 @@ def main():
                 for name in ("all", "hr", "it", "excel"):
                     page.locator("#gallery-" + name).click()
                     assert page.locator("#screen-" + name).is_visible()
-                    page.locator("#screen-" + name + " img").wait_for(state="visible")
-                    page.wait_for_function("(id) => document.querySelector(id + ' img').naturalWidth > 0", arg="#screen-" + name)
+                    for image in page.locator("#screen-" + name + " img").all():
+                        image.scroll_into_view_if_needed()
+                        image.evaluate("(image) => image.decode()")
                 page.locator(".wiring summary").click()
-                page.locator(".wiring img").wait_for(state="visible")
-                page.wait_for_function("() => document.querySelector('.wiring img').naturalWidth > 0")
+                assert page.locator(".wiring pre").is_visible()
+                source = (ROOT / "agent" / "agent.mcs.yml").read_text(encoding="utf-8")
+                expected = textwrap.dedent(source.split("instructions: |-\n", 1)[1]
+                                           .split("\ngptCapabilities:", 1)[0]).rstrip("\n")
+                assert page.locator("#instruction-source code").text_content() == expected
+                for image in page.locator("#agent img, #agent-flow img").all():
+                    image.scroll_into_view_if_needed()
+                    image.evaluate("(image) => image.decode()")
+                    assert image.get_attribute("src") == image.locator("..").get_attribute("href")
+                    full = page.request.get(base + image.get_attribute("src"))
+                    assert full.status == 200 and full.body().startswith(b"\x89PNG\r\n\x1a\n")
+                for section in ("agent-instructions", "tools", "flow-search", "flow-paging"):
+                    page.locator("#" + section).screenshot(path=str(artifacts / (section + "-desktop.png")))
+                results["displayedInstructionsMatchSource"] = True
+                results["inlineNativeFlowScreenshots"] = page.locator("#agent-flow img").count()
+                results["uniqueEmbeddedProductScreenshots"] = page.locator("img").evaluate_all(
+                    "(images) => new Set(images.map(image => image.getAttribute('src'))).size")
                 results["architectureButtons"] = 6
                 results["galleryButtons"] = 4
                 results["keyboardTabsPassed"] = True
-                results["wiringDisclosurePassed"] = True
+                results["settingsDisclosurePassed"] = True
                 package = page.request.get(base + "downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip")
                 assert package.status == 200
                 digest = hashlib.sha256(package.body()).hexdigest()
@@ -85,14 +102,19 @@ def main():
                 assert "keep=1" in page.url and "scoutTheme=dark" in page.url
                 page.screenshot(path=str(artifacts / "desktop-dark.png"))
                 results["themeAndQueryPreservationPassed"] = True
-                for width in (390, 320):
+                for width in (1440, 1024, 768, 390, 320):
                     page.set_viewport_size({"width": width, "height": 844})
-                    page.goto(base + "?scoutTheme=light", wait_until="networkidle")
-                    assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth"), f"Overflow at {width}"
-                    assert page.get_by_role("heading", level=1).is_visible()
-                    if width == 390:
-                        page.screenshot(path=str(artifacts / "mobile-light.png"))
-                results["noHorizontalOverflowAtWidths"] = [390, 320]
+                    for theme in ("light", "dark"):
+                        page.goto(base + "?scoutTheme=" + theme, wait_until="networkidle")
+                        assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth"), f"Overflow at {width}"
+                        assert page.get_by_role("heading", level=1).is_visible()
+                        assert page.locator("#instruction-source code").text_content() == expected
+                        if width == 390:
+                            page.screenshot(path=str(artifacts / ("mobile-" + theme + ".png")))
+                            for section in ("agent-instructions", "tools", "flow-paging"):
+                                page.locator("#" + section).screenshot(
+                                    path=str(artifacts / (section + "-mobile-" + theme + ".png")))
+                results["noHorizontalOverflowAtWidthsBothThemes"] = [1440, 1024, 768, 390, 320]
                 results["browserUserAgent"] = page.evaluate("() => navigator.userAgent")
                 assert not errors, errors
                 assert not blocked, blocked
@@ -100,6 +122,20 @@ def main():
                                 "server": "Loopback only; project-prefixed allowlisted staging tree."})
             finally:
                 context.close()
+            browser = playwright.chromium.launch(channel="msedge", headless=True)
+            try:
+                nojs = browser.new_context(java_script_enabled=False, viewport={"width": 390, "height": 844})
+                nojs.route("**/*", route_request)
+                page = nojs.new_page()
+                assert page.goto(base).status == 200
+                assert page.locator("#instruction-source code").text_content() == expected
+                assert page.locator("#agent-flow img").count() == 9
+                assert page.locator('[role="tabpanel"]:visible').count() == 10
+                assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
+                assert not blocked, blocked
+                results["noJavaScriptWalkthroughPassed"] = True
+            finally:
+                browser.close()
     finally:
         server.shutdown()
         server.server_close()

@@ -1,11 +1,13 @@
 import hashlib
 import copy
+import html
 from html.parser import HTMLParser
 import importlib.util
 import json
 from pathlib import Path
 import re
 import shutil
+import textwrap
 import unittest
 from urllib.parse import unquote, urljoin, urlsplit
 import uuid
@@ -169,6 +171,71 @@ class SiteTests(unittest.TestCase):
         for key in ("ArrowRight", "ArrowLeft", "ArrowDown", "ArrowUp", "Home", "End"):
             self.assertIn(f'"{key}"', self.html)
         self.assertIn('href="#main">Skip to content', self.html)
+
+    def test_full_instructions_and_binding_are_derived_from_actual_source(self):
+        source = (ROOT / "agent" / "agent.mcs.yml").read_text(encoding="utf-8")
+        expected = textwrap.dedent(source.split("instructions: |-\n", 1)[1]
+                                   .split("\ngptCapabilities:", 1)[0]).rstrip("\n")
+        displayed = re.search(r'<pre[^>]*id="instruction-source"[^>]*><code>(.*?)</code></pre>',
+                              self.html, re.S).group(1)
+        self.assertEqual(html.unescape(displayed), expected)
+        self.assertIn(hashlib.sha256(expected.encode()).hexdigest(), self.html)
+        details = BUILD.load_agent_details()
+        self.assertEqual(details["instructions"], expected)
+        for key in ("binding", "settings", "tool"):
+            self.assertIn(html.escape(details[key], quote=True), self.html)
+        self.assertIn("source text, not a screenshot of the instruction editor", self.html)
+
+    def test_instruction_text_cannot_become_active_html(self):
+        details = BUILD.load_agent_details()
+        details["instructions"] = '<script>alert("untrusted")</script> & <img src=x>'
+        with patch.object(BUILD, "load_agent_details", return_value=details):
+            rendered = BUILD.render(True)
+        self.assertIn(html.escape(details["instructions"], quote=True), rendered)
+        self.assertNotIn(details["instructions"], rendered)
+
+    def test_all_reviewed_site_pngs_are_embedded_with_visible_flow_walkthrough(self):
+        images = {attrs["src"] for tag, attrs in self.document.elements if tag == "img"}
+        expected = {destination for _, destination in BUILD.ASSETS.values() if destination.endswith(".png")}
+        self.assertEqual(images, expected)
+        self.assertEqual(len(images), 21)
+        flow = self.html.split('id="agent-flow"', 1)[1].split('id="evidence"', 1)[0]
+        self.assertNotIn("<details", flow)
+        self.assertTrue(all("hidden" not in attrs for _, attrs in Document(flow).elements))
+        self.assertEqual(len(re.findall(r"<img ", flow)), 9)
+        for stage in ("start", "search", "hydration", "preview", "paging", "workbook", "privacy", "delivery"):
+            self.assertIn(f'id="flow-{stage}"', flow)
+        self.assertIn("predate the document-ID-only sort revision", flow)
+        for key in ("agent-source", "agent-settings", "topic-source", "fallback-source", "tool-source"):
+            self.assertIn('href="' + BUILD.ASSETS[key][1] + '"', self.html)
+
+    def test_tools_explanation_distinguishes_agent_binding_from_connector_actions(self):
+        catalogue = re.search(r'<table[^>]*id="connector-catalogue".*?</table>', self.html, re.S).group()
+        self.assertEqual(catalogue.count('scope="row"'), 5)
+        for operation in ("HttpRequest", "MyProfile_V2", "UserProfile_V2", "GetFileMetadataByPath",
+                          "CreateFile", "PatchItem", "AddRowV2", "DeleteItem", "GetItems", "SendEmailV2"):
+            self.assertIn(f"<code>{operation}</code>", catalogue)
+        text = " ".join(self.document.text)
+        for required in ("not five separate model-selected agent tools", "same capability",
+                         "not independently", "no separate queue", "not a permission boundary",
+                         "not agent tools", "not independently verified inbox receipt"):
+            self.assertIn(required, text)
+
+    def test_changed_connector_operation_fails_the_walkthrough_build(self):
+        definition = json.loads((ROOT / BUILD.ASSETS["definition"][0]).read_text())
+        def change_operations(value):
+            if isinstance(value, dict):
+                if "operationId" in value:
+                    value["operationId"] = "UnreviewedOperation"
+                for child in value.values():
+                    change_operations(child)
+            elif isinstance(value, list):
+                for child in value:
+                    change_operations(child)
+        change_operations(definition)
+        with patch.object(BUILD.json, "loads", return_value=definition):
+            with self.assertRaisesRegex(ValueError, "five-connector operation catalogue"):
+                BUILD.load_agent_details()
 
     def test_theme_and_no_remote_runtime_dependencies(self):
         scripts = re.findall(r"<script>(.*?)</script>", self.html, flags=re.S)

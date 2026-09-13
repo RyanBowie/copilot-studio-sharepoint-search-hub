@@ -26,6 +26,46 @@ environment as described in [setup](setup.md) and the [agent guide](../agent/REA
 
 ## 1. User inputs and the topic
 
+The [website's agent guide](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent)
+shows the actual input/output and topic-binding screenshots directly.
+Its [instruction section](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent-instructions)
+displays the complete instruction text generated from `agent/agent.mcs.yml`,
+alongside the configuration and an explanation of prompt guidance versus code-enforced gates.
+
+### Tools used, and why the flow covers the sequence
+
+The agent-facing capability is the native search/export flow. The topic invokes
+it explicitly with `InvokeFlowAction`; the solution also includes its registered
+`TaskDialog` / `InvokeFlowTaskAction` tool binding with `mode: Invoker`. These
+represent the same capability, not two searches. With
+`GenerativeActionsEnabled: false`, a model does not freely select a series of
+SharePoint, Excel and mail tools.
+
+The five caller-provided connectors run **inside** that flow:
+
+| Connector | Actual operations | Purpose |
+|---|---|---|
+| SharePoint | `HttpRequest` | Scoped Search REST, current source/identity reads and private destination permission checks. |
+| Office 365 Users | `MyProfile_V2`, `UserProfile_V2` | Resolve selected/directory profiles and the verified mailbox. |
+| OneDrive for Business | `GetFileMetadataByPath`, `CreateFile` | Inspect the private drive and create the report from the prepared template. |
+| Excel Online (Business) | `PatchItem`, `AddRowV2`, `DeleteItem`, `GetItems` | Update/append results and metadata, remove an unused placeholder, and read actual written rows back. |
+| Office 365 Outlook | `SendEmailV2` | Guarded workbook-link delivery and explicit failure/access-change notifications. |
+
+Keeping these actions in one native flow makes scope checks, source hydration,
+output verification and the final private-access gate part of the execution
+path, rather than relying on a model-selected tool sequence. It also permits a
+preview response followed by same-run continuation. This is not a separate
+durable queue and does not bypass consent, DLP, licensing, throttling or bounds.
+
+The path does not use a generative SharePoint knowledge answer, public browsing,
+a separate pre-flow Graph identity-attestation tool or runtime Office Script.
+The Python builder and fixture/provisioning scripts are offline/setup tools,
+not agent-callable search sources. The provisioning flow is stopped and excluded
+from the runtime solution. See the [inline tool catalogue](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#tools)
+and [actual native designer walkthrough](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#agent-flow).
+
+### Supported conversation
+
 The supported entry phrase is **Search SharePoint**. The topic asks for a scope
 and then plain search words. For example:
 
@@ -210,9 +250,14 @@ plus the remaining verified matches. It is not merely the rows after the
 first ten. Source strings are written literally; controlled presentation
 formulas provide hyperlinks and visible dates.
 
-The demonstration proved actual StartRow **0 then 100**, with **100 + 12**
-disjoint candidates and 112 exact Excel rows. This is different from management
-API `nextLink` pagination and from a diagnostic indexing-readiness query.
+The earlier demonstration proved actual StartRow **0 then 100**, with **100 + 12**
+disjoint candidates and 112 exact Excel rows. The later owner-started scale run,
+using document-ID-only ascending sort, proved StartRows **0 through 500** with
+**100 + 100 + 100 + 100 + 100 + 12** disjoint candidates and **512 exact Excel rows**.
+Historical designer captures predate that sort revision; current JSON and
+[runtime evidence](scale-runtime-validation-summary.json) establish it.
+This is different from management API `nextLink` pagination and from a diagnostic
+indexing-readiness query.
 
 | Bound | Value |
 |---|---:|
