@@ -48,6 +48,15 @@ represent the same capability, not two searches. With
 `GenerativeActionsEnabled: false`, a model does not freely select a series of
 SharePoint, Excel and mail tools.
 
+**Classic orchestration is a test choice, not a requirement of the pattern.**
+It keeps the demonstration topic-based and easy to inspect. A generative
+variant could invoke the same guarded flow: change the orchestration setting,
+update agent instructions and topic/tool descriptions for the intended routing,
+and test the resulting behavior. Keep instructions aligned with whichever
+approach is chosen. The current package and evidence remain classic; a
+generative variant has not been validated here. See Microsoft's
+[orchestration comparison](https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-generative-actions).
+
 The five caller-provided connectors run **inside** that flow:
 
 | Connector | Actual operations | Purpose |
@@ -81,6 +90,12 @@ Start: Search SharePoint
 Area:  HR
 Words: annual leave
 ```
+
+Both questions currently accept **free-text entry**. The typed department is
+normalized and checked against the configured areas; it is not an unrestricted
+scope. A multiple-choice question or department buttons could provide the same
+validated scope instead. These are minimal test UI choices, not a fixed UX
+requirement; query word/syntax validation still applies.
 
 The native trigger is a request with `kind: Skills`. Its required input
 properties are exactly:
@@ -219,6 +234,10 @@ the same native flow invocation continues after its agent response.
 ![Actual response followed by private-export continuation](images/styled-hr/native-response-and-continuation.png)
 
 ### Optional contextual banner in the topic
+
+This is basic, optional customization to make outputs visibly different by
+department and demonstrate presentation choices. It is not required by search
+or export; adopters can keep, alter or omit the contextual banner.
 
 The department-banner enhancement is a separate Adaptive Card 1.5 message
 immediately before the existing guarded result message. Its theme is selected

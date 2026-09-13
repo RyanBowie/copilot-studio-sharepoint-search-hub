@@ -10,8 +10,8 @@
 |---|---|
 | ![Copilot Studio agent in the Microsoft 365 Copilot channel: Search SharePoint, IT, devices typed before submission](docs/images/table-polish/published-m365-it-devices-inputs.png) | ![The same published Copilot Studio agent's four-result IT devices output with verified source links, dates and tags](docs/images/table-polish/published-m365-polished-table-100.png) |
 
-**Built in Copilot Studio and published to the Microsoft 365 Copilot channel,
-not the built-in Microsoft 365 Copilot assistant.**
+**Built in Copilot Studio, not Agent Builder, and published to the
+Microsoft 365 Copilot channel.**
 Genuine 12 September table-polish captures: one page and three documents.
 These illustrate the IT query, not the later 512-row scenario. Full-resolution
 images open from the previews. **New-tenant solution import remains unverified.**
@@ -32,9 +32,22 @@ into a filterable workbook delivered through the selected account's mailbox.
 
 ## What it does
 
+This is a **configurable test/reference**, not a prescribed final user experience.
+Classic orchestration keeps this test topic-based. A generative-orchestration
+variant could use the same guarded flow with the orchestration setting,
+instructions and topic/tool descriptions updated and revalidated. Keep the
+instructions aligned with either approach; the supplied package and recorded
+runs remain classic.
+
+Both department and search words currently use **free-text entry**. Department
+buttons or a multiple-choice question could replace the typed area if desired,
+while preserving the same validated scope. Search text still follows the
+documented word/syntax limits. Department banners and visual styling are optional
+examples of output customization, not prerequisites for search or export.
+
 | Capability | Behavior |
 |---|---|
-| Guided search | Select `All`, `CorpNet`, `HR`, `Finance`, or `IT`, then supply plain search words or `*`. |
+| Guided search | Type `All`, `CorpNet`, `HR`, `Finance`, or `IT`, then type plain search words or `*`. Department options could be presented as choices instead. |
 | Hub-and-spoke coverage | Search an explicit inventory of approved site collections, including multiple sites in one department. A hub URL alone is not automatic discovery. |
 | Files and pages | Retrieve matching documents and SharePoint pages, subject to indexing, current access and configured bounds. |
 | Useful chat preview | Show up to ten verified rows in four separate columns: linked file/page, Created (UTC), Modified (UTC), and stored tags. Missing metadata is not invented. |
@@ -389,6 +402,10 @@ identity-token permissions. Optional browser checks in `site/smoke_browser.py`
 use Playwright and a new isolated headless Edge profile, not a signed-in browser.
 
 ## Department banners
+
+This is **optional, basic output customization** to make the departmental
+examples visibly different. Keep, change or omit it; the search/export pattern
+does not require banners.
 
 The banner enhancement uses a **context-only Adaptive Card** followed by the
 existing native four-column results table. The table is not squeezed into a

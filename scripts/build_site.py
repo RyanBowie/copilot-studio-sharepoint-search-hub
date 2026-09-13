@@ -135,7 +135,6 @@ def render(staged):
         "ROOT_DOCUMENTS": str(coverage["source"]["newRootDocuments"]),
         "NESTED_DOCUMENTS": str(coverage["source"]["newNestedDocuments"]),
         "AGENT_INSTRUCTIONS": agent["instructions"],
-        "INSTRUCTIONS_SHA": hashlib.sha256(agent["instructions"].encode()).hexdigest(),
         "AGENT_SETTINGS": agent["settings"],
         "TOPIC_BINDING": agent["binding"],
         "TOOL_SOURCE": agent["tool"],

@@ -179,7 +179,8 @@ class SiteTests(unittest.TestCase):
         displayed = re.search(r'<pre[^>]*id="instruction-source"[^>]*><code>(.*?)</code></pre>',
                               self.html, re.S).group(1)
         self.assertEqual(html.unescape(displayed), expected)
-        self.assertIn(hashlib.sha256(expected.encode()).hexdigest(), self.html)
+        self.assertNotIn(hashlib.sha256(expected.encode()).hexdigest(), self.html)
+        self.assertNotIn("SHA-256 of the displayed UTF-8 instruction text", self.html)
         details = BUILD.load_agent_details()
         self.assertEqual(details["instructions"], expected)
         for key in ("binding", "settings", "tool"):
@@ -252,7 +253,8 @@ class SiteTests(unittest.TestCase):
         self.assertIn("new-tenant import is unverified", showcase)
         self.assertIn("typed before submission", showcase)
         self.assertIn("Copilot Studio agent · Microsoft 365 Copilot channel", showcase)
-        self.assertIn("not the built-in Microsoft 365 Copilot assistant", showcase)
+        self.assertIn("not Agent Builder", showcase)
+        self.assertNotIn("built-in Microsoft 365 Copilot assistant", self.html)
         self.assertNotIn("Actual published M365 Copilot", self.html)
 
     def test_all_sharepoint_requests_and_helpers_match_the_actual_definition(self):
@@ -276,6 +278,18 @@ class SiteTests(unittest.TestCase):
         self.assertIn(html.escape(reference["kql"]), self.html)
         self.assertEqual((ROOT / "docs" / "sharepoint-actions.md").read_text(encoding="utf-8"),
                          BUILD.sharepoint_reference_markdown(reference))
+
+    def test_orchestration_inputs_and_banners_are_explained_as_test_choices(self):
+        text = " ".join(self.document.text)
+        for required in ("Classic orchestration for this topic-based test",
+                         "Generative orchestration is an alternative",
+                         "Change the orchestration setting",
+                         "a generative variant has not been tested here",
+                         "Both the department and search terms currently use free-text entry",
+                         "multiple-choice question", "Optional output styling example",
+                         "not required for search", "Keep, change or omit the banner"):
+            self.assertIn(required, text)
+        self.assertIn(BUILD.SOLUTION_SHA256, self.html)
 
     def test_sharepoint_reference_fails_if_an_action_has_no_description(self):
         definition = json.loads((ROOT / BUILD.ASSETS["definition"][0]).read_text())

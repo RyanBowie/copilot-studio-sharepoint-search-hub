@@ -99,7 +99,9 @@ The website presents this [new-tenant checklist directly on the page](https://ry
    current flow writes `CorpNetSearchResults-<JobId>.xlsx` in the personal-drive
    root (`folderPath: "/"`): no pre-created shared export library or special
    folder is required. Select a real Entra audience group and retain
-   Integrated/Always authentication and classic orchestration.
+   Integrated/Always authentication. Keep classic orchestration to reproduce
+   the tested version; a generative adaptation requires the corresponding
+   setting, instructions/descriptions and validation changes described below.
 9. **Validate in the target before release.** Start small: topic questions,
    tool binding, a positive query, no-match, invalid input, connector failure,
    allowed/denied source access, exact workbook rows/dates/tags, private ACL and
@@ -176,6 +178,19 @@ must remain consistent.
     separate operations.
 
 ## Agent model
+
+Classic orchestration was selected to keep this demonstration topic-based.
+It is not a requirement of the SharePoint flow. Generative orchestration is
+an alternative: change the orchestration setting, update instructions and
+topic/tool descriptions to invoke the same guarded capability, and validate
+that variant. Keep instructions appropriate to either approach. The shipped
+settings and published runtime evidence remain classic.
+
+The department and search questions use free text simply for the test.
+Department buttons/multiple-choice options can replace the typed scope if
+desired, while preserving validation and the flow's `query`/`scope` contract.
+Banners are optional styling; update their mappings if retained, or omit that
+contextual message without removing the actual result message.
 
 The verified paging draft used **GPT-5 Chat** (`GPT5Chat`), upgraded from an
 actual UI-confirmed GPT-4.1/default configuration. A local model hint alone

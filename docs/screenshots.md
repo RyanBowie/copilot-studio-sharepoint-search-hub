@@ -5,11 +5,16 @@ addresses, environment identifiers, account names/email and avatars. They are
 not mockups. Cropping is visibly marked in each image; the displayed result
 pixels were not fabricated or rewritten.
 
-**The published-channel screenshots show this custom Copilot Studio agent
-published to the Microsoft 365 Copilot channel, not the built-in Microsoft 365
-Copilot assistant.** References to M365 below identify the hosting channel;
+**The published-channel screenshots show this test agent built in Copilot
+Studio, not Agent Builder, and published to the Microsoft 365 Copilot channel.**
+References to M365 below identify the hosting channel;
 Studio test-pane and Excel captures are labelled separately. Historical
 caption pixels are preserved rather than editing the captured evidence.
+
+The topic uses free-text department and search inputs for this test; department
+options could instead use a multiple-choice question or buttons. The department
+banners are optional styling examples showing how output can be customized,
+not required retrieval functionality.
 
 Each section identifies the client, source and revision boundary. The owner
 provided the published M365 Copilot image; the automation captured the Studio
