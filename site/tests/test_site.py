@@ -1,4 +1,5 @@
 import hashlib
+import copy
 from html.parser import HTMLParser
 import importlib.util
 import json
@@ -103,6 +104,52 @@ class SiteTests(unittest.TestCase):
             self.assertIn(required, text)
         self.assertIn("no new 512-row workbook UI capture", text)
         self.assertIn("no environment-variable values that automatically retarget", text)
+
+    def test_coverage_breakdown_matches_all_ten_sites_and_rendered_tables(self):
+        proof, _ = BUILD.load_evidence()
+        coverage = BUILD.load_coverage(proof)
+        self.assertEqual(
+            [(row["label"], row["sites"], row["files"], row["pages"], row["total"])
+             for row in coverage["departments"]],
+            [("CorpNet", 1, 49, 1, 50), ("HR", 3, 150, 4, 154),
+             ("Finance", 3, 150, 4, 154), ("IT", 3, 150, 4, 154)])
+        self.assertEqual(len(coverage["sites"]), 10)
+        for row in coverage["sites"]:
+            expected = ((49, 1, 50) if row["label"] == "CorpNet hub" or row["label"].endswith("Main")
+                        else (53, 2, 55) if row["label"].endswith("Operations") else (48, 1, 49))
+            self.assertEqual((row["files"], row["pages"], row["total"]), expected)
+        for table_id, rows, include_sites in (
+                ("department-coverage", coverage["departments"], True),
+                ("site-coverage", coverage["sites"], False)):
+            table = re.search(rf'<table[^>]*id="{table_id}".*?</table>', self.html, re.S).group()
+            self.assertIn(BUILD.coverage_rows(rows, include_sites), table)
+            self.assertEqual(table.count('scope="row"'), len(rows) + 1)
+        text = " ".join(self.document.text)
+        for boundary in ("not a live tenant-wide inventory", "200 in library roots",
+                         "200 in nested", "non-marker examples", "four fictional site references"):
+            self.assertIn(boundary, text)
+        self.assertIn('href="#coverage"', self.html)
+
+    def test_coverage_rejects_changed_counts_unknown_types_and_duplicate_records(self):
+        proof, _ = BUILD.load_evidence()
+        source = json.loads((ROOT / BUILD.ASSETS["source-proof"][0]).read_text())
+        blueprint = json.loads((ROOT / BUILD.ASSETS["blueprint"][0]).read_text())
+        for mutation in ("site-count", "type", "duplicate", "folder-count", "body-proof"):
+            with self.subTest(mutation=mutation):
+                changed_source, changed_blueprint = copy.deepcopy(source), copy.deepcopy(blueprint)
+                if mutation == "site-count":
+                    changed_source["matchesBySiteKey"]["hr-main"] += 1
+                elif mutation == "type":
+                    changed_blueprint["artifacts"][0]["kind"] = "Unreviewed"
+                elif mutation == "duplicate":
+                    changed_blueprint["artifacts"][1] = copy.deepcopy(changed_blueprint["artifacts"][0])
+                elif mutation == "folder-count":
+                    changed_source["newRootDocuments"] -= 1
+                else:
+                    changed_source["indexReadiness"]["results"]["Body"]["ready"] = False
+                with patch.object(BUILD.json, "loads", side_effect=[changed_source, changed_blueprint]):
+                    with self.assertRaises(ValueError):
+                        BUILD.load_coverage(proof)
 
     def test_accessible_structure_controls_and_progressive_enhancement(self):
         self.assertEqual(len(self.document.ids), len(set(self.document.ids)))

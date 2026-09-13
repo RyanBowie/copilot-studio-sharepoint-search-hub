@@ -35,6 +35,7 @@ ASSETS = {
     "workbook": ("agent/flows/search-export/RuntimeSearchResults.template.xlsx", "downloads/RuntimeSearchResults.template.xlsx"),
     "settings": ("solutions/deployment-settings.template.json", "downloads/deployment-settings.template.json"),
     "scale-proof": ("docs/scale-runtime-validation-summary.json", "evidence/scale-runtime-validation-summary.json"),
+    "source-proof": ("docs/scale-source-validation-summary.json", "evidence/scale-source-validation-summary.json"),
     "scale-provenance": ("docs/scale-512-capture-provenance.json", "evidence/scale-512-capture-provenance.json"),
     "hr-proof": ("docs/m365-validation-summary.json", "evidence/m365-validation-summary.json"),
     "it-proof": ("docs/table-polish-validation-summary.json", "evidence/table-polish-validation-summary.json"),
@@ -96,6 +97,7 @@ def load_evidence():
 
 def render(staged):
     proof, package_proof = load_evidence()
+    coverage = load_coverage(proof)
     facts = {
         "ROWS": str(proof["actualExcelRows"]),
         "FILES": str(proof["files"]),
@@ -107,10 +109,19 @@ def render(staged):
         "NATIVE_SHA": proof["definitionRevisionSha256"],
         "PORTABLE_SHA": package_proof["portableDefinitionCanonicalSha256"],
         "REPO": REPOSITORY,
+        "NEW_DOCUMENTS": str(coverage["source"]["newDocuments"]),
+        "ROOT_DOCUMENTS": str(coverage["source"]["newRootDocuments"]),
+        "NESTED_DOCUMENTS": str(coverage["source"]["newNestedDocuments"]),
+    }
+    coverage_html = {
+        "COVERAGE_DEPARTMENTS": coverage_rows(coverage["departments"], include_sites=True),
+        "COVERAGE_SITES": coverage_rows(coverage["sites"]),
     }
 
     def substitute(match):
         token = match.group(1)
+        if token in coverage_html:
+            return coverage_html[token]
         if token.startswith("ASSET:"):
             source, destination = ASSETS[token.split(":", 1)[1]]
             value = destination if staged else (
@@ -131,6 +142,78 @@ def render(staged):
     if "@@" in rendered:
         raise ValueError("Unresolved website template token.")
     return rendered
+
+
+def load_coverage(proof):
+    source = json.loads(source_path(ASSETS["source-proof"][0]).read_text(encoding="utf-8"))
+    blueprint = json.loads(source_path(ASSETS["blueprint"][0]).read_text(encoding="utf-8"))
+    labels = {
+        "corpnet-main": ("CorpNet", "CorpNet hub"),
+        "hr-main": ("HR", "HR - Main"),
+        "hr-operations": ("HR", "HR - Operations"),
+        "hr-fieldteam": ("HR", "HR - Field Team"),
+        "finance-main": ("Finance", "Finance - Main"),
+        "finance-operations": ("Finance", "Finance - Operations"),
+        "finance-fieldteam": ("Finance", "Finance - Field Team"),
+        "it-main": ("IT", "IT - Main"),
+        "it-operations": ("IT", "IT - Operations"),
+        "it-fieldteam": ("IT", "IT - Field Team"),
+    }
+    if (blueprint.get("synthetic") is not True or blueprint.get("query") != "hubspokeverify"
+            or blueprint.get("scope") != "All" or source.get("query") != blueprint["query"]
+            or source.get("scope") != blueprint["scope"]):
+        raise ValueError("Coverage requires the reviewed synthetic All-scope marker corpus.")
+    sites = {key: {"label": label, "department": department, "files": 0, "pages": 0, "total": 0}
+             for key, (department, label) in labels.items()}
+    identities, urls = set(), set()
+    for item in blueprint["artifacts"]:
+        key, kind = item["siteKey"], item["kind"]
+        if (key not in sites or kind not in {"DOCX", "Page"}
+                or item["department"] != sites[key]["department"]
+                or item["id"] in identities or item["url"] in urls):
+            raise ValueError("Unreviewed, inconsistent or duplicate coverage record.")
+        identities.add(item["id"])
+        urls.add(item["url"])
+        sites[key]["files" if kind == "DOCX" else "pages"] += 1
+        sites[key]["total"] += 1
+    departments = {key: {"label": key, "sites": 0, "files": 0, "pages": 0, "total": 0}
+                   for key in ("CorpNet", "HR", "Finance", "IT")}
+    for row in sites.values():
+        department = departments[row["department"]]
+        department["sites"] += 1
+        for key in ("files", "pages", "total"):
+            department[key] += row[key]
+    totals = {key: sum(row[key] for row in sites.values()) for key in ("files", "pages", "total")}
+    if (totals != {"files": proof["files"], "pages": proof["pages"], "total": proof["actualExcelRows"]}
+            or len(sites) != proof["collections"]
+            or source["matchingSources"] != totals["total"]
+            or source["documents"] != totals["files"] or source["pages"] != totals["pages"]
+            or source["siteCollections"] != len(sites)
+            or blueprint["expectedCount"] != totals["total"]
+            or blueprint["expectedFiles"] != totals["files"] or blueprint["expectedPages"] != totals["pages"]
+            or source["matchesBySiteKey"] != {key: row["total"] for key, row in sites.items()}
+            or source["matchesByDepartment"] != {key: row["total"] for key, row in departments.items()}):
+        raise ValueError("Coverage breakdown disagrees with verified source/runtime evidence.")
+    if (source["newDocuments"] != 400 or source["newRootDocuments"] != 200
+            or source["newNestedDocuments"] != 200
+            or source["newDocumentsPerSite"] != dict.fromkeys(sites, 40)):
+        raise ValueError("Review the new-document folder coverage against changed evidence.")
+    indexing = source["indexReadiness"]
+    if (indexing["results"]["Body"]["uniqueURLs"] != 400
+            or indexing["results"]["Body"]["ready"] is not True
+            or indexing["bodyMarkerNotInNamesTitlesOrTags"] is not True
+            or indexing["notAnAgentRuntimeTest"] is not True):
+        raise ValueError("Review the separately scoped body-content indexing evidence.")
+    return {"source": source, "sites": list(sites.values()), "departments": list(departments.values())}
+
+
+def coverage_rows(rows, include_sites=False):
+    rendered = []
+    for row in rows:
+        numbers = ([row["sites"]] if include_sites else []) + [row["files"], row["pages"], row["total"]]
+        cells = "".join(f"<td>{number}</td>" for number in numbers)
+        rendered.append(f'<tr><th scope="row">{html.escape(row["label"])}</th>{cells}</tr>')
+    return "\n".join(rendered)
 
 
 def checked_output(output):

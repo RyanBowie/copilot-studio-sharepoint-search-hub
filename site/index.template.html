@@ -136,6 +136,14 @@ figcaption strong { color: var(--cp-text); }
 .metric + .metric { border-left: 1px solid var(--cp-border); }
 .metric strong { display: block; font-size: 2rem; line-height: 1.2; letter-spacing: -.04em; margin-bottom: 8px; }
 .metric span { font-size: .85rem; color: var(--cp-text-soft); }
+.coverage-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .9rem; margin-top: 20px; }
+.coverage-table caption { text-align: left; font-weight: 600; margin-bottom: 12px; }
+.coverage-table th, .coverage-table td { padding: 12px 8px; border-bottom: 1px solid var(--cp-border); text-align: right; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.coverage-table th:first-child { width: 36%; text-align: left; }
+.coverage-table thead, .coverage-table tfoot { background: var(--cp-bg-elevated); }
+.coverage-table tfoot { font-weight: 700; }
+.coverage-sites th:first-child { width: 46%; }
+.coverage-details { margin-top: 24px; }
 .section { padding-top: 96px; }
 .section-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 32px; }
 .section-head p:not(.eyebrow) { color: var(--cp-text-soft); max-width: 48ch; }
@@ -236,6 +244,11 @@ details p, details li { color: var(--cp-text-soft); }
   .metrics { grid-template-columns: 1fr 1fr; }
   .metric { padding: 20px; } .metric:nth-child(3) { border-left: 0; }
   .metric:nth-child(n+3) { border-top: 1px solid var(--cp-border); }
+  .coverage-table { font-size: .8rem; }
+  .coverage-table th, .coverage-table td { padding: 10px 4px; }
+  .coverage-table:not(.coverage-sites) th:first-child { width: 28%; }
+  .coverage-sites th:first-child { width: 44%; }
+  .coverage-table thead th:not(:first-child), .coverage-table td { white-space: nowrap; overflow-wrap: normal; }
   .section { padding-top: 64px; }
   .architecture, .evidence, .contract, .downloads, .setup { grid-template-columns: 1fr; }
   .stage { min-height: 0; } .card, .evidence-banner { padding: 24px; }
@@ -257,7 +270,7 @@ details p, details li { color: var(--cp-text-soft); }
   <nav class="wrap nav" aria-label="Main navigation">
     <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">CH</span><span>CorpNet Search Hub<small>Copilot Studio reference</small></span></a>
     <div class="nav-links">
-      <a href="#architecture" class="wide">Architecture</a><a href="#evidence" class="optional">Evidence</a><a href="#downloads">Downloads</a>
+      <a href="#coverage">Coverage</a><a href="#architecture" class="wide">Architecture</a><a href="#evidence" class="optional">Evidence</a><a href="#downloads">Downloads</a>
       <a href="@@REPO@@" class="wide">GitHub ↗</a>
       <button type="button" class="theme" id="theme-toggle" hidden>Switch theme</button>
     </div>
@@ -278,12 +291,47 @@ details p, details li { color: var(--cp-text-soft); }
       <figcaption><strong>Pending at capture. Verified complete afterwards.</strong> This is a genuine four-row preview excerpt, not a fabricated chat or a screenshot of 512 rows. Completion was established from the same run’s connector evidence.</figcaption>
     </figure>
   </section>
-  <div class="metrics" aria-label="Observed owner-account native run">
-    <div class="metric"><strong>@@ROWS@@</strong><span>actual verified Excel rows</span></div>
-    <div class="metric"><strong>@@SITES@@</strong><span>approved demo collections</span></div>
-    <div class="metric"><strong>@@DATES@@</strong><span>source timestamp/date comparisons</span></div>
-    <div class="metric"><strong>26m46s</strong><span>observed end-to-end run · not an SLA</span></div>
+  <div class="metrics" aria-label="Verified demo search coverage for All / hubspokeverify">
+    <div class="metric"><strong>@@SITES@@</strong><span>SharePoint site collections searched</span></div>
+    <div class="metric"><strong>@@FILES@@</strong><span>Word files matched and exported</span></div>
+    <div class="metric"><strong>@@PAGES@@</strong><span>SharePoint pages matched and exported</span></div>
+    <div class="metric"><strong>@@ROWS@@</strong><span>total verified results in Excel</span></div>
   </div>
+  <p class="small">Verified demo snapshot: 13 September 2026 · <code>All / hubspokeverify</code> · not a live tenant-wide inventory.</p>
+
+  <section class="section" id="coverage" aria-labelledby="coverage-title">
+    <div class="section-head"><div><p class="eyebrow">Search coverage / The actual test estate</p><h2 id="coverage-title">@@SITES@@ sites. @@FILES@@ files.<br>@@PAGES@@ SharePoint pages.</h2></div><p>One corporate hub and nine departmental spokes: a Main, Operations and Field Team collection for HR, Finance and IT. All ten were searched in the verified run.</p></div>
+    <div class="contract">
+      <article class="card">
+        <span class="tag">By department</span><h3>Every approved area, counted.</h3>
+        <p>These are matched source items, not index estimates alone. All @@ROWS@@ were checked as the caller and read back from the completed private workbook.</p>
+        <table class="coverage-table" id="department-coverage">
+          <caption>Verified matches for All / hubspokeverify</caption>
+          <thead><tr><th scope="col">Area</th><th scope="col">Sites</th><th scope="col">Files</th><th scope="col">Pages</th><th scope="col">Total</th></tr></thead>
+          <tbody>@@COVERAGE_DEPARTMENTS@@</tbody>
+          <tfoot><tr><th scope="row">All areas</th><td>@@SITES@@</td><td>@@FILES@@</td><td>@@PAGES@@</td><td>@@ROWS@@</td></tr></tfoot>
+        </table>
+      </article>
+      <article class="card">
+        <span class="tag">What is being searched?</span><h3>Files, page content and folders.</h3>
+        <p>The verified set contains <strong>@@FILES@@ DOCX files and @@PAGES@@ published SharePoint pages</strong>. Search can match indexed content inside supported files and pages, not just their titles.</p>
+        <p>The scale expansion added <strong>@@NEW_DOCUMENTS@@ documents: @@ROOT_DOCUMENTS@@ in library roots and @@NESTED_DOCUMENTS@@ in nested <code>Runbooks/Quarter One</code> folders</strong>, with 40 additions per collection. Those folder counts describe the additions, not the entire corpus.</p>
+        <p>A separate body-only marker found all 400 new documents without appearing in filenames, titles or tags. That is indexing evidence, not a policy-answering or question-rewriting capability.</p>
+        <p><strong>Sites are not subsites.</strong> Field Team locations are separate modern site collections. Classic child-web traversal was not tested, and no tenant policy was relaxed.</p>
+      </article>
+    </div>
+    <details class="coverage-details">
+      <summary>See all 10 sites and their file/page counts</summary>
+      <table class="coverage-table coverage-sites" id="site-coverage">
+        <caption>Friendly demo labels; “pages” means SharePoint content pages</caption>
+        <thead><tr><th scope="col">Site / role</th><th scope="col">Files</th><th scope="col">Pages</th><th scope="col">Total</th></tr></thead>
+        <tbody>@@COVERAGE_SITES@@</tbody>
+        <tfoot><tr><th scope="row">All 10 sites</th><td>@@FILES@@</td><td>@@PAGES@@</td><td>@@ROWS@@</td></tr></tfoot>
+      </table>
+    </details>
+    <aside class="notice"><strong>Coverage is explicit, not automatic discovery.</strong> These counts belong to one verified marker search in the ten-site demo, not every item in a tenant or every future query. The complete authored fixture also contains non-marker examples. The downloadable solution starts with <strong>four fictional site references</strong>; importing it does not create these ten sites or their content. Approve and configure your own inventory and keep caller permissions intact.</aside>
+    <div class="actions"><a href="@@ASSET:source-proof@@">Source and per-site count evidence</a><a href="@@ASSET:blueprint@@">512-item fixture blueprint</a><a href="@@ASSET:scale-proof@@">Completed search and export proof</a></div>
+  </section>
 
   <section class="section" id="overview" aria-labelledby="overview-title">
     <div class="section-head"><div><p class="eyebrow">01 / The pattern</p><h2 id="overview-title">Find the source.<br>Keep the evidence.</h2></div><p>A controlled search-and-export workflow—not a policy-answer bot, a tenant crawler or an unrestricted knowledge connection.</p></div>

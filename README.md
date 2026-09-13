@@ -89,6 +89,29 @@ and actually retrieving those items are separate checks. The connected source
 deployment has now passed the [full 512-row native export check](docs/validation.md#512-result-native-export---13-september-2026);
 that does not establish import or runtime success for the fictional reference ZIP.
 
+## Verified search coverage
+
+The **13 September 2026** `All / hubspokeverify` run searched **10 approved site
+collections** and verified **499 Word files + 13 SharePoint pages = 512 results**.
+One collection is the corporate hub; each of HR, Finance and IT has Main,
+Operations and Field Team collections.
+
+| Area | Sites searched | Files matched | Pages matched | Total matches |
+|---|---:|---:|---:|---:|
+| CorpNet | 1 | 49 | 1 | 50 |
+| HR | 3 | 150 | 4 | 154 |
+| Finance | 3 | 150 | 4 | 154 |
+| IT | 3 | 150 | 4 | 154 |
+| **All** | **10** | **499** | **13** | **512** |
+
+The [website coverage section](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#coverage)
+also lists each of the ten sites. The latest 400-document addition contains
+200 library-root files and 200 nested-folder files, 40 additions per site.
+These are a verified query snapshot, not a live count of every item in the
+tenant. The authored fixture includes additional non-marker examples, and the
+portable solution starts with four fictional site references rather than
+provisioning the ten-site demo.
+
 ## Quick demonstration
 
 Start with **`Search SharePoint`**, choose **`HR`**, then enter **`leave`**.
