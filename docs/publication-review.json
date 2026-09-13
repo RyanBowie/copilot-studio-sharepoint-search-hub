@@ -1,0 +1,55 @@
+{
+  "date": "2026-09-13",
+  "scope": "Public-reference source, artifact, history and image review; not a production security certification.",
+  "ownerAuthorizedPublicRepositoryAndPages": true,
+  "projectLicense": "No project-wide open-source license grant; upstream licenses and rights notices retained.",
+  "initialHistoryReview": {
+    "head": "5dccce6555c94c17f892e2f66c6a475796b15517",
+    "commits": 12,
+    "uniquePathBlobPairs": 287,
+    "knownLocatorOrSecretPatternFindings": 0,
+    "historicalOnlyPngVersions": 0,
+    "historicalSolutionArchiveVersionsReviewed": 2
+  },
+  "imageReview": {
+    "reviewedUtc": "2026-09-13T11:54:51.696243Z",
+    "uniquePngsInspectedAtFullResolution": 40,
+    "allInventoryHashesMatch": true,
+    "visibleDisclosureBlockers": 0,
+    "alternateFramesEmbeddedOriginalsOrRemovableLayers": false,
+    "recipientRedaction": "Irreversible opaque raster pixels",
+    "historicalStudioAndPendingAtCaptureCaptionsRetained": true
+  },
+  "cleanCheckout": {
+    "agentBuildAndTestsPassed": 68,
+    "asShippedSolutionTestsPassed": 13,
+    "fixtureTestsAfterDefinitionGenerationPassed": 5,
+    "dependencies": "Isolated environment restored from pinned agent requirements.",
+    "portabilityFix": "Preserve PAC CRLF text under solutions/src on checkout; no runtime or solution ZIP change.",
+    "testOrder": "Test the as-shipped package before regenerating workbook ZIP metadata; regenerate the solution if rebuilding agent templates."
+  },
+  "solutionSha256": "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272",
+  "localWebsiteChecks": {
+    "dependencyFreeTestsPassed": 13,
+    "curatedStagingFiles": 26,
+    "architectureControls": 6,
+    "galleryControls": 4,
+    "keyboardNavigationAndDisclosureChecks": true,
+    "lightDarkThemeAndQueryPreservation": true,
+    "noHorizontalOverflowAtMobileWidths": [390, 320],
+    "javascriptDisabledHeadingsAndDownloadsAvailable": true,
+    "browserPageErrors": 0,
+    "unexpectedExternalRequests": 0,
+    "solutionDownloadedOverLocalHttpHashMatches": true,
+    "existingSignedInBrowserUsed": false,
+    "allFivePinnedActionsVerifiedInOfficialRepositories": true
+  },
+  "retainedIntrinsicWorkflowIdentity": "One reviewed solution component identity needed for internal references; not a tenant locator or credential.",
+  "microsoftAssetReview": "Official Fabric Assets License clauses 1(a)-(b) and Annex 1; unmodified, labelled integration use, not project branding.",
+  "remainingBoundaries": [
+    "Pattern scans and visual review do not establish absence of every possible vulnerability.",
+    "Website deployment and anonymous download verification are separate release steps.",
+    "New-tenant solution import/runtime, negative non-owner access and Teams remain unverified.",
+    "Public reference availability is not a production support or licensing grant."
+  ]
+}

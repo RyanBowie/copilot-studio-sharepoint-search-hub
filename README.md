@@ -8,11 +8,13 @@ The agent guides the user through a scope and keyword search, shows a compact
 preview with real source links, source dates and stored tags, and continues the same request
 into a filterable workbook delivered through the selected account's mailbox.
 
-> **Private preview, prepared for future public review.**
+> **Public reference implementation, not a production-ready release.**
 > This repository contains portable source, a synthetic test corpus and an
-> unmanaged reference solution—not live tenant connections or a production-ready release. Keep it
-> private until the [public-release checklist](docs/public-release-checklist.md)
-> is complete. GitHub Pages is not enabled.
+> unmanaged reference solution—not live tenant connections. Explore the
+> **[project website](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/)**,
+> [publication review and remaining deployment checks](docs/public-release-checklist.md)
+> and [rights notice](NOTICE.md). A successful demo is not a new-tenant import
+> or non-owner authorization certification.
 
 ## What it does
 
@@ -310,6 +312,32 @@ record the crop boundaries.
 | [`docs/setup.md`](docs/setup.md) | Environment preparation and safe adaptation to a different tenant. |
 | [`docs/validation.md`](docs/validation.md) | What was observed, what remains unproven and how to repeat the checks. |
 | [`docs/public-release-checklist.md`](docs/public-release-checklist.md) | Review gates before changing visibility or enabling a public site. |
+| [`site/`](site/) and [`scripts/build_site.py`](scripts/build_site.py) | Static website template, dependency-free build/tests and isolated local preview. |
+
+## Website development and deployment
+
+From the repository root, with Python 3.10 or later:
+
+```powershell
+python -B scripts\build_site.py
+python -B -m unittest discover -s site\tests -v
+python -B site\preview.py --port 8765
+```
+
+Open the loopback URL printed by the preview command. The builder generates
+`docs/index.html` and stages only the explicit public-file allowlist in `_site`.
+It copies the reviewed solution bytes; it never regenerates the agent, connects
+to Microsoft 365, submits a search or sends email. The page has no analytics,
+external scripts or font service; architecture/gallery controls explain the
+implementation rather than execute it.
+
+Pages uses GitHub Actions. After pushing a reviewed update, run
+**Build and deploy reference Pages** manually from the **Actions** tab on `main`.
+The [workflow](.github/workflows/pages.yml) intentionally does not change Pages
+settings or repository visibility, and only deploys `_site`. Official actions
+are pinned to commit hashes; only the deployment job has Pages write and
+identity-token permissions. Optional browser checks in `site/smoke_browser.py`
+use Playwright and a new isolated headless Edge profile, not a signed-in browser.
 
 ## Department banners
 
@@ -360,5 +388,6 @@ themes and the icon. Teams remains untested.
 - Owner-account demonstration evidence is not a non-owner permission-denial
   test, a 150-site performance result or a SharePoint-channel rollout.
 
-All demonstration policies and facts are fictional. There is no open-source
-license grant yet; licensing is a deliberate public-release decision.
+All demonstration policies and facts are fictional. Public visibility does not
+grant an open-source license. As with the companion Power BI reference, no
+project-wide license is granted; [third-party rights and notices](NOTICE.md) remain.

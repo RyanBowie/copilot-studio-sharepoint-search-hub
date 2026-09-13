@@ -482,7 +482,8 @@ above does not transfer that evidence to a customized tenant.
 - Multi-user channel/connector identity equivalence or SharePoint-hosted/Teams
   behaviour. The actual owner-account M365 run has the narrower evidence scope
   described above; it does not independently attest every connector principal.
-- A public GitHub release, GitHub Pages site or open-source license grant.
+- An open-source license grant or production support commitment. Public source
+  and documentation hosting do not establish either.
 
 The release checklist deliberately keeps these boundaries visible instead of
 presenting a demonstration as a production certification.

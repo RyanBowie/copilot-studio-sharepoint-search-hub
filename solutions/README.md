@@ -206,5 +206,6 @@ in another tenant or Teams. Non-owner behavior, inbox receipt and production sca
 remain independent validation work.
 
 Read [`ASSET-NOTICE.md`](ASSET-NOTICE.md). Microsoft retains rights in its unmodified
-product icon; no project-wide license has been selected, and public redistribution
-requires owner rights/license review. Packing an asset does not broaden its license.
+product icon. This public reference grants no project-wide open-source license;
+the [rights notice](../NOTICE.md) and upstream terms apply. Packing or publicly
+hosting an asset does not broaden its license.

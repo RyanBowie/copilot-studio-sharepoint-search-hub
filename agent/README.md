@@ -1,7 +1,9 @@
 # Portable agent reference source
 
 This is an allowlisted, sanitized adaptation of an existing Copilot Studio agent,
-not a solution ZIP, supported turnkey import package, or proof of production readiness.
+not itself a solution ZIP or proof of production readiness. The separate
+[unmanaged solution and import guidance](../solutions/README.md) are provided
+at repository level; target-tenant import/runtime remain unverified.
 `contoso.sharepoint.com`, every `00000000-...` GUID and every
 `REPLACE_WITH_CALLER_...` connection name are **fictional placeholders**.
 No connected workspace, credentials, live resource identifiers or populated workbooks
@@ -211,13 +213,16 @@ with controlled formulas and no source data. This package contains no run record
 populated layout examples, screenshots, connected deployment manifests or deployment
 scripts. Native flow registration and connection rebinding remain product tasks.
 
-No license has been selected. Private review comes first; the owner must decide
-licensing and complete configuration, security, accessibility, performance and
-deployment validation before public release.
+This is a public reference, with no project-wide open-source license grant.
+See the [rights notice](../NOTICE.md). Configuration, multi-user access,
+accessibility, performance and target-deployment validation remain each
+adopter's responsibility; public documentation is not production certification.
 
 ## Packaging validation record
 
-The local reference build and **42 offline tests** pass. Tests cover the four
+The initial packaging checkpoint passed **42 offline tests**; the current
+reference build passes **68**, including the later banner, table and stable-paging
+coverage recorded in [validation](../docs/validation.md). Tests cover the four
 fictional sites, fail-closed configuration, all five Invoker bindings, ten/twenty
 preview bounds, 100-row source pages, canonical source-date selection, full raw
 timestamp roundtrips, controlled date/display/readback expressions, hidden wrapping,

@@ -47,3 +47,9 @@
 # Keep curated screenshots, reference JSON and blank workbook templates tracked.
 Thumbs.db
 .DS_Store
+
+# Allowlisted Pages builds and isolated, local-only site validation.
+/_site/
+/.site-test-build/
+/.site-browser-profile/
+/.site-browser-artifacts/

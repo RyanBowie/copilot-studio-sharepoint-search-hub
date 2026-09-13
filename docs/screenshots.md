@@ -201,15 +201,17 @@ The supplied result pixels are unchanged; the publication copy adds only a
 labelled footer and omits image metadata. [Provenance](owner-table-provenance.json)
 records the source/output hashes and evidence limits.
 
-## Current four-column chat
+<a id="current-four-column-chat"></a>
 
-![Actual current chat headers, with severe narrow-pane wrapping preserved](images/live-chat-four-column-headers.png)
+## Historical 112-row Studio chat
+
+![Historical 112-row Studio headers from 12 September 2026, preserving narrow-pane wrapping](images/live-chat-four-column-headers.png)
 
 ![Actual middle rows with separate date cells and link-only titles](images/live-chat-four-column-middle.png)
 
 ![Actual final rows and bounded-preview notice](images/live-chat-four-column-last.png)
 
-The current owner draft returned ten genuine rows in four columns, with dates
+The owner draft on **12 September 2026** returned ten genuine rows in four columns, with dates
 separate from the linked title. These crops preserve actual product rendering,
 including heavy header/date wrapping, scrolling and text selection. The run
 passed 45 functional checks and exported 112 exact rows; it is not a polished
@@ -217,7 +219,8 @@ narrow-pane or Teams-client rendering claim.
 
 Each title URL, tag value and UTC date matched caller-authenticated source
 metadata and the same-run export. Screenshots show excerpts rather than a
-fabricated single-screen view of all ten rows.
+fabricated single-screen view of all ten rows. These images predate the polished
+M365 output and the 512-row run; "current" in older filenames refers to capture time.
 
 ## Paging-run linked results
 

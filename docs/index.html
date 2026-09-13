@@ -1,0 +1,499 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A practical Copilot Studio reference: search approved SharePoint hub and spoke sites, verify current source access, and export matches to private Excel.">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
+  <title>CorpNet Search Hub · Copilot Studio reference</title>
+  <link rel="icon" href="data:,">
+  <script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+  </script>
+  <script>
+  (() => {
+    const explicit = new URLSearchParams(window.location.search).get("scoutTheme");
+    if (explicit === "light" || explicit === "dark") document.documentElement.setAttribute("data-theme", explicit);
+    else document.documentElement.setAttribute("data-theme", window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  })();
+  </script>
+  <style>
+:root {
+  color-scheme: light;
+  --cp-bg: #f7f4ef;
+  --cp-bg-elevated: #fcfbf8;
+  --cp-surface: #ffffff;
+  --cp-surface-soft: #f5f5f5;
+  --cp-border: #dedede;
+  --cp-border-strong: #919191;
+  --cp-text: #242424;
+  --cp-text-muted: #5c5c5c;
+  --cp-text-soft: #6f6f6f;
+  --cp-accent: #b11f4b;
+  --cp-accent-hover: #9a1a41;
+  --cp-accent-soft: rgba(177, 31, 75, 0.08);
+  --cp-accent-fg: #ffffff;
+  --cp-success: #16a34a;
+  --cp-danger: #dc2626;
+  --cp-warning: #f59e0b;
+  --cp-link: #0078d4;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(177, 31, 75, 0.12);
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --cp-bg: #3d3b3a;
+  --cp-bg-elevated: #343231;
+  --cp-surface: #292929;
+  --cp-surface-soft: #2e2e2e;
+  --cp-border: #474747;
+  --cp-border-strong: #5f5f5f;
+  --cp-text: #dedede;
+  --cp-text-muted: #919191;
+  --cp-text-soft: #b0b0b0;
+  --cp-accent: #fd8ea1;
+  --cp-accent-hover: #fb7b91;
+  --cp-accent-soft: rgba(253, 142, 161, 0.14);
+  --cp-accent-fg: #1a1a1a;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
+  --cp-link: #4da6ff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(41, 41, 41, 0.88);
+  --cp-panel: rgba(41, 41, 41, 0.72);
+  --cp-panel-strong: rgba(41, 41, 41, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(253, 142, 161, 0.12);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font: 16px/1.65 "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; }
+[hidden] { display: none !important; }
+a { color: var(--cp-accent); text-underline-offset: 4px; }
+a:hover { color: var(--cp-accent-hover); }
+button, input { font: inherit; }
+button { cursor: pointer; }
+button, a { -webkit-tap-highlight-color: var(--cp-highlight); }
+:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 5px; }
+::selection { background: var(--cp-highlight); color: var(--cp-text); }
+img { max-width: 100%; height: auto; }
+figure, p { margin: 0; }
+p + p { margin-top: 16px; }
+h1, h2, h3, h4 { line-height: 1.12; margin: 0; letter-spacing: -.035em; }
+h1 { font-size: clamp(2.7rem, 5vw, 3.85rem); font-weight: 750; }
+h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; }
+h3 { font-size: 1.4rem; }
+h4 { font-size: 1.1rem; }
+ul, ol { padding-left: 24px; margin: 16px 0; }
+li + li { margin-top: 8px; }
+code, pre, .mono { font-family: Consolas, "Courier New", Courier, monospace; }
+code { background: var(--cp-surface-soft); padding: 2px 5px; border-radius: 4px; font-size: .9em; overflow-wrap: anywhere; }
+pre { background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: 10px; padding: 20px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: .88rem; line-height: 1.7; margin: 20px 0; }
+pre code { background: none; padding: 0; }
+.wrap { width: min(1200px, calc(100% - 64px)); margin-inline: auto; }
+.skip { position: absolute; top: -100px; left: 20px; background: var(--cp-surface); padding: 12px 20px; z-index: 20; }
+.skip:focus { top: 12px; }
+.topbar { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--cp-border); background: var(--cp-bg-elevated); }
+.nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--cp-text); font-weight: 700; line-height: 1.2; }
+.brand-mark { width: 36px; height: 36px; display: grid; place-items: center; background: var(--cp-accent-soft); border: 1px solid var(--cp-accent); color: var(--cp-accent); border-radius: 10px; font-size: .75rem; letter-spacing: .02em; }
+.brand small { display: block; font-size: .72rem; font-weight: 400; color: var(--cp-text-soft); margin-top: 4px; }
+.nav-links { display: flex; align-items: center; gap: 24px; font-size: .88rem; }
+.nav-links a { color: var(--cp-text); text-decoration: none; }
+.nav-links a:hover { color: var(--cp-accent); }
+.theme { border: 1px solid var(--cp-border); background: var(--cp-surface); color: var(--cp-text); border-radius: 10px; padding: 8px 12px; font-size: .82rem; min-height: 40px; }
+.eyebrow { color: var(--cp-accent); font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; margin-bottom: 20px; }
+.hero { padding: 88px 0 56px; display: grid; grid-template-columns: 1fr 1.05fr; align-items: center; gap: 52px; }
+.hero h1 span { color: var(--cp-accent); }
+.lead { margin-top: 28px; font-size: 1.13rem; color: var(--cp-text-soft); max-width: 60ch; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; align-items: center; }
+.button { display: inline-flex; justify-content: center; align-items: center; padding: 12px 20px; min-height: 48px; border-radius: 10px; border: 1px solid var(--cp-border); background: var(--cp-surface); color: var(--cp-text); font-size: .9rem; font-weight: 600; text-decoration: none; }
+.button:hover { color: var(--cp-accent); border-color: var(--cp-accent); }
+.button.primary { background: var(--cp-accent); color: var(--cp-accent-fg); border-color: var(--cp-accent); }
+.button.primary:hover { background: var(--cp-accent-hover); color: var(--cp-accent-fg); }
+.small { font-size: .82rem; color: var(--cp-text-soft); }
+.hero .small { margin-top: 20px; max-width: 58ch; }
+.shot-card { overflow: hidden; background: var(--cp-surface); border: 1px solid var(--cp-border); border-radius: 16px; box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border); }
+.shot-bar { padding: 16px 20px; border-bottom: 1px solid var(--cp-border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: .78rem; }
+.status { color: var(--cp-accent); font-weight: 600; }
+.image-link { display: block; background: var(--cp-surface); }
+.image-link img { display: block; margin: auto; }
+figcaption { padding: 20px; font-size: .85rem; color: var(--cp-text-soft); }
+figcaption strong { color: var(--cp-text); }
+.metrics { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--cp-border); border-radius: 16px; overflow: hidden; background: var(--cp-bg-elevated); }
+.metric { padding: 28px; }
+.metric + .metric { border-left: 1px solid var(--cp-border); }
+.metric strong { display: block; font-size: 2rem; line-height: 1.2; letter-spacing: -.04em; margin-bottom: 8px; }
+.metric span { font-size: .85rem; color: var(--cp-text-soft); }
+.section { padding-top: 96px; }
+.section-head { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 32px; }
+.section-head p:not(.eyebrow) { color: var(--cp-text-soft); max-width: 48ch; }
+.section-head .eyebrow { margin-bottom: 12px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.card { border: 1px solid var(--cp-border); border-radius: 16px; padding: 28px; background: var(--cp-surface); min-width: 0; }
+.card h3 { margin: 12px 0 16px; }
+.card p { color: var(--cp-text-soft); }
+.card .tag { color: var(--cp-accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.notice { background: var(--cp-accent-soft); border-left: 3px solid var(--cp-accent); padding: 20px 24px; border-radius: 0 10px 10px 0; margin-top: 24px; font-size: .93rem; }
+.notice p { color: var(--cp-text); }
+.architecture { display: grid; grid-template-columns: .85fr 1.4fr; gap: 24px; }
+.tab-list { display: flex; gap: 8px; }
+.step-list { flex-direction: column; }
+.step { text-align: left; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); padding: 16px 20px; color: var(--cp-text); min-height: 72px; display: flex; gap: 16px; align-items: center; }
+.step span:first-child { font: .8rem Consolas, "Courier New", Courier, monospace; color: var(--cp-text-soft); }
+.step strong { display: block; font-size: .95rem; }
+.step small { color: var(--cp-text-soft); display: block; font-size: .77rem; }
+[role="tab"][aria-selected="true"] { background: var(--cp-accent-soft); border-color: var(--cp-accent); }
+.step[aria-selected="true"] span:first-child { color: var(--cp-accent); }
+.step[aria-selected="true"] small { color: var(--cp-text); }
+.stage { min-height: 470px; }
+.stage h3 { font-size: 1.9rem; margin: 0 0 20px; }
+.stage .number { font: .78rem Consolas, "Courier New", Courier, monospace; letter-spacing: .12em; color: var(--cp-accent); margin-bottom: 16px; }
+.stage .detail { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--cp-border); color: var(--cp-text-soft); font-size: .9rem; }
+.connectors { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.connector { padding: 8px 12px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-bg-elevated); font-size: .79rem; }
+.topology { margin-top: 24px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: center; }
+.hub { text-align: center; border: 1px solid var(--cp-accent); background: var(--cp-accent-soft); border-radius: 10px; padding: 16px; max-width: 240px; margin: auto; }
+.hub strong, .spoke strong { display: block; }
+.hub small, .spoke small { font-size: .77rem; color: var(--cp-text-soft); }
+.hub small { color: var(--cp-text); }
+.spokes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; position: relative; margin-top: 32px; }
+.spokes::before { content: ""; position: absolute; top: -16px; left: 16%; right: 16%; border-top: 1px solid var(--cp-border-strong); }
+.spokes::after { content: ""; position: absolute; top: -32px; left: 50%; height: 16px; border-left: 1px solid var(--cp-border-strong); }
+.spoke { padding: 12px 8px; border: 1px solid var(--cp-border); border-radius: 10px; text-align: center; position: relative; background: var(--cp-bg-elevated); }
+.spoke::before { content: ""; position: absolute; top: -17px; left: 50%; height: 16px; border-left: 1px solid var(--cp-border-strong); }
+.gallery-tabs { flex-wrap: wrap; margin-bottom: 20px; }
+.gallery-tabs button { padding: 12px 20px; border: 1px solid var(--cp-border); border-radius: 10px; color: var(--cp-text); background: var(--cp-surface); min-height: 48px; }
+.gallery-panel { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(220px, .7fr); gap: 28px; align-items: start; }
+.gallery-panel .capture { max-height: 760px; width: auto; }
+.gallery-notes { padding-top: 12px; }
+.gallery-notes h3 { font-size: 1.65rem; margin-bottom: 20px; }
+.gallery-notes p { color: var(--cp-text-soft); }
+.gallery-notes .actions { align-items: start; }
+.evidence { display: grid; grid-template-columns: 1.05fr 1fr; gap: 28px; }
+.evidence-banner { padding: 36px; background: var(--cp-accent-soft); border: 1px solid var(--cp-accent); border-radius: 16px; }
+.evidence-banner .big { font-size: clamp(3.5rem, 7vw, 5.5rem); line-height: 1; letter-spacing: -.05em; font-weight: 750; color: var(--cp-accent); }
+.evidence-banner h3 { font-size: 1.5rem; margin-top: 16px; }
+.evidence-banner p { margin-top: 20px; color: var(--cp-text); }
+.check-list { list-style: none; margin: 0; padding: 0; }
+.check-list li { padding: 16px 0; border-bottom: 1px solid var(--cp-border); margin: 0; }
+.check-list strong { color: var(--cp-text); }
+.check-list span { display: block; color: var(--cp-text-soft); font-size: .9rem; }
+.contract { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.contract h3 { margin-top: 0; }
+.wiring { margin-top: 24px; }
+.wiring summary, details summary { cursor: pointer; font-weight: 600; }
+details { border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); padding: 20px 24px; }
+details + details { margin-top: 12px; }
+details[open] summary { margin-bottom: 20px; }
+details p, details li { color: var(--cp-text-soft); }
+.setup { counter-reset: setup; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; padding: 0; list-style: none; }
+.setup li { counter-increment: setup; margin: 0; }
+.setup li::before { content: "0" counter(setup); font: .8rem Consolas, "Courier New", Courier, monospace; color: var(--cp-accent); }
+.downloads { display: grid; grid-template-columns: 1.15fr 1fr; gap: 24px; }
+.download-main { border-color: var(--cp-accent); }
+.checksum { display: block; font-size: .74rem; word-break: break-all; background: var(--cp-bg-elevated); border: 1px solid var(--cp-border); border-radius: 10px; padding: 16px; margin-top: 12px; }
+.download-list { display: grid; gap: 12px; }
+.download-item { display: flex; justify-content: space-between; gap: 16px; align-items: center; padding: 20px 24px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); text-decoration: none; color: var(--cp-text); }
+.download-item small { display: block; color: var(--cp-text-soft); font-size: .8rem; }
+.download-item .arrow { color: var(--cp-accent); font-size: 1.25rem; }
+.bounds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.bound { padding: 20px; border-radius: 10px; border: 1px solid var(--cp-border); background: var(--cp-bg-elevated); }
+.bound strong { display: block; font-size: 1.45rem; }
+.bound span { color: var(--cp-text-soft); font-size: .83rem; }
+.footer { border-top: 1px solid var(--cp-border); margin-top: 88px; padding: 36px 0 48px; }
+.footer-grid { display: flex; gap: 32px; justify-content: space-between; align-items: start; }
+.footer p { max-width: 75ch; font-size: .82rem; color: var(--cp-text-soft); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 16px; font-size: .85rem; }
+@media (max-width: 980px) {
+  .nav-links { gap: 16px; } .nav-links .optional { display: none; }
+  .hero { gap: 32px; padding-top: 60px; } h1 { font-size: 3.1rem; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .section-head { display: block; } .section-head > p { margin-top: 20px; }
+  .topology { grid-template-columns: 1fr; }
+  .gallery-panel { grid-template-columns: 1fr; } .gallery-notes { padding: 8px 0; }
+}
+@media (max-width: 720px) {
+  html { scroll-padding-top: 128px; }
+  .wrap { width: calc(100% - 40px); }
+  .nav { min-height: 84px; flex-wrap: wrap; gap: 12px; padding: 12px 0; }
+  .nav-links { gap: 16px; } .nav-links .wide { display: none; }
+  .brand small { display: none; }
+  .hero { grid-template-columns: 1fr; padding-top: 44px; gap: 32px; }
+  h1 { font-size: clamp(2.65rem, 10vw, 3.6rem); }
+  .lead { font-size: 1.05rem; }
+  .metrics { grid-template-columns: 1fr 1fr; }
+  .metric { padding: 20px; } .metric:nth-child(3) { border-left: 0; }
+  .metric:nth-child(n+3) { border-top: 1px solid var(--cp-border); }
+  .section { padding-top: 64px; }
+  .architecture, .evidence, .contract, .downloads, .setup { grid-template-columns: 1fr; }
+  .stage { min-height: 0; } .card, .evidence-banner { padding: 24px; }
+  .bounds { grid-template-columns: 1fr 1fr; }
+  .footer-grid { flex-direction: column; gap: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media print {
+  .topbar, .tab-list, .theme, .skip { display: none !important; }
+  [role="tabpanel"][hidden] { display: block !important; }
+  .hero, .architecture, .gallery-panel, .evidence, .contract, .downloads { display: block; }
+  .section { padding-top: 32px; } .card { break-inside: avoid; }
+}
+  </style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <nav class="wrap nav" aria-label="Main navigation">
+    <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">CH</span><span>CorpNet Search Hub<small>Copilot Studio reference</small></span></a>
+    <div class="nav-links">
+      <a href="#architecture" class="wide">Architecture</a><a href="#evidence" class="optional">Evidence</a><a href="#downloads">Downloads</a>
+      <a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub" class="wide">GitHub ↗</a>
+      <button type="button" class="theme" id="theme-toggle" hidden>Switch theme</button>
+    </div>
+  </nav>
+</header>
+<main id="main" class="wrap" tabindex="-1">
+  <section class="hero" aria-labelledby="hero-title">
+    <div>
+      <p class="eyebrow">A practical agent blueprint</p>
+      <h1 id="hero-title">One search.<br>Every approved spoke.<br><span>Your permissions.</span></h1>
+      <p class="lead">Find files and pages across an approved SharePoint estate. Show verified links in Microsoft 365 Copilot, then collect the full verified result set in private Excel.</p>
+      <div class="actions"><a class="button primary" href="#architecture">Explore how it works <span aria-hidden="true">&nbsp;↓</span></a><a class="button" href="#downloads">Get the solution</a></div>
+      <p class="small">Caller-provided connections, not a maker-account fallback. The selected connector account is the effective identity; it is not independently proved equal to the channel sign-in.</p>
+    </div>
+    <figure class="shot-card">
+      <div class="shot-bar"><strong>Actual M365 Copilot output</strong><span class="status">Owner-provided · 13 Sep 2026</span></div>
+      <a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png" aria-label="Open the genuine All-scope preview excerpt at full resolution"><img src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Actual first four source-linked preview rows in the owner’s All-scope M365 response, with separate created, modified and tag columns." fetchpriority="high"></a>
+      <figcaption><strong>Pending at capture. Verified complete afterwards.</strong> This is a genuine four-row preview excerpt, not a fabricated chat or a screenshot of 512 rows. Completion was established from the same run’s connector evidence.</figcaption>
+    </figure>
+  </section>
+  <div class="metrics" aria-label="Observed owner-account native run">
+    <div class="metric"><strong>512</strong><span>actual verified Excel rows</span></div>
+    <div class="metric"><strong>10</strong><span>approved demo collections</span></div>
+    <div class="metric"><strong>1,024</strong><span>source timestamp/date comparisons</span></div>
+    <div class="metric"><strong>26m46s</strong><span>observed end-to-end run · not an SLA</span></div>
+  </div>
+
+  <section class="section" id="overview" aria-labelledby="overview-title">
+    <div class="section-head"><div><p class="eyebrow">01 / The pattern</p><h2 id="overview-title">Find the source.<br>Keep the evidence.</h2></div><p>A controlled search-and-export workflow—not a policy-answer bot, a tenant crawler or an unrestricted knowledge connection.</p></div>
+    <div class="grid-3">
+      <article class="card"><span class="tag">Search</span><h3>Hub + explicit spokes</h3><p>Literal search terms run inside a maintained collection allowlist and a hub association restriction. A hub URL alone never discovers or approves every spoke.</p></article>
+      <article class="card"><span class="tag">Verify</span><h3>Read before disclosing</h3><p>The index supplies locators. Current caller-authenticated file/page reads supply the titles, links, stored tags and source dates that can appear in the response.</p></article>
+      <article class="card"><span class="tag">Export</span><h3>A private, filterable result set</h3><p>Up to ten verified matches appear in chat. The same flow continues to populate and verify a private workbook before emailing its link to the verified profile.</p></article>
+    </div>
+    <aside class="notice"><strong>Department is relevance, not authorization.</strong> HR, IT and Finance are sample scope choices. Access still depends on the selected caller’s SharePoint permissions. This demonstration is positive owner-account evidence, not a completed cross-user denial audit.</aside>
+  </section>
+
+  <section class="section" id="architecture" aria-labelledby="architecture-title">
+    <div class="section-head"><div><p class="eyebrow">02 / Interactive architecture</p><h2 id="architecture-title">One controlled path.<br>No hidden hand-off.</h2></div><p>Select a stage to inspect the actual implementation. These controls explain the design; they never call an agent, search SharePoint or send email.</p></div>
+    <div class="architecture" data-tabset>
+      <div class="tab-list step-list" role="tablist" aria-label="Architecture stages" aria-orientation="vertical" hidden>
+        <button class="step" id="step-1" role="tab" aria-controls="stage-1" aria-selected="true"><span>01</span><span><strong>Ask &amp; constrain</strong><small>Topic → query + scope</small></span></button>
+        <button class="step" id="step-2" role="tab" aria-controls="stage-2" aria-selected="false"><span>02</span><span><strong>Establish the caller</strong><small>Five Invoker connections</small></span></button>
+        <button class="step" id="step-3" role="tab" aria-controls="stage-3" aria-selected="false"><span>03</span><span><strong>Search the approved estate</strong><small>SiteID AND hub DepartmentId</small></span></button>
+        <button class="step" id="step-4" role="tab" aria-controls="stage-4" aria-selected="false"><span>04</span><span><strong>Prepare &amp; verify</strong><small>Private workbook + current source reads</small></span></button>
+        <button class="step" id="step-5" role="tab" aria-controls="stage-5" aria-selected="false"><span>05</span><span><strong>Return verified links</strong><small>One controlled result string</small></span></button>
+        <button class="step" id="step-6" role="tab" aria-controls="stage-6" aria-selected="false"><span>06</span><span><strong>Continue, verify &amp; email</strong><small>Same run—not a queue</small></span></button>
+      </div>
+      <div>
+        <section class="card stage" id="stage-1" role="tabpanel" aria-labelledby="step-1" tabindex="0">
+          <p class="number">01 / TOPIC</p><h3>Two inputs. Deliberately narrow.</h3><p><strong>Search SharePoint</strong> starts the controlled topic. It collects a scope and plain search words, validates them, and invokes the native flow.</p>
+          <pre><code>{ "query": "annual leave", "scope": "HR" }</code></pre>
+          <p><code>annual leave</code> becomes literal <code>"annual" AND "leave"</code> within the approved scope. Indexed body content can match, not only filenames.</p>
+          <p class="detail">No recipient, site URL, raw KQL, token or claimed identity is accepted. This path does not synthesize a policy answer or turn an arbitrary natural-language question into search terms.</p>
+        </section>
+        <section class="card stage" id="stage-2" role="tabpanel" aria-labelledby="step-2" tabindex="0">
+          <p class="number">02 / CALLER CONTEXT</p><h3>The selected account does the work.</h3><p><code>Selected_profile</code>, <code>SharePoint_profile</code> and <code>OneDrive_root</code> participate in identity and destination checks. <code>Accounts_aligned</code> gates the positive path.</p>
+          <div class="connectors" aria-label="Five caller-provided connectors"><span class="connector">SharePoint</span><span class="connector">Office 365 Users</span><span class="connector">OneDrive for Business</span><span class="connector">Excel Online (Business)</span><span class="connector">Office 365 Outlook</span></div>
+          <p class="detail">All five are <strong>Invoker / Provided by run-only user</strong>. There is no embedded maker fallback. This does not independently attest the Excel/Outlook principal or prove the selected connection equals channel sign-in.</p>
+        </section>
+        <section class="card stage" id="stage-3" role="tabpanel" aria-labelledby="step-3" tabindex="0">
+          <p class="number">03 / INDEX LOCATORS</p><h3>Explicit scope. Stable index order.</h3><p><code>Initial_request</code> and <code>Next_request</code> both request 100 rows, sorted by document ID ascending. Each query combines explicit <code>SiteID</code> batches <strong>AND</strong> the configured hub’s <code>DepartmentId</code>.</p>
+          <pre><code>"SortList": [{ "Property": "[docid]", "Direction": 0 }]
+"RowLimit": 100</code></pre>
+          <p class="detail">The index returns <code>SPWebUrl</code>, <code>SiteID</code>, <code>ListID</code> and <code>ListItemID</code> locators. Its count is an estimate—not a live inventory or an exported-row count. Document-ID order is not relevance rank or an index snapshot.</p>
+        </section>
+        <section class="card stage" id="stage-4" role="tabpanel" aria-labelledby="step-4" tabindex="0">
+          <p class="number">04 / POSITIVE-PATH GATES</p><h3>Private destination, current source.</h3><p>Before a positive preview, the flow prepares a genuine workbook and checks its initial private access through <code>Private_file_acl</code>. Preview candidates are then hydrated through <code>Read_preview_item</code>.</p>
+          <ul><li>Current file/page access is verified before disclosure.</li><li>Links use the verified current source path.</li><li>Dates come from <code>File.TimeCreated</code> and <code>File.TimeLastModified</code>.</li><li>Stored <code>TopicTags</code> are not invented from the title or body.</li></ul>
+          <p class="detail">A source/index title alone is never authorization to display a result. Export performs its own current reads; permissions or content can change between preview and export.</p>
+        </section>
+        <section class="card stage" id="stage-5" role="tabpanel" aria-labelledby="step-5" tabindex="0">
+          <p class="number">05 / CHAT RESPONSE</p><h3>Ten verified matches, at most.</h3><p><code>Format_chat_result</code> returns one Markdown string via <code>Respond_to_agent</code>. The topic sends that controlled <code>result</code>, alongside a contextual department banner.</p>
+          <pre><code>File or page | Created (UTC) | Modified (UTC) | Stored tags</code></pre>
+          <p>Twenty candidates may yield fewer than ten verified rows. Candidates follow document-ID index order within bounded batches—not the relevance-ranked “best ten” or a global top ten.</p>
+          <p class="detail">The success callout confirms export startup and explicitly says delivery is pending. The contextual image is not a success signal for error/no-match outcomes.</p>
+        </section>
+        <section class="card stage" id="stage-6" role="tabpanel" aria-labelledby="step-6" tabindex="0">
+          <p class="number">06 / SAME-RUN CONTINUATION</p><h3>Finish the workbook. Check it. Then notify.</h3><p><code>Continue_private_export</code> runs after the chat response in the <strong>same flow invocation</strong>. It is not an independent background queue or job hand-off.</p>
+          <ul><li>Page through candidates and re-read current source metadata.</li><li>Write verified rows with full raw tags and source timestamps.</li><li>Read back actual Excel rows and verify private access.</li><li>Email the link to the verified profile’s directory mail.</li></ul>
+          <p class="detail">A connector HTTP 200 means email acceptance, not inbox receipt. Caps, omissions and processing failures must remain explicit; a preview is not completion evidence.</p>
+        </section>
+      </div>
+    </div>
+    <div class="card topology">
+      <div><p class="eyebrow">Demo topology / illustration</p><h3>Ten collections.<br>One explicit inventory.</h3><p class="lead">One CorpNet hub and three collections per department. The downloadable reference deliberately starts with only four fictional Contoso collections.</p></div>
+      <div role="img" aria-label="Illustrative ten-collection demonstration topology: one CorpNet hub plus HR, Finance and IT, each with a root, Operations and FieldTeam collection. Association does not grant access.">
+        <div class="hub"><strong>CorpNet hub</strong><small>1 approved collection</small></div>
+        <div class="spokes"><div class="spoke"><strong>HR</strong><small>Root · Operations<br>FieldTeam · 3 sites</small></div><div class="spoke"><strong>Finance</strong><small>Root · Operations<br>FieldTeam · 3 sites</small></div><div class="spoke"><strong>IT</strong><small>Root · Operations<br>FieldTeam · 3 sites</small></div></div>
+      </div>
+    </div>
+    <div class="actions"><a href="images/architecture.svg">Open the detailed architecture SVG</a><a href="images/architecture.excalidraw" download>Download editable Excalidraw source</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/flow-walkthrough.md">Read the full flow walkthrough ↗</a></div>
+  </section>
+
+  <section class="section" id="screenshots" aria-labelledby="screenshots-title">
+    <div class="section-head"><div><p class="eyebrow">03 / Actual product captures</p><h2 id="screenshots-title">Real output.<br>Clearly scoped evidence.</h2></div><p>Genuine, privacy-curated screenshots—not mock conversations. Each example retains its own revision, capture timing and verification boundary.</p></div>
+    <div data-tabset>
+      <div class="tab-list gallery-tabs" role="tablist" aria-label="Screenshot scenarios" hidden>
+        <button id="gallery-all" role="tab" aria-controls="screen-all" aria-selected="true">All · 512 verified</button>
+        <button id="gallery-hr" role="tab" aria-controls="screen-hr" aria-selected="false">HR · 2 results</button>
+        <button id="gallery-it" role="tab" aria-controls="screen-it" aria-selected="false">IT · 4 results</button>
+        <button id="gallery-excel" role="tab" aria-controls="screen-excel" aria-selected="false">Excel · historical 112</button>
+      </div>
+      <section id="screen-all" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-all" tabindex="0">
+        <figure class="shot-card"><a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png"><img class="capture" src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Genuine first four rows of the owner-provided All-scope preview; this screenshot was captured while the export was pending." loading="lazy"></a><figcaption><strong>13 September · native revision 80f131a…</strong> Owner-provided preview excerpt, pending at capture. It is not a screenshot of a completed 512-row workbook.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → All</p><h3><code>hubspokeverify</code></h3><p>The owner started this published M365 request. Ten preview rows were checked; the screenshot preserves the first four. The same run later completed with <strong>512 actual Excel rows</strong>.</p><p>499 documents, 13 pages, ten collections. Final verification used existing native connector evidence—not another invocation or a new workbook screenshot.</p><div class="actions"><a href="images/scale-512/owner-m365-index-estimate.png">View the original index-estimate crop</a><a href="scale-runtime-validation-summary.json">Read the completed-run evidence</a><a href="scale-512-capture-provenance.json">Capture provenance</a></div></div>
+      </section>
+      <section id="screen-hr" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-hr" tabindex="0">
+        <figure class="shot-card"><a class="image-link" href="images/published-m365/published-m365-hr-full-output-67.png"><img class="capture" src="images/published-m365/published-m365-hr-full-output-67.png" width="750" height="1024" alt="Actual published M365 HR annual-leave response with purple contextual banner, labelled SharePoint icon and two four-column results, captured at 67 percent zoom." loading="lazy"></a><figcaption><strong>12 September · ebfc9aa… · 67% capture.</strong> Historical banner proof, before table-specific polish. The full response is preserved; a separate 100% crop is available.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → HR</p><h3><code>annual leave</code></h3><p>A source page and a Word document—not two duplicates of the same file. Both results and all source dates matched the two-row private workbook.</p><p>The purple banner is contextual. This does not answer a policy question from model knowledge; users receive verified source links.</p><div class="actions"><a href="images/published-m365/published-m365-hr-table-100.png">Open the readable 100% table crop</a><a href="m365-validation-summary.json">HR / no-match runtime summary</a></div></div>
+      </section>
+      <section id="screen-it" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-it" tabindex="0">
+        <figure class="shot-card"><a class="image-link" href="images/table-polish/published-m365-polished-table-100.png"><img class="capture" src="images/table-polish/published-m365-polished-table-100.png" width="1095" height="1059" alt="Actual M365 IT devices output at 100 percent zoom with four linked rows, verified file/page glyphs, separate date columns, stored tags and full footer." loading="lazy"></a><figcaption><strong>12 September · 3a4b9ca… · 100% capture.</strong> Historical table-polish proof: four rows, one page and three documents. No new full-banner recapture is implied.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → IT</p><h3><code>devices</code></h3><p>Four verified matches, four private Excel rows and eight exact source timestamp/calendar comparisons. Bold linked glyphs and monospace short tags render; longer tags wrap.</p><p><strong>Host limitation:</strong> M365 keeps date values left-aligned despite source center markers. These are not colored tag pills or custom table CSS.</p><div class="actions"><a href="images/table-polish/published-m365-it-devices-inputs.png">View the actual inputs</a><a href="table-polish-validation-summary.json">Read checks and alignment limitation</a></div></div>
+      </section>
+      <section id="screen-excel" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-excel" tabindex="0">
+        <figure class="shot-card"><a class="image-link" href="images/live-workbook-compact.png"><img class="capture" src="images/live-workbook-compact.png" width="1525" height="996" alt="Actual historical Excel web screenshot of a completed 112-row private workbook, not the later 512-row export." loading="lazy"></a><figcaption><strong>Historical 112-row workbook—not 512.</strong> Genuine Excel web capture from the earlier compact-workbook revision. The associated two-column chat layout is superseded.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Private Excel / historical UI proof</p><h3>A workbook you can filter.</h3><p>The visible summary records 112 rows: 99 documents and 13 pages. Compact rows, separate UTC date columns and <strong>Open file</strong> hyperlinks were inspected in Excel web.</p><p>The later 512-row result was verified through actual Excel connector readback. There is <strong>no new 512-row workbook UI capture</strong> on this page.</p><div class="actions"><a href="images/live-workbook-compact.png">Open full-resolution historical capture</a><a href="workbook-validation-summary.json">Workbook evidence</a><a href="../agent/flows/search-export/RuntimeSearchResults.template.xlsx" download>Download the genuine blank template</a></div></div>
+      </section>
+    </div>
+  </section>
+
+  <section class="section" id="evidence" aria-labelledby="evidence-title">
+    <div class="section-head"><div><p class="eyebrow">04 / Verified native execution</p><h2 id="evidence-title">512 is the workbook count.<br>Not just the estimate.</h2></div><p>One owner-started published M365 run on 13 September 2026. Evidence inspection reused that run; it did not create another query, workbook or email.</p></div>
+    <div class="evidence">
+      <div class="evidence-banner"><div class="big">512 / 512</div><h3>Actual source-hydrated rows<br>matched actual Excel readback.</h3><p>499 documents + 13 pages across 10 collections. Zero omissions, duplicate index hits, raw-metadata mismatches or processing errors.</p><p><strong>25 final checks · 23 paging checks · 15 date/markup checks passed.</strong></p><div class="actions"><a class="button" href="scale-runtime-validation-summary.json">Inspect the safe JSON evidence</a></div></div>
+      <ul class="check-list">
+        <li><strong>Six real source pages</strong><span>100 + 100 + 100 + 100 + 100 + 12; StartRow 0 through 500; document-ID ascending on every native request.</span></li>
+        <li><strong>512 real Excel rows</strong><span>Read back as 250 + 250 + 12, with exact raw metadata and no remaining sentinel row.</span></li>
+        <li><strong>1,024 source-date comparisons</strong><span>Full timestamps and UTC calendar values matched. No substitution of crawl, export or collection dates.</span></li>
+        <li><strong>Private access + one accepted email</strong><span>Final owner-private ACL verified. The verified profile’s email was accepted by the connector; inbox receipt is not independently verified.</span></li>
+        <li><strong>26m46s end to end</strong><span>About 25m13s in export processing; about six seconds in readback. Observed timing, not a performance guarantee.</span></li>
+      </ul>
+    </div>
+    <aside class="notice"><strong>Revision evidence has a boundary.</strong> The canonical/management definition and workflow ETag were unchanged before, during and after the run, and actual requests used the expected sort. The API did not expose an immutable per-run definition payload. This is not a new-tenant import, Teams, negative-ACL or production-scale validation.</aside>
+  </section>
+
+  <section class="section" id="contracts" aria-labelledby="contracts-title">
+    <div class="section-head"><div><p class="eyebrow">05 / Topic and tool contract</p><h2 id="contracts-title">Small interface.<br>Substantial verification.</h2></div><p>Classic Copilot Studio orchestration with a native agent-callable flow. The local Python builder generates source; it is not a hosted runtime service.</p></div>
+    <div class="contract">
+      <article class="card"><span class="tag">Input / Request · Skills</span><h3>Exactly <code>query</code> and <code>scope</code></h3><pre><code>{
+  "query": "devices",
+  "scope": "IT"
+}</code></pre><ul><li>Scopes: <code>All</code>, <code>CorpNet</code>, <code>HR</code>, <code>Finance</code>, <code>IT</code>.</li><li>A single <code>*</code>, or 1–12 plain ASCII alphanumeric/hyphen-separated words, within 160 characters.</li><li>No raw KQL, user-supplied recipient or arbitrary site URL. Stored-tag filtering is not implemented.</li></ul><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/topics/SearchSharePoint.mcs.yml">Inspect the complete topic source ↗</a></article>
+      <article class="card"><span class="tag">Output / one string</span><h3>Exactly <code>result</code></h3><pre><code>{ "result": "&lt;controlled Markdown status and verified rows&gt;" }</code></pre><p>This is a contract illustration, not an executed output. The topic sends the actual string without adding inferred results or a generated policy answer.</p><ul><li>Four separate columns, verified links, source dates and stored tags.</li><li>Unknown dates/tags: <code>Not supplied</code>.</li><li>No-match/error branches retain explicit outcomes. Verified no-match evidence skipped workbook and email writes.</li></ul><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/actions/SearchAndExport.mcs.yml">Inspect the registered-tool reference ↗</a></article>
+    </div>
+    <details class="wiring"><summary>See the actual topic-to-flow wiring and implementation files</summary><figure class="shot-card"><a class="image-link" href="images/styled-hr/topic-native-flow-binding.png"><img src="images/styled-hr/topic-native-flow-binding.png" width="560" height="766" alt="Genuine historical Copilot Studio topic binding showing the query and scope inputs and controlled result output." loading="lazy"></a><figcaption>Historical product capture of the preserved two-input/one-output binding. It is not a new-tenant import check.</figcaption></figure><div class="actions"><a href="../agent/flows/search-export/definition.json" download>Full portable native definition</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/scripts/build-search-export-flow.py">Flow builder ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/flow-walkthrough.md">Named-action walkthrough ↗</a></div></details>
+  </section>
+
+  <section class="section" id="setup" aria-labelledby="setup-title">
+    <div class="section-head"><div><p class="eyebrow">06 / Adapt, bind, validate</p><h2 id="setup-title">Bring the pattern.<br>Configure your estate.</h2></div><p>A real unmanaged solution and complete source are included. Neither is turnkey proof for another tenant. HR/IT-like topics and scopes are examples that need adaptation.</p></div>
+    <ol class="setup">
+      <li class="card"><h3>Start in an isolated target</h3><p>Confirm Dataverse, Copilot Studio, connector licensing, DLP and target model availability. The <code>GPT5Chat</code> hint is not an availability guarantee. Read the package and rights notices first.</p></li>
+      <li class="card"><h3>Replace the fictional inventory</h3><p>The reference has <strong>four fictional Contoso collections</strong>, not the ten-site demo estate. Verify your tenant, hub registration/association, each allowed SiteID, source locators and metadata. No automatic tenant discovery.</p></li>
+      <li class="card"><h3>Import or wire manually</h3><p>Use the supported unmanaged import experience, or recreate the authenticated classic agent/native flow and apply the source. Bind both native flow references consistently. Keep <code>query, scope → result</code> and all five Invoker connections.</p></li>
+      <li class="card"><h3>Validate before publishing</h3><p>Adapt scope choices, topic instructions, inventory and fixed banner mappings together. Verify target security group, caller accounts, private destination, product-loaded topics and negative-access cases. Only the target owner activates and publishes.</p></li>
+    </ol>
+    <aside class="notice"><strong>Unmanaged import can merge into existing components.</strong> Do not import the reference back into the original demo or another environment with matching component identities without a reviewed upgrade plan. The package requests a <strong>stopped flow, no automatic publication and empty channels</strong>; actual target import behavior remains unverified.</aside>
+    <details><summary>Connection settings are not tenant retargeting</summary><p>The template has five empty connection IDs and an <strong>all-zero security-group scaffold</strong>. Select approved target bindings and an appropriate Entra group; never treat zeros as a verified sharing policy.</p><p>There are no environment-variable values that automatically retarget this flow. Updating deployment settings alone does not replace embedded SharePoint URLs, hub IDs or collection inventory. Never commit a filled settings file or connected export.</p><div class="actions"><a href="../solutions/deployment-settings.template.json" download>Download unbound settings template</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/README.md">Read all import prerequisites ↗</a></div></details>
+    <div class="actions"><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/setup.md">Step-by-step setup ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/README.md">Manual source wiring guide ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/fixtures/corpnet-demo/README.md">Reproducible fictional fixture guide ↗</a></div>
+  </section>
+
+  <section class="section" id="downloads" aria-labelledby="downloads-title">
+    <div class="section-head"><div><p class="eyebrow">07 / Source and downloads</p><h2 id="downloads-title">Inspect it.<br>Rebuild it deliberately.</h2></div><p>Static downloads only. No sign-in, runtime service, analytics or external font dependency is attached to this page.</p></div>
+    <div class="downloads">
+      <article class="card download-main"><span class="tag">Actual unmanaged Power Platform package</span><h3>CorpNet Search Hub Reference</h3><p>One agent, 16 active bot components, one current native workflow and five unbound connection references. No fixture seeder, populated workbook or source-tenant credentials.</p><div class="actions"><a class="button primary" href="../solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip" download>Download solution ZIP ↓</a></div><p class="small">Version 1.0.0.0 · <strong>64,159 bytes</strong> · new-tenant import UNVERIFIED</p><span class="small">SHA-256</span><code class="checksum" id="solution-sha">525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272</code><p class="small">13 package tests + 68 portable-agent tests; supported PAC unpack/pack/unpack preserved 39 source files semantically. Packing is not proof of target import or runtime.</p><div class="actions"><a href="../solutions/validation.json">Package validation snapshot</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/README.md">Customization and import caveats ↗</a></div></article>
+      <div class="download-list">
+        <a class="download-item" href="../agent/flows/search-export/definition.json" download><span><strong>Complete flow definition</strong><small>Portable JSON · document-ID paging · not pseudocode</small></span><span class="arrow" aria-hidden="true">↓</span></a>
+        <a class="download-item" href="../fixtures/corpnet-demo/scale-expected-results.example.json" download><span><strong>512-item fixture blueprint</strong><small>Fictional expected-result oracle · not live tenant data</small></span><span class="arrow" aria-hidden="true">↓</span></a>
+        <a class="download-item" href="../agent/flows/search-export/RuntimeSearchResults.template.xlsx" download><span><strong>Genuine blank workbook</strong><small>Runtime Excel template · no populated search results</small></span><span class="arrow" aria-hidden="true">↓</span></a>
+        <a class="download-item" href="images/architecture.excalidraw" download><span><strong>Editable architecture</strong><small>Original Excalidraw source · unchanged</small></span><span class="arrow" aria-hidden="true">↓</span></a>
+        <a class="download-item" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/archive/refs/heads/main.zip"><span><strong>Full reference source</strong><small>GitHub archive · source, tests, documentation and notices</small></span><span class="arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+    <details style="margin-top:24px"><summary>Revisions and reproducibility</summary><p>Native 512-run revision:</p><code class="checksum">80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a</code><p>Portable definition revision:</p><code class="checksum">5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3</code><p>Tenant-neutral policy and workbook preparation account for the separate portable revision. The solution preserves one intrinsic workflow identity for valid internal references; it is not a tenant locator. Do not blanket-replace GUIDs.</p><p>The package snapshot predates the subsequent native 512-row execution. Use the <a href="scale-runtime-validation-summary.json">later runtime summary</a> for that run’s outcome; target-tenant import remains unverified.</p></details>
+  </section>
+
+  <section class="section" id="boundaries" aria-labelledby="boundaries-title">
+    <div class="section-head"><div><p class="eyebrow">08 / Explicit boundaries</p><h2 id="boundaries-title">Finite by design.<br>Honest about what is proven.</h2></div><p>This is an owner-validated demonstration and technical reference, not a production readiness certificate or a supported Microsoft product.</p></div>
+    <div class="bounds" aria-label="Runtime bounds"><div class="bound"><strong>10 / 20</strong><span>preview rows / candidates checked</span></div><div class="bound"><strong>1,000 / 2,000</strong><span>export rows / candidates checked</span></div><div class="bound"><strong>100 / 40</strong><span>rows per source page / page cap</span></div><div class="bound"><strong>12 × 20</strong><span>maximum site batches / sites per batch</span></div></div>
+    <div class="grid-3">
+      <article class="card"><span class="tag">Observed</span><h3>One owner’s actual execution</h3><p>512 verified rows, private ACL and one accepted email. The export loop is capped at 45 minutes; Excel readback at five minutes. Observed performance is not a timing guarantee.</p></article>
+      <article class="card"><span class="tag">Not established</span><h3>Another tenant or identity</h3><p>New-tenant import/runtime, Teams rendering, cross-user negative ACLs, revocation and inbox receipt remain unverified. Ten demo collections do not validate a 150-site production estate.</p></article>
+      <article class="card"><span class="tag">Host controlled</span><h3>Readable, not fully skinnable</h3><p>M365 owns table fonts, borders and alignment. Date-centering was not honored. Banners are contextual images; code-style tags are monospace, not custom-colored pills.</p></article>
+    </div>
+    <div class="actions"><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/validation.md">Read the full evidence ledger ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/public-release-checklist.md">Review release boundaries ↗</a><a href="https://ryanbowie.github.io/copilot-studio-powerbi-agent/">Explore the companion Power BI reference ↗</a></div>
+  </section>
+</main>
+<footer class="footer"><div class="wrap footer-grid"><div><p><strong>Public reference—not an open-source license grant.</strong> Public visibility and downloads do not themselves grant a permissive project license. Microsoft retains rights in its product UI, trademarks and unmodified integration icon. This site’s identity is original text, not the SharePoint product mark. Review the notices before reuse or redistribution.</p><p>No cookies, analytics, remote scripts, runtime calls or sign-in flows. Screenshots contain fictional demonstration content and retain their documented revision limits.</p></div><div class="footer-links"><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub">Source ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/NOTICE.md">Rights notice ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/ASSET-NOTICE.md">Asset terms ↗</a><a href="#main">Back to top ↑</a></div></div></footer>
+<script>
+(() => {
+  const themeButton = document.getElementById("theme-toggle");
+  const updateThemeLabel = () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    themeButton.textContent = `${next === "dark" ? "Dark" : "Light"} theme`;
+    themeButton.setAttribute("aria-label", `Switch to ${next} theme`);
+  };
+  themeButton.hidden = false;
+  updateThemeLabel();
+  themeButton.addEventListener("click", () => {
+    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    const url = new URL(window.location.href);
+    url.searchParams.set("scoutTheme", next);
+    try { window.history.replaceState(null, "", url); } catch (_) { /* file previews may restrict history updates */ }
+    updateThemeLabel();
+  });
+  document.querySelectorAll("[data-tabset]").forEach(set => {
+    const list = set.querySelector('[role="tablist"]');
+    const tabs = [...list.querySelectorAll('[role="tab"]')];
+    const panels = tabs.map(tab => document.getElementById(tab.getAttribute("aria-controls")));
+    const activate = index => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute("aria-selected", String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+        panels[i].hidden = i !== index;
+      });
+    };
+    tabs.forEach((tab, index) => {
+      tab.addEventListener("click", () => activate(index));
+      tab.addEventListener("keydown", event => {
+        let next;
+        if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index + tabs.length - 1) % tabs.length;
+        if (event.key === "Home") next = 0;
+        if (event.key === "End") next = tabs.length - 1;
+        if (next === undefined) return;
+        event.preventDefault();
+        activate(next);
+        tabs[next].focus();
+      });
+    });
+    list.hidden = false;
+    activate(0);
+  });
+})();
+</script>
+</body>
+</html>
