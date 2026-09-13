@@ -1,0 +1,60 @@
+{
+  "providedUtc": "2026-09-13T10:45:36Z",
+  "client": "Published M365 Copilot, owner-provided screenshot",
+  "sourceSha256": "a2f0522938fcc696501da767f792e9304b228120e3ce820d98e5999d3d260f46",
+  "sourceDimensions": [
+    1167,
+    1086
+  ],
+  "sourceOriginalKeptPrivate": true,
+  "images": [
+    {
+      "image": "images/scale-512/owner-m365-index-estimate.png",
+      "cropBox": [
+        63,
+        31,
+        850,
+        136
+      ],
+      "outputDimensions": [
+        787,
+        139
+      ],
+      "outputSha256": "6fe8d8af8585b6b52469411242023b48ce49cb44cdf83e1a320655ede49d1fca",
+      "addedFooter": "OWNER-PROVIDED M365 CROP - INDEX ESTIMATE, NOT COMPLETED EXPORT"
+    },
+    {
+      "image": "images/scale-512/owner-m365-preview-excerpt.png",
+      "cropBox": [
+        63,
+        332,
+        1128,
+        996
+      ],
+      "outputDimensions": [
+        1065,
+        698
+      ],
+      "outputSha256": "95cdbc016889a1f8e36f89605c8f63065f7b34cab855de2e0c50a10a162a2219",
+      "addedFooter": "OWNER-PROVIDED M365 CROP - FIRST FOUR PREVIEW ROWS; EXPORT PENDING AT CAPTURE"
+    }
+  ],
+  "rescaled": false,
+  "compositedOrStitched": false,
+  "resultPixelsRewritten": false,
+  "zoom": "Not independently verified",
+  "privacy": "The recipient/account block is entirely outside both crops. New RGB PNGs omit source image metadata.",
+  "inputSequenceCaptured": false,
+  "bannerCaptured": false,
+  "visibleScope": "All",
+  "visibleIndexEstimate": 512,
+  "exportStatusAtCapture": "Started; delivery pending, not completed",
+  "visibleCompletePreviewRows": 4,
+  "notEvidenceOf": [
+    "All ten preview rows fitting in one viewport",
+    "Six disjoint native source pages or 512 caller source reads",
+    "512 completed Excel rows or final private access",
+    "Email acceptance or inbox receipt",
+    "Teams rendering or non-owner permission trimming"
+  ]
+}

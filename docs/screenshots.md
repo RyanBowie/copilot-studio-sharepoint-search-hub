@@ -10,6 +10,34 @@ provided the published M365 Copilot image; the automation captured the Studio
 and Excel evidence. Published output is not relabelled as an independently
 executed channel test.
 
+## Owner-provided 512-item preview
+
+![Actual M365 scope All and index estimate of 512](images/scale-512/owner-m365-index-estimate.png)
+
+![Actual first four preview rows in the owner-provided M365 screenshot](images/scale-512/owner-m365-preview-excerpt.png)
+
+The owner supplied this image at **10:45:36 UTC on 13 September 2026**, after
+the instruction to search `All` for `hubspokeverify`. The input sequence is not
+in this screenshot; actual trigger inputs require separate run correlation.
+The visible result reports **512 as an index estimate**, not a completed export
+count. The original private image explicitly says export started and delivery
+pending; its recipient block is entirely outside these publication crops.
+
+The excerpt preserves four rows with linked page/file glyphs, separate created
+and modified dates and wrapped stored tags. Dates remain visibly left-aligned.
+It is not the entire ten-row preview or a complete response/footer capture.
+The two crops are not stitched, rescaled or rewritten; only labelled provenance
+footers were added. Browser zoom was not independently verified.
+
+This owner-operated published-channel view is distinct from an automated
+invocation. It does not by itself prove all six native search pages, 512
+caller-hydrated sources, 512 Excel rows, final private access or email delivery.
+Those checks must use the same existing native run, without submitting another
+query merely to obtain evidence.
+
+[Exact crop coordinates and hashes](scale-512-capture-provenance.json) ·
+[Source/index checkpoint](scale-source-validation-summary.json)
+
 ## Published M365 table polish
 
 ![Actual published IT selection and prepared devices query](images/table-polish/published-m365-it-devices-inputs.png)

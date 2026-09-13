@@ -104,6 +104,26 @@ The [flow walkthrough](docs/flow-walkthrough.md) follows the actual named action
 from `Valid_input` and `Initial_search` through `Respond_to_agent`, `Export_rows`
 and `Send_private_workbook`, including the source checks and completion gates.
 
+## 512-item search in published M365
+
+<img src="docs/images/scale-512/owner-m365-index-estimate.png" width="787" alt="Owner-provided M365 result showing scope All and an index estimate of 512; not a completed export count">
+
+<img src="docs/images/scale-512/owner-m365-preview-excerpt.png" width="900" alt="Genuine owner-provided excerpt showing four page and file preview rows with separate UTC dates and stored tags">
+
+The owner supplied this published M365 screenshot on 13 September 2026.
+It shows the **512-match index estimate** and a cross-department preview with
+page/file glyphs, linked titles, UTC dates and stored tags. The private export
+had started, but delivery was still pending at capture.
+
+**This is not proof of 512 completed Excel rows.** The header and four-row
+excerpt are separate crops of one real screenshot, not a stitched full result.
+The account/recipient block is excluded; browser zoom was not independently
+verified. The full native-run and workbook checks remain a separate gate.
+
+[Screenshot context and limits](docs/screenshots.md#owner-provided-512-item-preview) ·
+[Capture provenance](docs/scale-512-capture-provenance.json) ·
+[Source/index evidence](docs/scale-source-validation-summary.json)
+
 ## Updated table in published M365
 
 <img src="docs/images/table-polish/published-m365-polished-table-100.png" width="900" alt="Actual M365 table at 100 percent zoom with bold linked page/file icons, styled tags and four readable rows; dates remain left-aligned">
