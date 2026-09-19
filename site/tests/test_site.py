@@ -336,6 +336,7 @@ class SiteTests(unittest.TestCase):
         css = re.search(r"<style>(.*?)</style>", self.html, flags=re.S).group(1)
         components = css[css.index("* { box-sizing:"):]
         self.assertNotRegex(components, r"#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(")
+        self.assertNotIn("color: var(--cp-text-soft)", components)
         self.assertNotRegex(self.html, r"<script[^>]+src=|<iframe|<form|@import|localStorage|document\.cookie|fetch\(|XMLHttpRequest")
         self.assertIn("connect-src 'none'", self.html)
         self.assertIn("prefers-reduced-motion", self.html)
@@ -361,14 +362,32 @@ class SiteTests(unittest.TestCase):
             return sum(v * weight for v, weight in zip(linear, (.2126, .7152, .0722)))
 
         styles = re.search(r"<style>(.*?)</style>", self.html, flags=re.S).group(1)
-        blocks = re.findall(r'(?:^:root|html\[data-theme="dark"\]) \{(.*?)\}', styles, flags=re.S | re.M)[:2]
-        self.assertEqual(len(blocks), 2)
-        for block in blocks:
-            colors = dict(re.findall(r"--cp-([\w-]+): (#[0-9a-f]{6});", block))
-            for foreground in ("text", "text-soft", "accent"):
+        blocks = re.findall(r'(^:root|^html\[data-theme="dark"\]) \{(.*?)\}', styles, flags=re.S | re.M)
+        self.assertEqual(len(blocks), 4)
+        light, dark = {}, {}
+        for selector, block in blocks:
+            target = light if selector == ":root" else dark
+            target.update(re.findall(r"--cp-([\w-]+): (#[0-9a-f]{6});", block))
+        for theme, colors in (("light", light), ("dark", light | dark)):
+            for foreground in ("text", "text-muted", "accent", "link"):
                 for background in ("bg", "surface", "bg-elevated"):
                     high, low = sorted((luminance(colors[foreground]), luminance(colors[background])), reverse=True)
-                    self.assertGreaterEqual((high + .05) / (low + .05), 4.5, (foreground, background))
+                    self.assertGreaterEqual((high + .05) / (low + .05), 4.5, (theme, foreground, background))
+            for background in ("accent", "accent-hover"):
+                high, low = sorted((luminance(colors["accent-fg"]), luminance(colors[background])), reverse=True)
+                self.assertGreaterEqual((high + .05) / (low + .05), 4.5, (theme, "accent-fg", background))
+            for foreground in ("success", "danger", "warning"):
+                high, low = sorted((luminance(colors[foreground]), luminance(colors["surface"])), reverse=True)
+                self.assertGreaterEqual((high + .05) / (low + .05), 4.5, (theme, foreground, "surface"))
+
+    def test_editorial_title_has_readable_gradient_fallbacks(self):
+        styles = re.search(r"<style>(.*?)</style>", self.html, flags=re.S).group(1)
+        self.assertIn("font-weight: 450; color: var(--cp-chart-blue)", styles)
+        self.assertIn("@supports (background-clip: text)", styles)
+        self.assertEqual(styles.count("linear-gradient("), 1)
+        self.assertIn("linear-gradient(105deg, var(--cp-chart-blue), var(--cp-chart-purple) 56%, var(--cp-chart-magenta))", styles)
+        for media in ("forced-colors: active", "print"):
+            self.assertRegex(styles, rf"@media \(?{media}\)? \{{\s*h1 \{{ background: none; color: var\(--cp-text\); \}}")
 
     def test_changed_package_pin_fails_closed(self):
         with patch.object(BUILD, "SOLUTION_SHA256", "0" * 64):

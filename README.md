@@ -393,13 +393,27 @@ to Microsoft 365, submits a search or sends email. The page has no analytics,
 external scripts or font service; architecture/gallery controls explain the
 implementation rather than execute it.
 
+The shared `--cp-*` foundation in `site/index.template.html` is followed by the
+[Cowork benchmark](https://ryanbowie.github.io/copilot-cowork-app-benchmark/#overview)
+palette overrides: purple accents, neutral surfaces and an editorial gradient
+title. Edit the template, then rebuild the tracked `docs/index.html`; do not edit
+generated HTML by hand. System preference selects the initial theme unless
+`?scoutTheme=light` or `?scoutTheme=dark` is supplied. The theme button preserves
+the other query parameters and the current section. Evidence images retain
+their original colours.
+
 Pages uses GitHub Actions. After pushing a reviewed update, run
 **Build and deploy reference Pages** manually from the **Actions** tab on `main`.
 The [workflow](.github/workflows/pages.yml) intentionally does not change Pages
 settings or repository visibility, and only deploys `_site`. Official actions
 are pinned to commit hashes; only the deployment job has Pages write and
 identity-token permissions. Optional browser checks in `site/smoke_browser.py`
-use Playwright and a new isolated headless Edge profile, not a signed-in browser.
+use Playwright and a new isolated headless Edge profile, not a signed-in browser:
+`python -B site\smoke_browser.py`. Use `--browser-channel chromium` for Playwright's
+bundled Chromium or `--browser-channel chrome` for installed Chrome. The checks
+cover the effective palette, responsive title, contrast fallbacks, keyboard
+focus/navigation, theme selection and existing demos/downloads. Browser artifacts
+stay in the ignored `.site-browser-artifacts` directory.
 
 ## Department banners
 

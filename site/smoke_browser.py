@@ -1,5 +1,6 @@
-"""Optional local headless Edge smoke test; never attaches to an existing browser."""
+"""Optional isolated headless browser smoke test; never attaches to an existing browser."""
 
+import argparse
 import hashlib
 import json
 import os
@@ -11,7 +12,102 @@ import textwrap
 from preview import ROOT, DEFAULT_PREFIX, create_server
 
 
+LIGHT_PALETTE = {
+    "bg": "#f2f2f8", "bg-elevated": "#f8f7fc", "surface": "#ffffff",
+    "surface-soft": "#f2f2f8", "border": "#e3dfed", "border-strong": "#9285aa",
+    "text": "#102631", "text-muted": "#52637a", "text-soft": "#667287",
+    "accent": "#7653ae", "accent-hover": "#58378b", "accent-soft": "#eee8f7",
+    "accent-fg": "#ffffff", "link": "#066bc7", "success": "#207346",
+    "danger": "#b4233e", "warning": "#8c6208", "chart-blue": "#0877dd",
+    "chart-indigo": "#5364ba", "chart-purple": "#7653ae", "chart-violet": "#9651bb",
+    "chart-magenta": "#b535c3", "chart-track": "#e8e3f0", "transparent": "transparent",
+    "highlight": "rgba(118, 83, 174, 0.12)",
+}
+DARK_PALETTE = LIGHT_PALETTE | {
+    "bg": "#171717", "bg-elevated": "#222222", "surface": "#1f1f1f",
+    "surface-soft": "#262626", "border": "#3b3b3b", "border-strong": "#858585",
+    "text": "#f2f2f2", "text-muted": "#bdbdbd", "text-soft": "#aaaaaa",
+    "accent": "#c3a0ef", "accent-hover": "#debeff", "accent-soft": "#2b2b2b",
+    "accent-fg": "#181818", "link": "#80baff", "success": "#4ade80",
+    "danger": "#f87171", "warning": "#fbbf24", "chart-blue": "#69aeff",
+    "chart-indigo": "#98a5ff", "chart-purple": "#bc98ed", "chart-violet": "#d097ee",
+    "chart-magenta": "#ed8fea", "chart-track": "#3b3b3b",
+    "highlight": "rgba(195, 160, 239, 0.12)",
+}
+
+
+def rgb(hex_color):
+    return "rgb(" + ", ".join(str(int(hex_color[i:i + 2], 16)) for i in (1, 3, 5)) + ")"
+
+
+def check_theme(page, theme):
+    expected = LIGHT_PALETTE if theme == "light" else DARK_PALETTE
+    actual = page.evaluate("""keys => {
+        const style = getComputedStyle(document.documentElement);
+        return Object.fromEntries(keys.map(key => [key, style.getPropertyValue('--cp-' + key).trim()]));
+    }""", list(expected))
+    assert actual == expected, (theme, actual)
+    styles = page.evaluate("""() => {
+        const read = (selector, properties) => {
+            const style = getComputedStyle(document.querySelector(selector));
+            return Object.fromEntries(properties.map(property => [property, style[property]]));
+        };
+        return {
+            body: read('body', ['backgroundColor', 'color', 'fontSize', 'lineHeight', 'fontFamily']),
+            title: read('h1', ['fontWeight', 'fontSize', 'lineHeight', 'letterSpacing', 'backgroundImage', 'backgroundClip']),
+            heading: read('h2', ['fontWeight']),
+            header: read('.topbar', ['backgroundColor', 'borderBottomWidth', 'borderBottomColor']),
+            card: read('.shot-card', ['backgroundColor', 'borderRadius', 'borderTopWidth', 'borderTopColor']),
+            button: read('.button.primary', ['backgroundColor', 'color', 'borderRadius']),
+            link: read('.guide-jumps a', ['color']),
+            image: read('#showcase img', ['filter', 'opacity', 'mixBlendMode'])
+        };
+    }""")
+    assert styles["body"]["backgroundColor"] == rgb(expected["bg"])
+    assert styles["body"]["color"] == rgb(expected["text"])
+    assert styles["body"]["fontSize"] == "16px"
+    assert styles["body"]["lineHeight"] == "26.4px"
+    assert styles["body"]["fontFamily"].startswith('"Segoe UI", Aptos, Calibri')
+    title = styles["title"]
+    assert title["fontWeight"] == "450"
+    size = float(title["fontSize"].removesuffix("px"))
+    assert 36 <= size <= 64, size
+    assert abs(float(title["lineHeight"].removesuffix("px")) - size * 1.12) < .01
+    assert abs(float(title["letterSpacing"].removesuffix("px")) + size * .035) < .01
+    assert title["backgroundClip"] == "text"
+    gradient = f'linear-gradient(105deg, {rgb(expected["chart-blue"])}, {rgb(expected["chart-purple"])} 56%, {rgb(expected["chart-magenta"])})'
+    assert title["backgroundImage"] == gradient, title
+    assert styles["heading"]["fontWeight"] == "600"
+    assert styles["header"] == {"backgroundColor": rgb(expected["surface"]), "borderBottomWidth": "1px",
+                                "borderBottomColor": rgb(expected["border"])}
+    assert styles["card"] == {"backgroundColor": rgb(expected["surface"]), "borderRadius": "16px",
+                              "borderTopWidth": "1px", "borderTopColor": rgb(expected["border"])}
+    assert styles["button"] == {"backgroundColor": rgb(expected["accent"]),
+                                "color": rgb(expected["accent-fg"]), "borderRadius": "10px"}
+    assert styles["link"]["color"] == rgb(expected["link"])
+    assert styles["image"] == {"filter": "none", "opacity": "1", "mixBlendMode": "normal"}
+    assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
+    return {"theme": theme, "titleSize": size, "variables": actual}
+
+
+def check_keyboard_focus(page, selector, theme):
+    element = page.locator(selector)
+    assert element.evaluate("(element) => element === document.activeElement")
+    focus = element.evaluate("""element => {
+        const style = getComputedStyle(element);
+        return {visible: element.matches(':focus-visible'), width: style.outlineWidth,
+                color: style.outlineColor, offset: style.outlineOffset, style: style.outlineStyle};
+    }""")
+    palette = LIGHT_PALETTE if theme == "light" else DARK_PALETTE
+    assert focus == {"visible": True, "width": "3px", "color": rgb(palette["accent"]),
+                     "offset": "5px", "style": "solid"}, focus
+
+
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--browser-channel", choices=("msedge", "chrome", "chromium"), default="msedge")
+    args = parser.parse_args()
+    channel = None if args.browser_channel == "chromium" else args.browser_channel
     profile = ROOT / ".site-browser-profile"
     artifacts = ROOT / ".site-browser-artifacts"
     if profile.exists():
@@ -33,7 +129,7 @@ def main():
     try:
         with sync_playwright() as playwright:
             context = playwright.chromium.launch_persistent_context(
-                user_data_dir=str(profile), channel="msedge", headless=True,
+                user_data_dir=str(profile), channel=channel, headless=True,
                 viewport={"width": 1440, "height": 1000}, accept_downloads=False,
                 downloads_path=str(artifacts), traces_dir=str(artifacts),
                 args=["--no-first-run", "--no-default-browser-check", "--disable-background-networking",
@@ -64,7 +160,7 @@ def main():
                     assert page.locator(f"#step-{i}").get_attribute("aria-selected") == "true"
                 page.locator("#step-6").focus()
                 page.keyboard.press("Home")
-                assert page.locator("#step-1").evaluate("(element) => element === document.activeElement")
+                check_keyboard_focus(page, "#step-1", "light")
                 page.keyboard.press("ArrowDown")
                 assert page.locator("#stage-2").is_visible()
                 for name in ("all", "hr", "it", "excel"):
@@ -115,25 +211,67 @@ def main():
                 results["httpSolutionSha256"] = digest
                 assert len(package.body()) == 64159
                 page.goto(base + "?scoutTheme=light&keep=1", wait_until="networkidle")
+                check_theme(page, "light")
                 page.screenshot(path=str(artifacts / "desktop-light.png"))
-                page.get_by_role("button", name="Switch to dark theme").click()
+                page.get_by_role("navigation", name="Main navigation").get_by_role("link", name="Coverage", exact=True).click()
+                assert page.url.endswith("#coverage")
+                page.get_by_role("button", name="Switch to dark theme").focus()
+                page.keyboard.press("Enter")
                 assert page.locator("html").get_attribute("data-theme") == "dark"
-                assert "keep=1" in page.url and "scoutTheme=dark" in page.url
+                assert "keep=1" in page.url and "scoutTheme=dark" in page.url and page.url.endswith("#coverage")
+                check_keyboard_focus(page, "#theme-toggle", "dark")
+                check_theme(page, "dark")
+                page.evaluate("() => window.scrollTo(0, 0)")
                 page.screenshot(path=str(artifacts / "desktop-dark.png"))
                 results["themeAndQueryPreservationPassed"] = True
+                results["computedThemes"] = []
                 for width in (1440, 1024, 768, 390, 320):
                     page.set_viewport_size({"width": width, "height": 844})
                     for theme in ("light", "dark"):
+                        page.emulate_media(color_scheme="dark" if theme == "light" else "light")
                         page.goto(base + "?scoutTheme=" + theme, wait_until="networkidle")
-                        assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth"), f"Overflow at {width}"
+                        assert page.locator("html").get_attribute("data-theme") == theme
+                        results["computedThemes"].append({"width": width, **check_theme(page, theme)})
                         assert page.get_by_role("heading", level=1).is_visible()
                         assert page.locator("#instruction-source code").text_content() == expected
+                        page.keyboard.press("Tab")
+                        check_keyboard_focus(page, ".skip", theme)
+                        page.keyboard.press("Enter")
+                        assert page.locator("#main").evaluate("(element) => element === document.activeElement")
+                        page.get_by_role("button", name="Switch to " + ("dark" if theme == "light" else "light") + " theme").focus()
+                        page.keyboard.press("Enter")
+                        check_theme(page, "dark" if theme == "light" else "light")
+                        page.keyboard.press("Enter")
+                        check_theme(page, theme)
+                        page.locator("#gallery-hr").focus()
+                        page.keyboard.press("End")
+                        check_keyboard_focus(page, "#gallery-excel", theme)
+                        assert page.locator("#screen-excel").is_visible()
+                        page.evaluate("() => window.scrollTo(0, 0)")
                         if width == 390:
                             page.screenshot(path=str(artifacts / ("mobile-" + theme + ".png")))
                             for section in ("agent-instructions", "sp-Initial_search", "sp-Final_file_acl"):
                                 page.locator("#" + section).screenshot(
                                     path=str(artifacts / (section + "-mobile-" + theme + ".png")))
                 results["noHorizontalOverflowAtWidthsBothThemes"] = [1440, 1024, 768, 390, 320]
+                for theme in ("light", "dark"):
+                    page.emulate_media(color_scheme=theme)
+                    for query in ("", "?scoutTheme=invalid"):
+                        page.goto(base + query, wait_until="networkidle")
+                        assert page.locator("html").get_attribute("data-theme") == theme
+                        check_theme(page, theme)
+                    for media in ({"forced_colors": "active"}, {"media": "print"}):
+                        page.emulate_media(**media)
+                        fallback = page.locator("h1").evaluate("""element => {
+                            const style = getComputedStyle(element);
+                            return {background: style.backgroundImage, color: style.color};
+                        }""")
+                        assert fallback["background"] == "none"
+                        assert fallback["color"] != "rgba(0, 0, 0, 0)"
+                        page.emulate_media(forced_colors="none", media="screen")
+                results["systemPreferenceAndInvalidParameterFallbackPassed"] = True
+                results["forcedColorsAndPrintTitleFallbackPassed"] = True
+                results["keyboardNavigationFocusAndToggleBothThemesPassed"] = True
                 results["browserUserAgent"] = page.evaluate("() => navigator.userAgent")
                 assert not errors, errors
                 assert not blocked, blocked
@@ -141,7 +279,7 @@ def main():
                                 "server": "Loopback only; project-prefixed allowlisted staging tree."})
             finally:
                 context.close()
-            browser = playwright.chromium.launch(channel="msedge", headless=True)
+            browser = playwright.chromium.launch(channel=channel, headless=True)
             try:
                 nojs = browser.new_context(java_script_enabled=False, viewport={"width": 390, "height": 844})
                 nojs.route("**/*", route_request)
