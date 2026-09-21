@@ -1,5 +1,8 @@
 # SharePoint Search Hub
 
+The documentation site defaults to dark regardless of OS preference. Its theme
+button and explicit `?scoutTheme=light` / `?scoutTheme=dark` choices remain available.
+
 **One Copilot Studio agent. Multiple approved SharePoint sites. Source-linked results and a private Excel export.**
 
 [Download solution ZIP](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip) ·

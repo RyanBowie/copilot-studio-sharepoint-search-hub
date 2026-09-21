@@ -258,8 +258,8 @@ def main():
                     page.emulate_media(color_scheme=theme)
                     for query in ("", "?scoutTheme=invalid"):
                         page.goto(base + query, wait_until="networkidle")
-                        assert page.locator("html").get_attribute("data-theme") == theme
-                        check_theme(page, theme)
+                        assert page.locator("html").get_attribute("data-theme") == "dark"
+                        check_theme(page, "dark")
                     for media in ({"forced_colors": "active"}, {"media": "print"}):
                         page.emulate_media(**media)
                         fallback = page.locator("h1").evaluate("""element => {

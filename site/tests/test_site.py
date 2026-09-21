@@ -463,7 +463,7 @@ class SiteTests(unittest.TestCase):
     def test_theme_and_no_remote_runtime_dependencies(self):
         scripts = re.findall(r"<script>(.*?)</script>", self.html, flags=re.S)
         self.assertIn('const param = new URLSearchParams(window.location.search).get("scoutTheme");', scripts[0])
-        self.assertIn('param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");', scripts[0])
+        self.assertIn('const theme = param === "light" ? "light" : "dark";', scripts[0])
         self.assertIn('explicit === "light" || explicit === "dark"', scripts[1])
         self.assertIn('url.searchParams.set("scoutTheme", next)', self.html)
         self.assertIn('"Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif', self.html)
