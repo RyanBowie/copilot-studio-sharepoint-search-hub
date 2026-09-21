@@ -1,0 +1,156 @@
+{
+  "importCompletedUtc": "2026-09-21T00:23:28Z",
+  "artifact": "CorpNetSearchHubReference_1_0_0_0_unmanaged.zip",
+  "artifactBytes": 64130,
+  "artifactSha256": "c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad",
+  "exactTestedBytesPromoted": true,
+  "targetType": "Sandbox",
+  "preflight": {
+    "completedUtc": "2026-09-21T00:21:36Z",
+    "explicitTargetVerified": true,
+    "globalReadAndImportPrivilegesConfirmed": true,
+    "queriedDirectEntityTablesIncludingComponentsOutsideSolutions": true,
+    "matchingExistingComponents": 0
+  },
+  "attempt": {
+    "count": 3,
+    "operation": "Dataverse Web API v9.2 ImportSolutionAsync",
+    "publishWorkflows": false,
+    "overwriteUnmanagedCustomizations": false,
+    "connectionBindingsProvided": false,
+    "requestMembers": [
+      "OverwriteUnmanagedCustomizations",
+      "PublishWorkflows",
+      "CustomizationFile"
+    ]
+  },
+  "attemptHistory": [
+    {
+      "sequence": 1,
+      "artifactBytes": 64159,
+      "artifactSha256": "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272",
+      "submittedUtc": "2026-09-20T23:38:58.8607874Z",
+      "result": "FAILED",
+      "status": "IMPORT-REQUEST-REJECTED",
+      "emptyComponentParametersSent": true,
+      "clientGeneratedImportJobIdSent": true,
+      "asyncOperationIdReturned": false,
+      "errorCode": "0x80040216",
+      "errorMessage": "Custom state is not set for entity type crmbaseentity.",
+      "postAttemptMatchingComponentCount": 0
+    },
+    {
+      "sequence": 2,
+      "artifactBytes": 64159,
+      "artifactSha256": "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272",
+      "freshPreflightUtc": "2026-09-20T23:56:23Z",
+      "completedUtc": "2026-09-20T23:56:42Z",
+      "postcheckUtc": "2026-09-20T23:58:44.7804281Z",
+      "result": "FAILED",
+      "status": "ASYNC-IMPORT-FAILED",
+      "emptyComponentParametersSent": false,
+      "clientGeneratedImportJobIdSent": false,
+      "asyncOperationIdReturned": true,
+      "importJobKeyReturned": true,
+      "asyncStateCode": 3,
+      "asyncStatusCode": 31,
+      "matchingImportJobRecords": 0,
+      "errorCode": "0x80040216",
+      "errorMessage": "The specified node cannot be inserted as the valid child of this node, because the specified node is the wrong type.",
+      "exceptionType": "System.InvalidOperationException",
+      "faultLocation": "SourceControlHandler.ImportEntityFromFile -> XmlNode.AppendChild",
+      "postAttemptMatchingComponentCount": 0
+    },
+    {
+      "sequence": 3,
+      "artifactBytes": 64130,
+      "artifactSha256": "c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad",
+      "freshPreflightUtc": "2026-09-21T00:21:36Z",
+      "startedUtc": "2026-09-21T00:21:42Z",
+      "completedUtc": "2026-09-21T00:23:28Z",
+      "result": "SUCCEEDED",
+      "status": "IMPORT-SUCCEEDED",
+      "emptyComponentParametersSent": false,
+      "clientGeneratedImportJobIdSent": false,
+      "asyncOperationIdReturned": true,
+      "importJobKeyReturned": true,
+      "asyncStateCode": 3,
+      "asyncStatusCode": 30,
+      "importJobProgress": 100,
+      "successfulLoggedResultStages": 14,
+      "failedLoggedResultStages": 0,
+      "solutionMembershipCount": 24
+    }
+  ],
+  "outcome": {
+    "result": "SUCCEEDED",
+    "status": "IMPORT-SUCCEEDED",
+    "asyncOperationIdReturned": true,
+    "importJobKeyReturned": true,
+    "asyncStateCode": 3,
+    "asyncStatusCode": 30,
+    "matchingImportJobRecords": 1,
+    "importJobProgress": 100,
+    "successfulLoggedResultStages": 14,
+    "failedLoggedResultStages": 0,
+    "solutionMembershipCount": 24,
+    "unexpectedSolutionMemberships": 0,
+    "postAttemptMatchingRecords": {
+      "solutions": 1,
+      "agents": 1,
+      "botComponents": 16,
+      "workflows": 1,
+      "connectionReferences": 5,
+      "toolWorkflowRelationships": 1,
+      "publishers": 1
+    }
+  },
+  "observedTarget": {
+    "allComponentsUnmanaged": true,
+    "workflowActionCount": 183,
+    "workflowStateCode": 0,
+    "workflowStatusCode": 1,
+    "agentPublishedOn": null,
+    "agentPublishedBy": null,
+    "publishOnImport": false,
+    "channels": [],
+    "unboundConnectionReferences": 5,
+    "invokerRuntimeConnectionReferences": 5,
+    "nativeToolMode": "Invoker",
+    "defaultToEmbeddedConnections": false
+  },
+  "editabilityMetadata": {
+    "workflowIsCustomizable": true,
+    "customizableConnectionReferences": 4,
+    "nonCustomizableAgents": 1,
+    "nonCustomizableBotComponents": 16,
+    "nonCustomizableSharePointReferences": 1,
+    "effectiveUiSaveTested": false
+  },
+  "verification": {
+    "targetImport": "VERIFIED_SANDBOX_ONLY",
+    "targetRuntime": "NOT_RUN",
+    "targetEditability": "METADATA_ONLY_UI_SAVE_NOT_TESTED",
+    "targetFlowOffAndAgentUnpublished": "VERIFIED_SANDBOX_ONLY",
+    "crossTenantImport": "NOT_VERIFIED"
+  },
+  "actionsDuringVerification": {
+    "agentOrFlowInvocations": 0,
+    "publishCalls": 0,
+    "connectionsCreatedOrRebound": 0,
+    "permissionChanges": 0,
+    "cleanupOrDeleteOperations": 0,
+    "authProfileOrDefaultEnvironmentChanges": 0
+  },
+  "limitations": [
+    "All three attempts were individually authorized, with an exclusive slot, exact artifact hash and fresh zero-collision preflight. The first two used the failed original bytes; only the third used the corrected bytes.",
+    "Removing unused request members allowed async processing but does not isolate the empty ComponentParameters array as the first rejection's cause.",
+    "The declaration-only correction matches authentic native fragment format and the corrected package imported successfully. This supports the packaging diagnosis without claiming isolated causality for all errors.",
+    "The successful import was not a configured deployment or a runtime test. No connections, audience or tenant policy were configured.",
+    "Unmanaged does not establish editability. Non-customizable managed properties were retained; effective native UI/save behavior was not tested.",
+    "Dataverse componentstate labelled Published is a customization-state label, not proof of live agent publication. Publication fields remained null, automatic publication false and channels empty.",
+    "The target name, URL, tenant/environment IDs, job IDs, account information and raw logs are intentionally not published. Original raw evidence remains private and preserved.",
+    "Imported inactive sandbox components were left in place. No cleanup, publication, invocation or further native change followed.",
+    "Cross-tenant portability, target permissions at runtime, non-owner behavior, Teams, inbox delivery and production-scale behavior remain unverified."
+  ]
+}

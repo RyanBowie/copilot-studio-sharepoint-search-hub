@@ -1,0 +1,62 @@
+{
+  "nativeImportCompletedUtc": "2026-09-21T00:23:28Z",
+  "artifact": "CorpNetSearchHubReference_1_0_0_0_unmanaged.zip",
+  "artifactSha256": "c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad",
+  "artifactBytes": 64130,
+  "packageType": "Unmanaged",
+  "exportMethod": "Authentic Dataverse unmanaged export adapted offline; corrected source packed with supported PAC SolutionPackager.",
+  "packager": "Microsoft PowerPlatform CLI 1.47.1+gc5a7855 / SolutionPackager",
+  "previousArtifactSha256": "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272",
+  "historicalValidation": "validation.json",
+  "targetImportEvidence": "import-verification.json",
+  "sourceDefinitionRevisionSha256": "80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a",
+  "portableDefinitionCanonicalSha256": "5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3",
+  "formatCorrection": {
+    "entry": "bots/cnh_corpnetSearchHub/bot.xml",
+    "removedBytes": 40,
+    "removedContent": "Leading XML declaration and its CRLF only",
+    "entryBytesBefore": 425,
+    "entryBytesAfter": 385,
+    "entrySha256After": "fa7d874d728a08de6a4453d5037ec98d4db683c2f8815e25b126de3ce8836ccb",
+    "basis": "Authentic native export uses an element-first bot fragment. Its bot element matches after excluding the deliberately omitted original icon. Appending the former declaration reproduces the native wrong-node exception locally.",
+    "botDocumentElementUnchanged": true,
+    "otherUncompressedEntriesByteIdentical": 38,
+    "allEntryNamesAndOrderUnchanged": true,
+    "runtimeLogicChanged": false,
+    "entityFragmentAppendChecksPassed": 17
+  },
+  "solutionTests": {
+    "passed": 18,
+    "failed": 0
+  },
+  "portableAgentTests": {
+    "passed": 68,
+    "failed": 0,
+    "jsonschemaVersion": "4.25.1"
+  },
+  "roundtrip": {
+    "sequence": "PAC unpack -> pack -> unpack",
+    "sourceFilesCompared": 39,
+    "allXmlJsonYamlSemanticsEqual": true,
+    "missingOrAdditionalFiles": 0,
+    "allRepackedEntryContentsIdentical": true,
+    "repackedZipSha256": "039b82c76a1f98ffcb09962317281f55ed55a9243426b48163bc886f02281731"
+  },
+  "zipCrcPassed": true,
+  "zipEntryCount": 39,
+  "nativeSandboxImport": "SUCCEEDED",
+  "crossTenantImport": "NOT_VERIFIED",
+  "targetRuntime": "NOT_RUN",
+  "targetEditability": "METADATA_ONLY_UI_SAVE_NOT_TESTED",
+  "runtimeInvocationsDuringVerification": 0,
+  "agentPublicationsDuringVerification": 0,
+  "limitations": [
+    "The exact downloadable bytes succeeded in one isolated Sandbox; this is not universal or cross-tenant import certification.",
+    "Native terminal success and complete component presence support the declaration-only correction; they do not establish isolated causality for every prior error.",
+    "All 38 unaffected entry payloads, the callable implementation and reviewed nested workbook/images are unchanged.",
+    "Bot, botcomponent and SharePoint-reference non-customizable managed properties remain. Effective UI/save editability was not tested.",
+    "Connections remain unbound, fictional tenant configuration remains, and the imported flow is off with the agent unpublished.",
+    "The original package validation and all failed import attempts are retained separately; no historical offline proof is rewritten as native success.",
+    "No target runtime, cross-user, Teams, inbox-delivery or production-scale validation was performed."
+  ]
+}

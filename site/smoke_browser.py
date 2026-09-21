@@ -207,9 +207,9 @@ def main():
                 package = page.request.get(base + "downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip")
                 assert package.status == 200
                 digest = hashlib.sha256(package.body()).hexdigest()
-                assert digest == "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272"
+                assert digest == "c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad"
                 results["httpSolutionSha256"] = digest
-                assert len(package.body()) == 64159
+                assert len(package.body()) == 64130
                 page.goto(base + "?scoutTheme=light&keep=1", wait_until="networkidle")
                 check_theme(page, "light")
                 page.screenshot(path=str(artifacts / "desktop-light.png"))

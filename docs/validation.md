@@ -82,7 +82,39 @@ its preview is a bounded verified sample, not the best ten by rank.
 [Source/index checkpoint and counts](scale-source-validation-summary.json) ·
 [Reproducible corpus and 512-item blueprint](../fixtures/corpnet-demo/README.md#500-plus-scale-fixture)
 
-## Unmanaged reference solution - 13 September 2026
+## Exact solution ZIP native import - 21 September 2026
+
+The corrected **64,130-byte** unmanaged ZIP completed a real isolated Sandbox
+import at **00:23:28 UTC**, with terminal async state/status **3/30**, import-job
+progress 100% and no failed result stages. Its SHA-256 is
+`c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad`.
+Those exact tested bytes, not a later repack, are the current solution artifact.
+
+Postchecks found all **24 expected solution memberships**, with no extras:
+one bot, 16 components, one workflow, five references and one tool relationship.
+The full 183-action workflow was Off; bot publication fields were empty,
+`publishOnImport=false`, channels empty, and all five references unbound with
+Invoker behavior intact. No connection, configuration, permissions, publication
+or runtime changes followed; inactive components were left in place.
+
+Both earlier failed attempts are retained: the original archive first had a
+request-level rejection, then a native XML wrong-child-node failure. Authentic
+export comparison supported removing only the bot fragment's 40-byte XML
+declaration and CRLF. Its bot element and all 38 other entry payloads were
+unchanged. The corrected candidate passed 18 solution tests, 68 portable tests
+and a 39-file PAC roundtrip before its separately authorized native import.
+
+**Unmanaged does not prove editability.** The workflow and four references
+reported customizable metadata; the bot, all 16 components and SharePoint
+reference retained non-customizable managed properties. Effective native
+UI/save behavior was not tested. Cross-tenant import and configured runtime,
+non-owner access, Teams and inbox delivery also remain unverified.
+
+[Current package evidence](../solutions/package-validation.json) ·
+[All three import attempts and target-state observations](../solutions/import-verification.json) ·
+[Import-then-setup guide and editability limits](../solutions/README.md)
+
+## Unmanaged reference solution - 13 September 2026 (historical)
 
 The repository now includes a real unmanaged package derived from a supported
 Dataverse export and rebuilt with Microsoft PAC 1.47.1 SolutionPackager.
@@ -104,7 +136,9 @@ and the packaged workflow is stopped. Those requested defaults still require
 verification after an actual import. A narrowly retained intrinsic workflow
 identity maintains internal references; all tenant/account locators remain excluded.
 
-**New-tenant import and runtime are UNVERIFIED.** HR/IT-like departments and
+**At this historical checkpoint, target import and runtime were UNVERIFIED.**
+The separate 21 September record above supersedes only the import boundary.
+HR/IT-like departments and
 topics require customization, as do inventory, metadata, connections,
 authentication, model availability and sharing. Packing is not evidence that
 those target prerequisites are satisfied.

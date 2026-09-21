@@ -3,12 +3,22 @@
 This is a **customizable reference**, not a one-click production deployment.
 It includes an [unmanaged solution ZIP and complete unpacked source](../solutions/README.md),
 but no live tenant connections or permission to publish into another environment.
-Package consistency is checked; **new-tenant import and runtime are unverified**.
+The [exact downloadable ZIP passed native Sandbox import](../solutions/import-verification.json)
+on 21 September 2026 UTC: all 24 expected solution memberships, a stopped flow,
+empty agent publication fields/channels, and five unbound Invoker references.
+Both earlier failed attempts remain in the record. **Cross-tenant import,
+configured runtime and effective UI/save editability remain unverified.**
+The workflow and four references report customizable metadata; the bot, its
+16 components and SharePoint reference retain non-customizable managed properties.
+No connection binding, tenant configuration, native editing, runtime test or
+publication was performed. Do not infer those capabilities from "unmanaged."
 
 ## Solution package route
 
-Follow the [solution-specific guide](../solutions/README.md) before importing
-the package into a separate development environment. It contains the agent,
+Follow the [import-then-setup guide](../solutions/README.md#import-then-set-up).
+[Download the actual solution ZIP](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip)
+and import it directly into a separate development environment, without unzipping
+or substituting the GitHub source archive. It contains the agent,
 current native runtime flow and required references, with fictional target
 configuration, unbound connections, no auto-publication and a stopped workflow.
 The [deployment-settings template](../solutions/deployment-settings.template.json)
@@ -55,7 +65,14 @@ The website presents this [new-tenant checklist directly on the page](https://ry
    Identify a SharePoint administrator for hub registration/association and an
    owner for agent access/sharing. Check model availability rather than assuming
    `GPT5Chat` exists in the target environment.
-2. **Create or select the source sites.** A straightforward pilot retains one
+2. **Import inactive, then configure.** In **Solutions → Import solution**, select
+   the actual ZIP and clear **Enable Plugin steps and flows included in the
+   solution** under Advanced settings. Bind the five approved target connections
+   and review dependencies. Download the import log on failure. Check the actual
+   agent/flow/component inventory and stopped/unpublished state; this checkbox
+   does not deactivate an existing flow. There is no post-import setup wizard,
+   and no environment-variable prompts that retarget the compiled tenant policy.
+3. **Create or select the source sites.** A straightforward pilot retains one
    corporate hub and HR, Finance and IT collections. Register the corporate site
    as a hub and associate each approved spoke through supported administration.
    Existing sites are acceptable within the current validator's supported shape:
@@ -63,37 +80,40 @@ The website presents this [new-tenant checklist directly on the page](https://ry
    `/teams/` roots, arbitrary subweb inventory entries, sovereign-cloud and
    cross-tenant targets need a deliberate redesign, not a placeholder swap.
    If no hub is available, do not bypass the required `DepartmentId` restriction.
-3. **Add a small real pilot corpus and permissions.** Create/select document
+4. **Add a small real pilot corpus and permissions.** Create/select document
    libraries and Site Pages, add safe documents and published pages, and grant
    intentional source access. Hub association is not authorization. You do not
    need 512 items initially; fixture generation is optional and separate.
    Include allowed and denied items for a separately authorized non-owner test.
-4. **Choose optional metadata.** For stored labels, use compatible text columns
+5. **Choose optional metadata.** For stored labels, use compatible text columns
    with internal names `Department`, `TopicTags` and `DocumentType`.
    `TopicTags` is semicolon-delimited text, not managed taxonomy. Discovery is
    dynamic; missing tags remain `Not supplied`. A renamed display label does
    not change the internal name. `DepartmentId` is the search hub-association
    property, not a custom list column to create. `PolicyStatus` and `ReviewDate`
    are not required or consumed by this flow.
-5. **Record identifiers and verify indexing.** Obtain actual collection IDs
+6. **Record identifiers and verify indexing.** Obtain actual collection IDs
    through approved admin tooling or each site's `_api/site?$select=Id`; do not
    substitute list IDs or URL slugs. Verify hub registration/association, then
    allow indexing to catch up. Confirm search locators `SPWebUrl`, `SiteID`,
    `ListID`, `ListItemID` and current file/page reads under the intended caller.
    Working direct links alone do not establish indexed search coverage.
-6. **Retarget a private source copy and regenerate coherently.** Use the matrix
+7. **Retarget a private source copy and regenerate coherently.** Use the matrix
    below. In `configured` mode, verification flags are owner assertions set only
    after their checks—not automated proof or a workaround for missing setup.
    Generate the target flow using the existing agent builder, then deliberately
    adapt the private reference-only package validation policy and rebuild if
    using the solution route. Stock package tests reject real tenant locators;
    do not remove runtime identity/scope checks to satisfy them.
-7. **Import/bind without publishing.** Use the reviewed target package and
-   supported Solutions import/PAC route. Bind all five target connections and
+8. **Apply and verify target configuration without publishing.** Apply a reviewed
+   private rebuild as an intentional unmanaged update to the new target solution,
+   or coordinate changes in the supported product editors. Bind all five target connections and
    keep every runtime connection **Provided by run-only user**, `invoker`,
    tool `Invoker`, and no embedded maker fallback. Verify the native tool is
    registered and both topic/tool references resolve to the same flow.
-8. **Prepare callers and audience.** Pilot users need provisioned personal
+9. **Prepare callers and audience.** Reconfigure authentication on the imported
+   agent in Copilot Studio; source-tenant auth/channel setup does not transfer
+   as a verified target configuration. Pilot users need provisioned personal
    OneDrive sites, supported connection consent and nonempty directory mail.
    Selected profile, source and private-drive identities must align. The
    current flow writes `CorpNetSearchResults-<JobId>.xlsx` in the personal-drive
@@ -102,13 +122,18 @@ The website presents this [new-tenant checklist directly on the page](https://ry
    Integrated/Always authentication. Keep classic orchestration to reproduce
    the tested version; a generative adaptation requires the corresponding
    setting, instructions/descriptions and validation changes described below.
-9. **Validate in the target before release.** Start small: topic questions,
+10. **Validate in the target before release.** Start small: topic questions,
    tool binding, a positive query, no-match, invalid input, connector failure,
    allowed/denied source access, exact workbook rows/dates/tags, private ACL and
    mailbox delivery. Then exercise more than 100 matches, duplicates, caps,
    partial processing and changed access. Enable the configured flow only for
    controlled testing; the target owner publishes/shares after approval.
    M365 and Teams rendering/sign-in are separate target checks.
+
+Use the [smoke-check matrix and troubleshooting guide](../solutions/README.md#5-enable-for-a-controlled-smoke-check-then-publish-separately)
+to distinguish import, draft testing, flow enablement, agent publication and
+verified delivery. An environment/channel that cannot support caller-provided
+connections is a blocker; do not fall back to maker credentials.
 
 ### Target customization matrix
 
@@ -134,6 +159,13 @@ repository YAML does not modify imported components, and filling connection IDs
 alone does not replace the embedded Contoso policy. Export your configured
 target solution privately; do not publish tenant IDs, connections or real data
 back into this neutral reference.
+
+The [compiled-location map](../solutions/README.md#4-configure-the-imported-implementation-for-your-tenant)
+enumerates the inventory object and ten additional tenant-dependent leaves.
+Some exported records carry `iscustomizable=0`; target editability is not proven.
+If supported editing is blocked, stop and investigate the product error rather
+than changing metadata flags to force it. The fictional policy is not a runtime
+activation interlock.
 
 See the [request-by-request SharePoint action reference](sharepoint-actions.md)
 for the actual corporate-site, current-source and personal-site requests that

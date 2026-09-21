@@ -252,8 +252,8 @@
     },
     {
       "path": "bots\\cnh_corpnetSearchHub\\bot.xml",
-      "bytes": 425,
-      "sha256": "649f7b08eb3566447d5fc976ecdfc00a6e1c844a654af7986945c7ed3a944f40"
+      "bytes": 385,
+      "sha256": "fa7d874d728a08de6a4453d5037ec98d4db683c2f8815e25b126de3ce8836ccb"
     },
     {
       "path": "bots\\cnh_corpnetSearchHub\\configuration.json",
@@ -464,8 +464,8 @@
     },
     {
       "path": "bots/cnh_corpnetSearchHub/bot.xml",
-      "bytes": 425,
-      "sha256": "649f7b08eb3566447d5fc976ecdfc00a6e1c844a654af7986945c7ed3a944f40"
+      "bytes": 385,
+      "sha256": "fa7d874d728a08de6a4453d5037ec98d4db683c2f8815e25b126de3ce8836ccb"
     },
     {
       "path": "bots/cnh_corpnetSearchHub/configuration.json",
