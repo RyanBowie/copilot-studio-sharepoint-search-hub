@@ -3,7 +3,9 @@
 This is an allowlisted, sanitized adaptation of an existing Copilot Studio agent,
 not itself a solution ZIP or proof of production readiness. The separate
 [unmanaged solution and import guidance](../solutions/README.md) are provided
-at repository level; target-tenant import/runtime remain unverified.
+at repository level. That exact package passed an isolated Sandbox import;
+cross-tenant portability, configured target runtime and native UI/save
+editability remain unverified.
 `contoso.sharepoint.com`, every `00000000-...` GUID and every
 `REPLACE_WITH_CALLER_...` connection name are **fictional placeholders**.
 No connected workspace, credentials, live resource identifiers or populated workbooks
@@ -85,8 +87,11 @@ on both the initial and subsequent pages. Preview candidates follow index order
 within each bounded batch; up to ten verified matches are not the “best ten”
 or a globally ranked top ten. The portable definition is
 `5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3`.
-The preceding M365 formatting evidence remains historical; native caller
-validation after this paging change is pending. See
+The preceding M365 formatting evidence remains historical. The later
+[source-environment native run](../docs/scale-runtime-validation-summary.json)
+verified 512 caller-hydrated rows, 512 private Excel rows and one accepted
+verified-profile email after this paging change. That does not verify inbox
+receipt, non-owner behavior or an import of the sanitized solution. See
 [stable paging](flows/search-export/stable-paging.md) for the diagnostic boundary.
 
 - Flow inputs: `query` and `scope` strings only. Supported topic areas are `All`,

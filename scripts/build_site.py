@@ -3,17 +3,20 @@
 import argparse
 import hashlib
 import html
+import io
 import json
 from pathlib import Path
 import re
 import shutil
 import struct
+import xml.etree.ElementTree as ET
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
 REPOSITORY = "https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub"
-SOLUTION_SHA256 = "525136e9e96afaf5a90594cc14cf502555b16eb31680a9c64dc3b109ec925272"
-SOLUTION_BYTES = 64159
+SOLUTION_SHA256 = "c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad"
+SOLUTION_BYTES = 64130
 TEMPLATE = ROOT / "site" / "index.template.html"
 MARKER = ".site-build-manifest.json"
 
@@ -40,7 +43,10 @@ ASSETS = {
     "hr-proof": ("docs/m365-validation-summary.json", "evidence/m365-validation-summary.json"),
     "it-proof": ("docs/table-polish-validation-summary.json", "evidence/table-polish-validation-summary.json"),
     "workbook-proof": ("docs/workbook-validation-summary.json", "evidence/workbook-validation-summary.json"),
-    "package-proof": ("solutions/validation.json", "evidence/solution-validation.json"),
+    "package-proof": ("solutions/package-validation.json", "evidence/solution-validation.json"),
+    "historical-package-proof": ("solutions/validation.json", "evidence/original-solution-validation.json"),
+    "package-inventory": ("solutions/component-inventory.json", "evidence/solution-component-inventory.json"),
+    "import-proof": ("solutions/import-verification.json", "evidence/solution-import-verification.json"),
     "notice": ("NOTICE.md", "NOTICE.md"),
     "asset-notice": ("solutions/ASSET-NOTICE.md", "ASSET-NOTICE.md"),
     "agent-source": ("agent/agent.mcs.yml", "downloads/agent.mcs.yml"),
@@ -103,16 +109,71 @@ def load_evidence():
     package = source_path(ASSETS["solution"][0]).read_bytes()
     if len(package) != SOLUTION_BYTES or hashlib.sha256(package).hexdigest() != SOLUTION_SHA256:
         raise ValueError("Solution bytes changed; review and deliberately update the website download pin.")
+    inventory = json.loads(source_path(ASSETS["package-inventory"][0]).read_text(encoding="utf-8"))
+    validate_solution_archive(package, inventory)
     package_proof = json.loads(source_path(ASSETS["package-proof"][0]).read_text(encoding="utf-8"))
     if package_proof["artifactSha256"] != SOLUTION_SHA256:
         raise ValueError("Package validation snapshot does not identify the downloadable ZIP.")
+    historical = json.loads(source_path(ASSETS["historical-package-proof"][0]).read_text(encoding="utf-8"))
+    if package_proof["previousArtifactSha256"] != historical["artifactSha256"]:
+        raise ValueError("Preserve the original package validation and its artifact identity.")
+    import_proof = json.loads(source_path(ASSETS["import-proof"][0]).read_text(encoding="utf-8"))
+    if (import_proof["artifactSha256"] != SOLUTION_SHA256
+            or import_proof["artifactBytes"] != SOLUTION_BYTES
+            or import_proof["outcome"]["result"] != "SUCCEEDED"
+            or import_proof["outcome"]["status"] != "IMPORT-SUCCEEDED"
+            or import_proof["outcome"]["asyncStateCode"] != 3
+            or import_proof["outcome"]["asyncStatusCode"] != 30
+            or import_proof["outcome"]["importJobProgress"] != 100
+            or import_proof["outcome"]["failedLoggedResultStages"] != 0
+            or import_proof["outcome"]["solutionMembershipCount"] != 24
+            or import_proof["outcome"]["unexpectedSolutionMemberships"] != 0
+            or import_proof["verification"]["targetImport"] != "VERIFIED_SANDBOX_ONLY"
+            or import_proof["verification"]["targetRuntime"] != "NOT_RUN"
+            or import_proof["verification"]["targetEditability"] != "METADATA_ONLY_UI_SAVE_NOT_TESTED"
+            or import_proof["verification"]["crossTenantImport"] != "NOT_VERIFIED"):
+        raise ValueError("Review website import-status copy against changed target evidence.")
+    if import_proof["observedTarget"] != {
+        "allComponentsUnmanaged": True, "workflowActionCount": 183,
+        "workflowStateCode": 0, "workflowStatusCode": 1,
+        "agentPublishedOn": None, "agentPublishedBy": None,
+        "publishOnImport": False, "channels": [],
+        "unboundConnectionReferences": 5, "invokerRuntimeConnectionReferences": 5,
+        "nativeToolMode": "Invoker", "defaultToEmbeddedConnections": False,
+    }:
+        raise ValueError("Review the imported component safety-state claims.")
     definition = json.loads(source_path(ASSETS["definition"][0]).read_text(encoding="utf-8"))
     canonical = hashlib.sha256(json.dumps(definition, sort_keys=True).encode()).hexdigest()
     if canonical != package_proof["portableDefinitionCanonicalSha256"]:
         raise ValueError("Portable flow and package snapshot disagree.")
-    if proof["definitionRevisionSha256"] != package_proof["sourceComponentGuard"]["afterDefinitionSha256"]:
+    if proof["definitionRevisionSha256"] != package_proof["sourceDefinitionRevisionSha256"]:
         raise ValueError("Native runtime evidence and the package source revision disagree.")
     return proof, package_proof
+
+
+def validate_solution_archive(package, inventory):
+    """Check the actual import archive, including PAC-generated XML, against its reviewed inventory."""
+    expected = {entry["path"]: entry for entry in inventory["zipEntries"]}
+    if len(expected) != len(inventory["zipEntries"]):
+        raise ValueError("Duplicate entry in the reviewed solution inventory.")
+    with zipfile.ZipFile(io.BytesIO(package)) as archive:
+        names = archive.namelist()
+        if (len(names) != len(set(names)) or set(names) != set(expected)
+                or not {"solution.xml", "customizations.xml", "[Content_Types].xml"} <= set(names)):
+            raise ValueError("Download must be the reviewed solution ZIP, not a source archive or outer bundle.")
+        if archive.testzip() is not None:
+            raise ValueError("Solution ZIP integrity check failed.")
+        for name, entry in expected.items():
+            payload = archive.read(name)
+            if len(payload) != entry["bytes"] or hashlib.sha256(payload).hexdigest() != entry["sha256"]:
+                raise ValueError(f"Solution entry differs from its reviewed inventory: {name}")
+        manifest = ET.fromstring(archive.read("solution.xml"))
+        for field, value in (("UniqueName", "cnh_CorpNetSearchHubReference"),
+                             ("Version", "1.0.0.0"), ("Managed", "0")):
+            if manifest.findtext(".//" + field) != value:
+                raise ValueError(f"Unexpected solution manifest {field}.")
+        if manifest.findall(".//MissingDependencies/*"):
+            raise ValueError("Solution manifest declares missing dependencies; review before publication.")
 
 
 def render(staged):

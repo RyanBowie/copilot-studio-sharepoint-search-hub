@@ -2,7 +2,7 @@
 
 **One Copilot Studio agent. Multiple approved SharePoint sites. Source-linked results and a private Excel export.**
 
-[Download solution ZIP](solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip) ·
+[Download solution ZIP](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip) ·
 [Import and configure](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup) ·
 [View repository](https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub)
 
@@ -100,12 +100,19 @@ designer captures are explicitly separated from current JSON and later runtime p
 
 ## Agent solution and new-tenant customization
 
-**[Download the unmanaged agent solution](solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip)**
+**[Download the unmanaged agent solution](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip)**
 
 This is a real Power Platform solution package containing the agent, 16 active
 bot components, the native search/export flow, five connection references,
 blank workbook and banners. Complete unpacked source and an offline rebuild
 script are included under [`solutions/`](solutions/).
+
+Import that ZIP itself through **Solutions → Import solution**; do not unzip it,
+upload the GitHub source archive, or try to import the separate flow JSON.
+The single runtime flow includes search, preview, export and email continuation;
+there is no second runtime solution to install. Follow the
+[import-then-setup steps](solutions/README.md#import-then-set-up) with activation
+unchecked, then configure your tenant before enabling the flow or publishing.
 
 **HR, IT, Finance and CorpNet are test departments, not universal business
 configuration.** A new tenant requires coordinated customization of scopes,
@@ -114,11 +121,29 @@ connections, authentication and model availability. The package starts with
 four fictional Contoso site references, empty connection bindings, no channels,
 no automatic publication and a stopped workflow.
 
-**New-tenant import/runtime remain unverified.** PAC packing, 13 package tests
-and a 39-file semantic roundtrip are not proof of successful import or target
-permissions. Use an isolated development environment and the
+**The exact download passed a native Sandbox import on 21 September 2026 UTC.**
+All 24 expected solution memberships were present: one agent, 16 bot components,
+one workflow, five references and one tool relationship, with no extras.
+The flow was Off, agent publication fields empty, channels empty and all five
+references unbound with Invoker behavior retained. This was an **import-only**
+check, not a configured deployment or cross-tenant/runtime validation. Use an isolated
+development environment and the
 [solution setup guide](solutions/README.md); do not import it back over the
 original demonstration agent without a separate upgrade plan.
+
+The [verification record retains all three attempts](solutions/import-verification.json).
+The first two failed using the original archive. Authentic export comparison
+supported removing only a 40-byte XML declaration from the bot metadata fragment;
+the other 38 archive payloads and all runtime logic stayed byte-identical.
+The corrected **64,130-byte** archive succeeded and is the exact tested download.
+See the [current package evidence](solutions/package-validation.json) and unchanged
+[historical snapshot](solutions/validation.json).
+
+**Unmanaged does not prove editability.** Sandbox metadata allows customization
+on the workflow and four references, but the bot, its 16 components and SharePoint
+reference retain non-customizable managed properties. Native UI/save behavior
+was not tested. The setup guide distinguishes these limits; no flags were
+weakened to make import pass.
 
 The SharePoint corpus is separate from the solution. The
 [512-item fixture blueprint](fixtures/corpnet-demo/scale-expected-results.example.json)
@@ -126,7 +151,7 @@ and [generator](fixtures/corpnet-demo/README.md#500-plus-scale-fixture) define
 499 documents and 13 pages across ten collection targets. Creating, indexing
 and actually retrieving those items are separate checks. The connected source
 deployment has now passed the [full 512-row native export check](docs/validation.md#512-result-native-export---13-september-2026);
-that does not establish import or runtime success for the fictional reference ZIP.
+that does not establish target runtime success for the fictional reference ZIP.
 
 ## Verified search coverage
 
@@ -388,7 +413,8 @@ python -B site\preview.py --port 8765
 
 Open the loopback URL printed by the preview command. The builder generates
 `docs/index.html` and stages only the explicit public-file allowlist in `_site`.
-It copies the reviewed solution bytes; it never regenerates the agent, connects
+It copies the reviewed solution bytes and checks every archive entry, including
+PAC-generated XML, against the published component inventory. It never regenerates the agent, connects
 to Microsoft 365, submits a search or sends email. The page has no analytics,
 external scripts or font service; architecture/gallery controls explain the
 implementation rather than execute it.
@@ -405,7 +431,9 @@ their original colours.
 Pages uses GitHub Actions. After pushing a reviewed update, run
 **Build and deploy reference Pages** manually from the **Actions** tab on `main`.
 The [workflow](.github/workflows/pages.yml) intentionally does not change Pages
-settings or repository visibility, and only deploys `_site`. Official actions
+settings or repository visibility, and only deploys `_site`. It runs the static
+solution/source checks before building, then checks the staged download over
+loopback HTTP as well as its file/hash manifest. Official actions
 are pinned to commit hashes; only the deployment job has Pages write and
 identity-token permissions. Optional browser checks in `site/smoke_browser.py`
 use Playwright and a new isolated headless Edge profile, not a signed-in browser:

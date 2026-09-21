@@ -3,15 +3,19 @@ import copy
 import html
 from html.parser import HTMLParser
 import importlib.util
+import io
 import json
 from pathlib import Path
 import re
 import shutil
 import textwrap
+import threading
 import unittest
 from urllib.parse import unquote, urljoin, urlsplit
+from urllib.request import urlopen
 import uuid
 from unittest.mock import patch
+import zipfile
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -90,18 +94,149 @@ class SiteTests(unittest.TestCase):
 
     def test_downloaded_solution_is_exact_and_visible_checksum_matches(self):
         solution = self.output / BUILD.ASSETS["solution"][1]
-        self.assertEqual(solution.stat().st_size, 64159)
+        self.assertEqual(solution.stat().st_size, 64130)
         self.assertEqual(hashlib.sha256(solution.read_bytes()).hexdigest(), BUILD.SOLUTION_SHA256)
         self.assertIn(BUILD.SOLUTION_SHA256, self.html)
-        self.assertIn("64,159 bytes", self.html)
+        self.assertIn("64,130 bytes", self.html)
         self.assertEqual(len(json.loads((self.output / BUILD.ASSETS["settings"][1]).read_text())["ConnectionReferences"]), 5)
+
+    def test_import_download_links_and_guidance_cannot_be_confused_with_source_archives(self):
+        destination = BUILD.ASSETS["solution"][1]
+        links = [attrs for tag, attrs in self.document.elements
+                 if tag == "a" and attrs.get("href") == destination]
+        self.assertGreaterEqual(len(links), 3)
+        self.assertTrue(all("download" in attrs for attrs in links))
+        public_url = "https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/" + destination
+        for name in ("README.md", "solutions/README.md", "docs/setup.md"):
+            text = (ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("](" + public_url + ")", text, name)
+            self.assertNotRegex(text, r"\]\((?:solutions/)?CorpNetSearchHubReference[^)]+\.zip\)")
+        setup = self.html.split('id="setup"', 1)[1].split('<section class="section" id="downloads"', 1)[0]
+        self.assertLess(setup.index("Import the ZIP without activation"),
+                        setup.index("Create or select the hub and spokes"))
+        for required in ("Enable Plugin steps and flows included in the solution",
+                         "does not deactivate existing flows", "reconfigure authentication after import",
+                         "There is no post-import setup wizard", 'id="import-troubleshooting"'):
+            self.assertIn(required, setup)
+        downloads = self.html.split('id="downloads"', 1)[1].split("</section>", 1)[0]
+        self.assertIn("No second runtime solution is needed", downloads)
+        self.assertIn("not the importable solution ZIP", downloads)
+        self.assertIn(BUILD.ASSETS["package-inventory"][1], downloads)
+
+    def test_archive_inventory_rejects_outer_bundles_extra_entries_and_changed_xml(self):
+        package = (self.output / BUILD.ASSETS["solution"][1]).read_bytes()
+        inventory = json.loads((self.output / BUILD.ASSETS["package-inventory"][1]).read_text())
+        BUILD.validate_solution_archive(package, inventory)
+        with zipfile.ZipFile(io.BytesIO(package)) as archive:
+            original = {name: archive.read(name) for name in archive.namelist()}
+        for mutation in ("outer-bundle", "extra-file", "missing-tool", "xml-changed"):
+            with self.subTest(mutation=mutation):
+                entries = original.copy()
+                if mutation == "outer-bundle":
+                    entries = {"bundle/" + name: content for name, content in entries.items()}
+                elif mutation == "extra-file":
+                    entries["unreviewed.txt"] = b"not approved for publication"
+                elif mutation == "missing-tool":
+                    entries.pop("Assets/botcomponent_workflowset.xml")
+                else:
+                    entries["customizations.xml"] += b"\n<!-- unreviewed metadata -->"
+                changed = io.BytesIO()
+                with zipfile.ZipFile(changed, "w") as archive:
+                    for name, content in entries.items():
+                        archive.writestr(name, content)
+                with self.assertRaises(ValueError):
+                    BUILD.validate_solution_archive(changed.getvalue(), inventory)
+
+    def test_target_import_evidence_is_sanitized_and_bounds_native_success(self):
+        text = (self.output / BUILD.ASSETS["import-proof"][1]).read_text()
+        proof = json.loads(text)
+        self.assertEqual(proof["artifactSha256"], BUILD.SOLUTION_SHA256)
+        self.assertEqual(proof["outcome"]["result"], "SUCCEEDED")
+        self.assertEqual(proof["outcome"]["status"], "IMPORT-SUCCEEDED")
+        self.assertFalse(proof["attempt"]["publishWorkflows"])
+        self.assertFalse(proof["attempt"]["connectionBindingsProvided"])
+        self.assertTrue(proof["outcome"]["asyncOperationIdReturned"])
+        self.assertEqual(proof["outcome"]["asyncStateCode"], 3)
+        self.assertEqual(proof["outcome"]["asyncStatusCode"], 30)
+        self.assertEqual(proof["outcome"]["importJobProgress"], 100)
+        self.assertEqual(proof["outcome"]["failedLoggedResultStages"], 0)
+        self.assertEqual(proof["outcome"]["solutionMembershipCount"], 24)
+        self.assertEqual(proof["outcome"]["unexpectedSolutionMemberships"], 0)
+        self.assertEqual(proof["attempt"]["count"], 3)
+        self.assertEqual([attempt["status"] for attempt in proof["attemptHistory"]],
+                         ["IMPORT-REQUEST-REJECTED", "ASYNC-IMPORT-FAILED", "IMPORT-SUCCEEDED"])
+        historical = json.loads((self.output / BUILD.ASSETS["historical-package-proof"][1]).read_text())
+        self.assertEqual([attempt["artifactSha256"] for attempt in proof["attemptHistory"]],
+                         [historical["artifactSha256"], historical["artifactSha256"], BUILD.SOLUTION_SHA256])
+        self.assertEqual(proof["outcome"]["postAttemptMatchingRecords"],
+                         {"solutions": 1, "agents": 1, "botComponents": 16, "workflows": 1,
+                          "connectionReferences": 5, "toolWorkflowRelationships": 1, "publishers": 1})
+        self.assertEqual(set(proof["actionsDuringVerification"].values()), {0})
+        self.assertEqual(proof["verification"]["targetImport"], "VERIFIED_SANDBOX_ONLY")
+        self.assertEqual(proof["verification"]["targetRuntime"], "NOT_RUN")
+        self.assertEqual(proof["verification"]["crossTenantImport"], "NOT_VERIFIED")
+        self.assertFalse(proof["editabilityMetadata"]["effectiveUiSaveTested"])
+        self.assertEqual(proof["editabilityMetadata"]["nonCustomizableAgents"], 1)
+        self.assertEqual(proof["editabilityMetadata"]["nonCustomizableBotComponents"], 16)
+        self.assertEqual(proof["editabilityMetadata"]["nonCustomizableSharePointReferences"], 1)
+        self.assertNotRegex(text, r"(?i)https?://|[a-z]:\\|[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}")
+        self.assertNotRegex(text, r"(?i)\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b")
+        self.assertIn("Exact downloadable ZIP: native Sandbox import succeeded.", self.html)
+        self.assertIn("Unmanaged does not prove editability", self.html)
+        self.assertIn('href="' + BUILD.ASSETS["import-proof"][1] + '"', self.html)
+
+    def test_changed_import_evidence_requires_explicit_publication_copy_review(self):
+        parse = json.loads
+
+        def changed_evidence(text):
+            result = parse(text)
+            if isinstance(result, dict) and "attempt" in result and "outcome" in result:
+                result["outcome"]["result"] = "FAILED"
+            return result
+
+        with patch.object(BUILD.json, "loads", side_effect=changed_evidence):
+            with self.assertRaisesRegex(ValueError, "import-status copy"):
+                BUILD.load_evidence()
+
+    def test_staged_downloads_work_over_http_with_the_project_prefix(self):
+        spec = importlib.util.spec_from_file_location("site_preview", ROOT / "site" / "preview.py")
+        preview = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(preview)
+        with patch.object(preview, "verified_staging", return_value=self.output):
+            server = preview.create_server()
+        thread = threading.Thread(target=server.serve_forever, daemon=True)
+        thread.start()
+        base = f"http://127.0.0.1:{server.server_address[1]}{preview.DEFAULT_PREFIX}"
+        try:
+            with urlopen(base, timeout=10) as response:
+                self.assertEqual(response.status, 200)
+                self.assertEqual(response.read(), (self.output / "index.html").read_bytes())
+            downloads = {attrs["href"] for tag, attrs in self.document.elements
+                         if tag == "a" and "download" in attrs}
+            downloads.add(BUILD.ASSETS["package-inventory"][1])
+            for relative in sorted(downloads):
+                with self.subTest(download=relative), urlopen(urljoin(base, relative), timeout=10) as response:
+                    self.assertEqual(response.status, 200)
+                    self.assertEqual(response.url, base + relative)
+                    payload = response.read()
+                    self.assertEqual(payload, (self.output / relative).read_bytes())
+                    if relative == BUILD.ASSETS["solution"][1]:
+                        self.assertNotIn("text/html", response.headers["Content-Type"])
+                        self.assertEqual(hashlib.sha256(payload).hexdigest(), BUILD.SOLUTION_SHA256)
+                        with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+                            self.assertEqual(len(archive.namelist()), 39)
+                            self.assertIsNone(archive.testzip())
+        finally:
+            server.shutdown()
+            thread.join(timeout=10)
+            server.server_close()
 
     def test_evidence_numbers_and_capture_boundaries_are_explicit(self):
         text = " ".join(self.document.text)
         for required in ("512 / 512", "499 documents", "13 pages", "ten collections", "26m46s",
                          "1,024", "250 + 250 + 12", "100 + 100 + 100 + 100 + 100 + 12",
                          "Pending at capture", "Historical 112-row workbook—not 512",
-                         "first four", "new-tenant import UNVERIFIED", "inbox receipt",
+                         "first four", "cross-tenant/runtime unverified", "inbox receipt",
                          "not a completed cross-user denial audit", "not relevance rank"):
             self.assertIn(required, text)
         self.assertIn("no new 512-row workbook UI capture", text)
@@ -408,8 +543,16 @@ class SiteTests(unittest.TestCase):
         self.assertNotRegex(workflow, r"(?m)^\s+(push|pull_request):")
         self.assertIn("enablement: false", workflow)
         for required in ("contents: read", "pages: write", "id-token: write", "github-pages",
-                         "python -B scripts/build_site.py", "unittest discover -s site/tests", "path: _site"):
+                         "python -B scripts/build_site.py", "unittest discover -s site/tests", "path: _site",
+                         "pip install -r agent/requirements.txt", "unittest discover -s solutions/tests",
+                         "unittest discover -s agent/tests"):
             self.assertIn(required, workflow)
+        self.assertLess(workflow.index("unittest discover -s solutions/tests"),
+                        workflow.index("python -B scripts/build_site.py"))
+        self.assertLess(workflow.index("unittest discover -s agent/tests"),
+                        workflow.index("python -B scripts/build_site.py"))
+        self.assertLess(workflow.index("unittest discover -s site/tests"),
+                        workflow.index("actions/upload-pages-artifact"))
         uses = re.findall(r"uses: ([^\s]+)", workflow)
         self.assertEqual(len(uses), 5)
         self.assertTrue(all(re.fullmatch(r"actions/[\w-]+@[0-9a-f]{40}", value) for value in uses))
