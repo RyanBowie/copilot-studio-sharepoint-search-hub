@@ -76,14 +76,23 @@ class RichBannerTests(unittest.TestCase):
         self.assertIn("Fabric Assets License", (ROOT / "cards" / "NOTICE.md").read_text())
         self.assertIn("MIT License", (ROOT / "cards" / "schema" / "LICENSE").read_text())
 
-    def test_banner_generator_is_reproducible(self):
+    def test_banner_generator_reproduces_exact_pixels(self):
         spec = importlib.util.spec_from_file_location("image_generator", ROOT / "scripts" / "build-rich-card-assets.py")
         generator = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(generator)
         for scope in BANNER.SCOPES:
-            stream = io.BytesIO()
-            generator.banner(scope).save(stream, format="PNG", compress_level=9, optimize=False)
-            self.assertEqual(stream.getvalue(), (ROOT / "cards" / "assets" / f"{scope}.png").read_bytes())
+            with self.subTest(scope=scope):
+                stream = io.BytesIO()
+                generator.banner(scope).save(stream, format="PNG", compress_level=9, optimize=False)
+                with Image.open(stream) as generated, Image.open(ROOT / "cards" / "assets" / f"{scope}.png") as stored:
+                    self.assertEqual(generated.format, "PNG")
+                    self.assertEqual(generated.size, stored.size)
+                    self.assertEqual(generated.mode, stored.mode)
+                    # Codec builds can encode identical pixels into different PNG bytes.
+                    self.assertEqual(
+                        hashlib.sha256(generated.convert("RGBA").tobytes()).hexdigest(),
+                        hashlib.sha256(stored.convert("RGBA").tobytes()).hexdigest(),
+                    )
 
     def test_scope_mapping_is_fixed_and_unknown_scopes_fail_closed(self):
         for scope in ("Unknown", "hr", "", "https://example.invalid", "All,HR"):
