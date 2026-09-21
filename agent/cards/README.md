@@ -46,7 +46,11 @@ python -B -m unittest discover -s tests -p test_rich_banner.py -v
 The checked-in icon/schema are used locally. Only an explicit
 `--fetch-official` request downloads their recorded official URLs; changed
 upstream hashes fail for review. The banner generator requires the pinned Pillow
-version for byte reproducibility. `build-rich-banner.py` updates only its own
+version. Reproducibility tests require exact decoded pixels, dimensions and mode;
+PNG compression bytes can vary across platform/codec builds. Separate SHA-256
+checks still pin every shipped asset and the exact native-tested solution ZIP:
+regeneration does not authorize replacing that reviewed package.
+`build-rich-banner.py` updates only its own
 topic node and the context-only HR example, not the flow or workbooks.
 
 ## Host validation and fallback limits
