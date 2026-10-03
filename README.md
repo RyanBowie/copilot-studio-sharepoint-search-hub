@@ -480,6 +480,10 @@ the owner then republished it, and separate M365 runtime checks verified both
 themes and the icon. Teams remains untested.
 [Actual designer capture and limits](docs/screenshots.md#department-banner-designer).
 
+## Licence and support
+
+This community project is shared under the [MIT licence](LICENSE). It is not a Microsoft product and is not supported by Microsoft. It is provided as is, without warranty or SLA. Test in a non-production environment first and get your organisation's approvals before importing a solution into an environment that holds real data.
+
 ## Important boundaries
 
 - A department is a relevance filter, **not an authorization boundary**.
@@ -499,6 +503,5 @@ themes and the icon. Teams remains untested.
 - Owner-account demonstration evidence is not a non-owner permission-denial
   test, a 150-site performance result or a SharePoint-channel rollout.
 
-All demonstration policies and facts are fictional. Public visibility does not
-grant an open-source license. As with the companion Power BI reference, no
-project-wide license is granted; [third-party rights and notices](NOTICE.md) remain.
+All demonstration policies and facts are fictional. The project is shared under the
+[MIT licence](LICENSE); [third-party rights and notices](NOTICE.md) still apply.

@@ -1,12 +1,27 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en-GB" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A practical Copilot Studio reference: search approved SharePoint hub and spoke sites, verify current source access, and export matches to private Excel.">
+  <meta name="description" content="SharePoint Search Hub is a community Copilot Studio reference implementation for hub-and-spoke SharePoint search with caller-checked results and a private Excel export.">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'">
-  <title>CorpNet Search Hub · Copilot Studio reference</title>
+  <title>SharePoint Search Hub ? Copilot Studio reference</title>
+  <meta name="color-scheme" content="dark light">
+  <meta property="og:title" content="SharePoint Search Hub">
+  <meta property="og:description" content="Hub-and-spoke SharePoint search in Copilot Studio, with caller-checked results, a private Excel export and a verified 512-item demo.">
+  <meta property="og:type" content="website">
+  <!-- dl-meta:start -->
+  <meta property="og:url" content="https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/">
+  <meta property="og:image" content="https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/og.png">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="640">
+  <meta property="og:image:alt" content="SharePoint Search Hub: Copilot Studio hub-and-spoke SharePoint search with caller-checked results and private Excel export.">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SharePoint Search Hub">
+  <meta name="twitter:description" content="Hub-and-spoke SharePoint search in Copilot Studio, with caller-checked results, a private Excel export and a verified 512-item demo.">
+  <meta name="twitter:image" content="https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/og.png">
+  <!-- dl-meta:end -->
   <link rel="icon" href="data:,">
   <script>
   (() => {
@@ -17,66 +32,13 @@
   </script>
   <script>
   (() => {
-    const explicit = new URLSearchParams(window.location.search).get("scoutTheme");
-    if (explicit === "light" || explicit === "dark") document.documentElement.setAttribute("data-theme", explicit);
-    else document.documentElement.setAttribute("data-theme", "dark");
+    document.documentElement.classList.add("js");
   })();
   </script>
   <style>
+/* design-layer:start */
 :root {
   color-scheme: light;
-  --cp-bg: #f7f4ef;
-  --cp-bg-elevated: #fcfbf8;
-  --cp-surface: #ffffff;
-  --cp-surface-soft: #f5f5f5;
-  --cp-border: #dedede;
-  --cp-border-strong: #919191;
-  --cp-text: #242424;
-  --cp-text-muted: #5c5c5c;
-  --cp-text-soft: #6f6f6f;
-  --cp-accent: #b11f4b;
-  --cp-accent-hover: #9a1a41;
-  --cp-accent-soft: rgba(177, 31, 75, 0.08);
-  --cp-accent-fg: #ffffff;
-  --cp-success: #16a34a;
-  --cp-danger: #dc2626;
-  --cp-warning: #f59e0b;
-  --cp-link: #0078d4;
-  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
-  --cp-overlay: rgba(255, 255, 255, 0.8);
-  --cp-panel: rgba(255, 255, 255, 0.86);
-  --cp-panel-strong: rgba(255, 255, 255, 0.96);
-  --cp-sheen: rgba(255, 255, 255, 0.55);
-  --cp-highlight: rgba(177, 31, 75, 0.12);
-}
-html[data-theme="dark"] {
-  color-scheme: dark;
-  --cp-bg: #3d3b3a;
-  --cp-bg-elevated: #343231;
-  --cp-surface: #292929;
-  --cp-surface-soft: #2e2e2e;
-  --cp-border: #474747;
-  --cp-border-strong: #5f5f5f;
-  --cp-text: #dedede;
-  --cp-text-muted: #919191;
-  --cp-text-soft: #b0b0b0;
-  --cp-accent: #fd8ea1;
-  --cp-accent-hover: #fb7b91;
-  --cp-accent-soft: rgba(253, 142, 161, 0.14);
-  --cp-accent-fg: #1a1a1a;
-  --cp-success: #4ade80;
-  --cp-danger: #f87171;
-  --cp-warning: #fbbf24;
-  --cp-link: #4da6ff;
-  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
-  --cp-overlay: rgba(41, 41, 41, 0.88);
-  --cp-panel: rgba(41, 41, 41, 0.72);
-  --cp-panel-strong: rgba(41, 41, 41, 0.96);
-  --cp-sheen: rgba(255, 255, 255, 0.04);
-  --cp-highlight: rgba(253, 142, 161, 0.12);
-}
-/* Benchmark palette overrides the shared Clawpilot foundation. */
-:root {
   --cp-bg: #f2f2f8;
   --cp-bg-elevated: #f8f7fc;
   --cp-surface: #ffffff;
@@ -90,10 +52,16 @@ html[data-theme="dark"] {
   --cp-accent-hover: #58378b;
   --cp-accent-soft: #eee8f7;
   --cp-accent-fg: #ffffff;
-  --cp-link: #066bc7;
   --cp-success: #207346;
   --cp-danger: #b4233e;
   --cp-warning: #8c6208;
+  --cp-link: #066bc7;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+  --cp-overlay: rgba(255, 255, 255, 0.8);
+  --cp-panel: rgba(255, 255, 255, 0.86);
+  --cp-panel-strong: rgba(255, 255, 255, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.55);
+  --cp-highlight: rgba(118, 83, 174, 0.12);
   --cp-chart-blue: #0877dd;
   --cp-chart-indigo: #5364ba;
   --cp-chart-purple: #7653ae;
@@ -101,10 +69,9 @@ html[data-theme="dark"] {
   --cp-chart-magenta: #b535c3;
   --cp-chart-track: #e8e3f0;
   --cp-transparent: transparent;
-  --cp-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
-  --cp-highlight: rgba(118, 83, 174, 0.12);
 }
 html[data-theme="dark"] {
+  color-scheme: dark;
   --cp-bg: #171717;
   --cp-bg-elevated: #222222;
   --cp-surface: #1f1f1f;
@@ -118,18 +85,36 @@ html[data-theme="dark"] {
   --cp-accent-hover: #debeff;
   --cp-accent-soft: #2b2b2b;
   --cp-accent-fg: #181818;
+  --cp-success: #4ade80;
+  --cp-danger: #f87171;
+  --cp-warning: #fbbf24;
   --cp-link: #80baff;
+  --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --cp-overlay: rgba(31, 31, 31, 0.88);
+  --cp-panel: rgba(31, 31, 31, 0.72);
+  --cp-panel-strong: rgba(31, 31, 31, 0.96);
+  --cp-sheen: rgba(255, 255, 255, 0.04);
+  --cp-highlight: rgba(195, 160, 239, 0.12);
   --cp-chart-blue: #69aeff;
   --cp-chart-indigo: #98a5ff;
   --cp-chart-purple: #bc98ed;
   --cp-chart-violet: #d097ee;
   --cp-chart-magenta: #ed8fea;
   --cp-chart-track: #3b3b3b;
-  --cp-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.14);
-  --cp-overlay: rgba(31, 31, 31, 0.88);
-  --cp-panel: rgba(31, 31, 31, 0.72);
-  --cp-panel-strong: rgba(31, 31, 31, 0.96);
-  --cp-highlight: rgba(195, 160, 239, 0.12);
+  --cp-transparent: transparent;
+}
+@media print {
+  html[data-theme="dark"] {
+    color-scheme: light;
+    --cp-bg: #f2f2f8; --cp-bg-elevated: #f8f7fc; --cp-surface: #ffffff; --cp-surface-soft: #f2f2f8;
+    --cp-border: #e3dfed; --cp-border-strong: #9285aa; --cp-text: #102631; --cp-text-muted: #52637a;
+    --cp-text-soft: #667287; --cp-accent: #7653ae; --cp-accent-hover: #58378b; --cp-accent-soft: #eee8f7;
+    --cp-accent-fg: #ffffff; --cp-success: #207346; --cp-danger: #b4233e; --cp-warning: #8c6208; --cp-link: #066bc7;
+    --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12); --cp-overlay: rgba(255, 255, 255, 0.8); --cp-panel: rgba(255, 255, 255, 0.86);
+    --cp-panel-strong: rgba(255, 255, 255, 0.96); --cp-sheen: rgba(255, 255, 255, 0.55); --cp-highlight: rgba(118, 83, 174, 0.12);
+    --cp-chart-blue: #0877dd; --cp-chart-indigo: #5364ba; --cp-chart-purple: #7653ae; --cp-chart-violet: #9651bb; --cp-chart-magenta: #b535c3;
+    --cp-chart-track: #e8e3f0; --cp-transparent: transparent;
+  }
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 100px; }
@@ -344,13 +329,56 @@ details p, details li { color: var(--cp-text-muted); }
   .hero, .architecture, .gallery-panel, .evidence, .contract, .downloads { display: block; }
   .section { padding-top: 32px; } .card { break-inside: avoid; }
 }
+
+#dl-progress { position: fixed; inset: 0 auto auto 0; width: 100%; height: 4px; transform-origin: left center; transform: scaleX(0); background: var(--cp-accent); z-index: 100; }
+html.dl-motion .dl-reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+html.dl-motion .dl-reveal.dl-in { opacity: 1; transform: translateY(0); }
+.pill { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 16px; padding: 4px 12px; border: 1px solid var(--cp-highlight); border-radius: 999px; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: .85rem; font-weight: 650; }
+.fact-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin: 24px 0 0; padding: 0; list-style: none; }
+.fact-row li { margin: 0; padding: 12px 16px; border: 1px solid var(--cp-border); border-radius: 10px; background: var(--cp-surface); }
+.fact-row strong { display: block; }
+.hero-panel { margin-top: 28px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); box-shadow: var(--cp-shadow); overflow: hidden; }
+.hero-signal { display: block; width: 100%; height: auto; }
+.hero-signal .node { fill: var(--cp-surface-soft); stroke: var(--cp-border-strong); }
+.hero-signal .node-hot { fill: var(--cp-accent-soft); stroke: var(--cp-accent); }
+.hero-signal .line { fill: none; stroke: var(--cp-border-strong); stroke-width: 3; stroke-linecap: round; }
+.hero-signal .dl-path { fill: none; stroke: var(--cp-accent); stroke-width: 4; stroke-dasharray: 12 10; stroke-linecap: round; }
+.hero-signal .dl-hot { stroke: var(--cp-chart-magenta); }
+.hero-signal text { fill: var(--cp-text); font-family: Consolas, "Courier New", Courier, monospace; font-size: 13px; font-weight: 700; }
+.hero-signal .muted-svg { fill: var(--cp-text-muted); font-size: 11px; font-weight: 400; }
+@media (prefers-reduced-motion: no-preference) { .hero-signal .dl-path { animation: dash 1.8s linear infinite; } @keyframes dash { to { stroke-dashoffset: -44; } } }
+.chipnav { position: sticky; top: 0; z-index: 9; border-bottom: 1px solid var(--cp-border); background: var(--cp-panel-strong); overflow-x: auto; }
+.chipnav ul { display: flex; gap: 8px; list-style: none; margin: 0; padding: 8px max(20px, calc((100vw - 1200px) / 2)); width: max-content; }
+.chipnav li { margin: 0; }
+.chipnav a { display: inline-block; padding: 4px 12px; border: 1px solid var(--cp-border); border-radius: 999px; background: var(--cp-surface); color: var(--cp-text); text-decoration: none; font-size: .85rem; white-space: nowrap; }
+.chipnav a[aria-current="true"] { background: var(--cp-accent); border-color: var(--cp-accent); color: var(--cp-accent-fg); }
+.community { margin: 28px 0; }
+.table-wrap { overflow-x: auto; margin-top: 16px; }
+.download-table { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .9rem; }
+.download-table th, .download-table td { padding: 12px; border-bottom: 1px solid var(--cp-border); text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.download-table thead { background: var(--cp-bg-elevated); }
+.download-table th:first-child { width: 28%; }
+.dl-series { margin-top: 56px; padding: 28px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); box-shadow: var(--cp-shadow); }
+.dl-series h2 { font-size: clamp(1.6rem, 3vw, 2.3rem); }
+.dl-series-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+.dl-series-card { display: flex; flex-direction: column; min-height: 190px; padding: 18px; border: 1px solid var(--cp-border); border-radius: 14px; background: var(--cp-bg-elevated); color: var(--cp-text); text-decoration: none; }
+.dl-series-card[aria-current="page"] { border-color: var(--cp-accent); background: var(--cp-accent-soft); }
+.dl-series-card strong { display: block; margin-bottom: 8px; }
+.dl-series-card span { color: var(--cp-text-muted); font-size: .88rem; }
+.dl-series-card .series-action { margin-top: auto; color: var(--cp-accent); font-weight: 700; }
+@media (max-width: 900px) { .dl-series-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .dl-series-grid { grid-template-columns: 1fr; } }
+@media (forced-colors: active) { #dl-progress { forced-color-adjust: none; background: Highlight; } h1 { background: none; color: CanvasText; } }
+@media print { #dl-progress, .chipnav, .theme { display: none !important; } html.dl-motion .dl-reveal { opacity: 1; transform: none; } }
+/* design-layer:end */
   </style>
 </head>
 <body>
+<div id="dl-progress" aria-hidden="true"></div>
 <a class="skip" href="#main">Skip to content</a>
 <header class="topbar">
   <nav class="wrap nav" aria-label="Main navigation">
-    <a class="brand" href="#main"><span class="brand-mark" aria-hidden="true">CH</span><span>CorpNet Search Hub<small>Copilot Studio reference</small></span></a>
+    <a class="brand" href="#top"><span class="brand-mark" aria-hidden="true">SH</span><span>SharePoint Search Hub<small>Community Copilot Studio reference</small></span></a>
     <div class="nav-links">
       <a href="#coverage">Coverage</a><a href="#architecture" class="optional">Architecture</a><a href="#agent" class="wide">Agent</a><a href="#tools" class="wide">Tools</a><a href="#agent-flow" class="wide">Flow</a><a href="#downloads">Downloads</a>
       <a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub" class="wide">GitHub ↗</a>
@@ -358,12 +386,34 @@ details p, details li { color: var(--cp-text-muted); }
     </div>
   </nav>
 </header>
+<nav class="chipnav" aria-label="Page sections"><ul><li><a href="#showcase">Start</a></li><li><a href="#read-first">Read first</a></li><li><a href="#coverage">Coverage</a></li><li><a href="#architecture">Architecture</a></li><li><a href="#agent-flow">Flow</a></li><li><a href="#setup">Setup</a></li><li><a href="#downloads">Downloads</a></li><li><a href="#series">More projects</a></li></ul></nav>
 <main id="main" class="wrap" tabindex="-1">
-  <section class="showcase" id="showcase" aria-labelledby="hero-title">
+  <span id="top" aria-hidden="true"></span>
+  <section class="showcase dl-reveal" id="showcase" aria-labelledby="hero-title">
+    <p class="pill">Community project. This is not a Microsoft product.</p>
     <h1 id="hero-title">SharePoint Search Hub</h1>
     <div class="actions" id="primary-actions"><a class="button primary" href="../solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip" download>Download solution ZIP</a><a class="button" href="#setup">Import and configure</a><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub">View repository</a></div>
     <p class="small">Experimental unmanaged reference; new-tenant import is unverified. Configure your own SharePoint estate and connections before publishing. This website is documentation, not a live agent or a connection to your data.</p>
     <p class="small"><strong>Built in Copilot Studio, not Agent Builder, and published to the Microsoft 365 Copilot channel.</strong> This is a configurable test/reference for the search-and-export pattern.</p>
+    <ul class="fact-row" aria-label="Key facts"><li><strong>MIT licence</strong><span>As-is, no SLA</span></li><li><strong>Caller checked</strong><span>Current SharePoint reads before disclosure</span></li><li><strong>Private export</strong><span>Workbook created for the selected account</span></li><li><strong>512 verified rows</strong><span>Demo evidence, not a production limit</span></li></ul>
+    <div class="hero-panel" id="read-first">
+      <svg class="hero-signal" viewBox="0 0 960 330" role="img" aria-labelledby="hero-signal-title hero-signal-desc">
+        <title id="hero-signal-title">Hub-and-spoke SharePoint search signal</title>
+        <desc id="hero-signal-desc">The agent collects scope and search words, calls a governed native flow, searches the approved hub-and-spoke estate, verifies source access, writes a private workbook and returns source-linked results.</desc>
+        <path class="dl-path" d="M268 93 H392"/>
+        <path class="dl-path" d="M608 93 H692"/>
+        <path class="dl-path dl-hot" d="M500 136 V176"/>
+        <path class="dl-path" d="M392 219 H268"/>
+        <path class="dl-path" d="M608 219 H692"/>
+        <g><rect class="node-hot" x="52" y="50" width="216" height="86" rx="18"/><text x="160" y="84" text-anchor="middle">Copilot Studio topic</text><text class="muted-svg" x="160" y="110" text-anchor="middle">scope + search words</text></g>
+        <g><rect class="node" x="392" y="50" width="216" height="86" rx="18"/><text x="500" y="84" text-anchor="middle">Native flow</text><text class="muted-svg" x="500" y="110" text-anchor="middle">identity and bounds</text></g>
+        <g><rect class="node" x="692" y="50" width="216" height="86" rx="18"/><text x="800" y="84" text-anchor="middle">Approved sites</text><text class="muted-svg" x="800" y="110" text-anchor="middle">hub + explicit spokes</text></g>
+        <g><rect class="node" x="392" y="176" width="216" height="86" rx="18"/><text x="500" y="210" text-anchor="middle">Caller checks</text><text class="muted-svg" x="500" y="236" text-anchor="middle">current source reads</text></g>
+        <g><rect class="node-hot" x="52" y="196" width="216" height="86" rx="18"/><text x="160" y="230" text-anchor="middle">Verified response</text><text class="muted-svg" x="160" y="256" text-anchor="middle">links + private Excel</text></g>
+        <g><rect class="node" x="692" y="196" width="216" height="86" rx="18"/><text x="800" y="230" text-anchor="middle">Workbook + email</text><text class="muted-svg" x="800" y="256" text-anchor="middle">same guarded run</text></g>
+      </svg>
+    </div>
+    <aside class="notice community"><p class="pill">Community project. This is not a Microsoft product.</p><p><strong>Read this first.</strong> SharePoint Search Hub is shared as-is under the MIT licence. It is not a Microsoft product, is not supported by Microsoft, and has no SLA or warranty. Test in a non-production environment first and get your organisation's approvals before importing any solution into an environment that holds real data.</p></aside>
     <div class="showcase-grid">
       <figure class="shot-card"><div class="shot-bar"><strong>The prompt</strong><span class="status">Copilot Studio agent · Microsoft 365 Copilot channel</span></div><a class="image-link" href="images/table-polish/published-m365-it-devices-inputs.png" aria-label="Open the published Copilot Studio agent's IT devices input screenshot at full resolution"><img src="images/table-polish/published-m365-it-devices-inputs.png" width="1255" height="1244" alt="Copilot Studio agent published to the Microsoft 365 Copilot channel: Search SharePoint, choose IT, and enter devices in the prompt box." fetchpriority="high"></a><figcaption><strong>Search SharePoint → IT → devices.</strong> Actual input to the published Copilot Studio agent, with the final keyword typed before submission. Select the image for full resolution.</figcaption></figure>
       <figure class="shot-card"><div class="shot-bar"><strong>The output</strong><span class="status">Same published Copilot Studio agent</span></div><a class="image-link" href="images/table-polish/published-m365-polished-table-100.png" aria-label="Open the published Copilot Studio agent's matching four-result output at full resolution"><img src="images/table-polish/published-m365-polished-table-100.png" width="1095" height="1059" alt="The same Copilot Studio agent's IT devices output in the Microsoft 365 Copilot channel, with four verified file/page links, source dates, stored tags and the export-status footer." fetchpriority="high"></a><figcaption><strong>Four verified matches: one page and three documents.</strong> The agent's output from the 12 September table-polish validation, before the later paging revision. These four rows also matched the private workbook; this is not the 512-row scenario.</figcaption></figure>
@@ -378,7 +428,7 @@ details p, details li { color: var(--cp-text-muted); }
   <p class="small">Verified demo snapshot: 13 September 2026 · <code>All / hubspokeverify</code> · not a live tenant-wide inventory.</p>
   <nav class="guide-jumps" aria-label="Implementation guide"><a href="#screenshots">More inputs and outputs</a><a href="#agent">Inside the agent</a><a href="#agent-instructions">Full agent instructions</a><a href="#tools">Tools and connectors</a><a href="#sharepoint-actions">SharePoint request details</a><a href="#agent-flow">Flow screenshots and steps</a><a href="#setup">New-tenant setup</a><a href="#evidence">512-row execution proof</a></nav>
 
-  <section class="section" id="coverage" aria-labelledby="coverage-title">
+  <section class="section dl-reveal" id="coverage" aria-labelledby="coverage-title">
     <div class="section-head"><div><p class="eyebrow">Search coverage / The actual test estate</p><h2 id="coverage-title">10 sites. 499 files.<br>13 SharePoint pages.</h2></div><p>One corporate hub and nine departmental spokes: a Main, Operations and Field Team collection for HR, Finance and IT. All ten were searched in the verified run.</p></div>
     <div class="contract">
       <article class="card">
@@ -424,7 +474,7 @@ details p, details li { color: var(--cp-text-muted); }
     <div class="actions"><a href="scale-source-validation-summary.json">Source and per-site count evidence</a><a href="../fixtures/corpnet-demo/scale-expected-results.example.json">512-item fixture blueprint</a><a href="scale-runtime-validation-summary.json">Completed search and export proof</a></div>
   </section>
 
-  <section class="section" id="overview" aria-labelledby="overview-title">
+  <section class="section dl-reveal" id="overview" aria-labelledby="overview-title">
     <div class="section-head"><div><p class="eyebrow">01 / The pattern</p><h2 id="overview-title">Find the source.<br>Keep the evidence.</h2></div><p>A controlled search-and-export workflow—not a policy-answer bot, a tenant crawler or an unrestricted knowledge connection.</p></div>
     <div class="grid-3">
       <article class="card"><span class="tag">Search</span><h3>Hub + explicit spokes</h3><p>Literal search terms run inside a maintained collection allowlist and a hub association restriction. A hub URL alone never discovers or approves every spoke.</p></article>
@@ -434,7 +484,7 @@ details p, details li { color: var(--cp-text-muted); }
     <aside class="notice"><strong>Department is relevance, not authorization.</strong> HR, IT and Finance are sample scope choices. Access still depends on the selected caller’s SharePoint permissions. This demonstration is positive owner-account evidence, not a completed cross-user denial audit.</aside>
   </section>
 
-  <section class="section" id="architecture" aria-labelledby="architecture-title">
+  <section class="section dl-reveal" id="architecture" aria-labelledby="architecture-title">
     <div class="section-head"><div><p class="eyebrow">02 / Interactive architecture</p><h2 id="architecture-title">One controlled path.<br>No hidden hand-off.</h2></div><p>Select a stage to inspect the actual implementation. These controls explain the design; they never call an agent, search SharePoint or send email.</p></div>
     <div class="architecture" data-tabset>
       <div class="tab-list step-list" role="tablist" aria-label="Architecture stages" aria-orientation="vertical" hidden>
@@ -491,7 +541,7 @@ details p, details li { color: var(--cp-text-muted); }
     <div class="actions"><a href="images/architecture.svg">Open the detailed architecture SVG</a><a href="images/architecture.excalidraw" download>Download editable Excalidraw source</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/flow-walkthrough.md">Read the full flow walkthrough ↗</a></div>
   </section>
 
-  <section class="section" id="screenshots" aria-labelledby="screenshots-title">
+  <section class="section dl-reveal" id="screenshots" aria-labelledby="screenshots-title">
     <div class="section-head"><div><p class="eyebrow">03 / Actual product captures</p><h2 id="screenshots-title">Real output.<br>Clearly scoped evidence.</h2></div><p>Genuine, privacy-curated captures of this Copilot Studio test agent published to the Microsoft 365 Copilot channel, plus its Excel export. It was not created in Agent Builder. Each example retains its own revision, capture timing and verification boundary.</p></div>
     <div data-tabset>
       <div class="tab-list gallery-tabs" role="tablist" aria-label="Screenshot scenarios" hidden>
@@ -501,25 +551,25 @@ details p, details li { color: var(--cp-text-muted); }
         <button id="gallery-excel" role="tab" aria-controls="screen-excel" aria-selected="false">Excel · historical 112</button>
       </div>
       <section id="screen-all" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-all" tabindex="0">
-        <figure class="shot-card"><a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png"><img class="capture" src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Genuine first four rows of the owner-provided All-scope preview; this screenshot was captured while the export was pending." loading="lazy"></a><figcaption><strong>13 September · native revision 80f131a… · Pending at capture.</strong> Owner-provided preview excerpt. It is not a screenshot of a completed 512-row workbook.</figcaption></figure>
-        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → All</p><h3><code>hubspokeverify</code></h3><p>The owner started this published M365 request. Ten preview rows were checked; the screenshot preserves the first four. The same run later completed with <strong>512 actual Excel rows</strong>.</p><p>499 documents, 13 pages, ten collections. Final verification used existing native connector evidence—not another invocation or a new workbook screenshot.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/scale-512/owner-m365-index-estimate.png"><img src="images/scale-512/owner-m365-index-estimate.png" width="787" height="139" alt="Owner-provided M365 crop showing the original 512 index estimate while export delivery was pending." loading="lazy"></a><figcaption>The same owner capture's index estimate. This was still pending, not a completed-export message.</figcaption></figure><div class="actions"><a href="images/scale-512/owner-m365-index-estimate.png">View the original index-estimate crop</a><a href="scale-runtime-validation-summary.json">Read the completed-run evidence</a><a href="scale-512-capture-provenance.json">Capture provenance</a></div></div>
+        <figure class="shot-card"><a class="image-link" href="images/scale-512/owner-m365-preview-excerpt.png"><img class="capture" src="images/scale-512/owner-m365-preview-excerpt.png" width="1065" height="698" alt="Genuine first four rows of the owner-provided All-scope preview; this screenshot was captured while the export was pending."></a><figcaption><strong>13 September · native revision 80f131a… · Pending at capture.</strong> Owner-provided preview excerpt. It is not a screenshot of a completed 512-row workbook.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → All</p><h3><code>hubspokeverify</code></h3><p>The owner started this published M365 request. Ten preview rows were checked; the screenshot preserves the first four. The same run later completed with <strong>512 actual Excel rows</strong>.</p><p>499 documents, 13 pages, ten collections. Final verification used existing native connector evidence—not another invocation or a new workbook screenshot.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/scale-512/owner-m365-index-estimate.png"><img src="images/scale-512/owner-m365-index-estimate.png" width="787" height="139" alt="Owner-provided M365 crop showing the original 512 index estimate while export delivery was pending."></a><figcaption>The same owner capture's index estimate. This was still pending, not a completed-export message.</figcaption></figure><div class="actions"><a href="images/scale-512/owner-m365-index-estimate.png">View the original index-estimate crop</a><a href="scale-runtime-validation-summary.json">Read the completed-run evidence</a><a href="scale-512-capture-provenance.json">Capture provenance</a></div></div>
       </section>
       <section id="screen-hr" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-hr" tabindex="0">
-        <figure class="shot-card"><a class="image-link" href="images/published-m365/published-m365-hr-full-output-67.png"><img class="capture" src="images/published-m365/published-m365-hr-full-output-67.png" width="750" height="1024" alt="Actual published M365 HR annual-leave response with purple contextual banner, labelled SharePoint icon and two four-column results, captured at 67 percent zoom." loading="lazy"></a><figcaption><strong>12 September · ebfc9aa… · 67% capture.</strong> Historical banner proof, before table-specific polish. The full response is preserved; a separate 100% crop is available.</figcaption></figure>
-        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → HR</p><h3><code>annual leave</code></h3><p>A source page and a Word document—not two duplicates of the same file. Both results and all source dates matched the two-row private workbook.</p><p>The purple banner is contextual. This does not answer a policy question from model knowledge; users receive verified source links.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/published-m365/published-m365-hr-table-100.png"><img src="images/published-m365/published-m365-hr-table-100.png" width="1100" height="769" alt="Actual historical HR M365 four-column result table captured at 100 percent zoom." loading="lazy"></a><figcaption>Separate 100% table crop from the historical HR validation; select for full resolution.</figcaption></figure><div class="actions"><a href="images/published-m365/published-m365-hr-table-100.png">Open the readable 100% table crop</a><a href="m365-validation-summary.json">HR / no-match runtime summary</a></div></div>
+        <figure class="shot-card"><a class="image-link" href="images/published-m365/published-m365-hr-full-output-67.png"><img class="capture" src="images/published-m365/published-m365-hr-full-output-67.png" width="750" height="1024" alt="Actual published M365 HR annual-leave response with purple contextual banner, labelled SharePoint icon and two four-column results, captured at 67 percent zoom."></a><figcaption><strong>12 September · ebfc9aa… · 67% capture.</strong> Historical banner proof, before table-specific polish. The full response is preserved; a separate 100% crop is available.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → HR</p><h3><code>annual leave</code></h3><p>A source page and a Word document—not two duplicates of the same file. Both results and all source dates matched the two-row private workbook.</p><p>The purple banner is contextual. This does not answer a policy question from model knowledge; users receive verified source links.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/published-m365/published-m365-hr-table-100.png"><img src="images/published-m365/published-m365-hr-table-100.png" width="1100" height="769" alt="Actual historical HR M365 four-column result table captured at 100 percent zoom."></a><figcaption>Separate 100% table crop from the historical HR validation; select for full resolution.</figcaption></figure><div class="actions"><a href="images/published-m365/published-m365-hr-table-100.png">Open the readable 100% table crop</a><a href="m365-validation-summary.json">HR / no-match runtime summary</a></div></div>
       </section>
       <section id="screen-it" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-it" tabindex="0">
-        <figure class="shot-card"><a class="image-link" href="images/table-polish/published-m365-polished-table-100.png"><img class="capture" src="images/table-polish/published-m365-polished-table-100.png" width="1095" height="1059" alt="Actual M365 IT devices output at 100 percent zoom with four linked rows, verified file/page glyphs, separate date columns, stored tags and full footer." loading="lazy"></a><figcaption><strong>12 September · 3a4b9ca… · 100% capture.</strong> Historical table-polish proof: four rows, one page and three documents. No new full-banner recapture is implied.</figcaption></figure>
-        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → IT</p><h3><code>devices</code></h3><p>Four verified matches, four private Excel rows and eight exact source timestamp/calendar comparisons. Bold linked glyphs and monospace short tags render; longer tags wrap.</p><p><strong>Host limitation:</strong> M365 keeps date values left-aligned despite source center markers. These are not colored tag pills or custom table CSS.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/table-polish/published-m365-it-devices-inputs.png"><img src="images/table-polish/published-m365-it-devices-inputs.png" width="1255" height="1244" alt="Actual published M365 IT scope and devices query used for the four-row table-polish verification." loading="lazy"></a><figcaption>Actual published-client inputs paired with this IT output, not a synthetic prompt example.</figcaption></figure><div class="actions"><a href="images/table-polish/published-m365-it-devices-inputs.png">View the actual inputs</a><a href="table-polish-validation-summary.json">Read checks and alignment limitation</a></div></div>
+        <figure class="shot-card"><a class="image-link" href="images/table-polish/published-m365-polished-table-100.png"><img class="capture" src="images/table-polish/published-m365-polished-table-100.png" width="1095" height="1059" alt="Actual M365 IT devices output at 100 percent zoom with four linked rows, verified file/page glyphs, separate date columns, stored tags and full footer."></a><figcaption><strong>12 September · 3a4b9ca… · 100% capture.</strong> Historical table-polish proof: four rows, one page and three documents. No new full-banner recapture is implied.</figcaption></figure>
+        <div class="gallery-notes"><p class="eyebrow">Search SharePoint → IT</p><h3><code>devices</code></h3><p>Four verified matches, four private Excel rows and eight exact source timestamp/calendar comparisons. Bold linked glyphs and monospace short tags render; longer tags wrap.</p><p><strong>Host limitation:</strong> M365 keeps date values left-aligned despite source center markers. These are not colored tag pills or custom table CSS.</p><figure class="shot-card inline-capture"><a class="image-link" href="images/table-polish/published-m365-it-devices-inputs.png"><img src="images/table-polish/published-m365-it-devices-inputs.png" width="1255" height="1244" alt="Actual published M365 IT scope and devices query used for the four-row table-polish verification."></a><figcaption>Actual published-client inputs paired with this IT output, not a synthetic prompt example.</figcaption></figure><div class="actions"><a href="images/table-polish/published-m365-it-devices-inputs.png">View the actual inputs</a><a href="table-polish-validation-summary.json">Read checks and alignment limitation</a></div></div>
       </section>
       <section id="screen-excel" class="gallery-panel" role="tabpanel" aria-labelledby="gallery-excel" tabindex="0">
-        <figure class="shot-card"><a class="image-link" href="images/live-workbook-compact.png"><img class="capture" src="images/live-workbook-compact.png" width="1525" height="996" alt="Actual historical Excel web screenshot of a completed 112-row private workbook, not the later 512-row export." loading="lazy"></a><figcaption><strong>Historical 112-row workbook—not 512.</strong> Genuine Excel web capture from the earlier compact-workbook revision. The associated two-column chat layout is superseded.</figcaption></figure>
+        <figure class="shot-card"><a class="image-link" href="images/live-workbook-compact.png"><img class="capture" src="images/live-workbook-compact.png" width="1525" height="996" alt="Actual historical Excel web screenshot of a completed 112-row private workbook, not the later 512-row export."></a><figcaption><strong>Historical 112-row workbook—not 512.</strong> Genuine Excel web capture from the earlier compact-workbook revision. The associated two-column chat layout is superseded.</figcaption></figure>
         <div class="gallery-notes"><p class="eyebrow">Private Excel / historical UI proof</p><h3>A workbook you can filter.</h3><p>The visible summary records 112 rows: 99 documents and 13 pages. Compact rows, separate UTC date columns and <strong>Open file</strong> hyperlinks were inspected in Excel web.</p><p>The later 512-row result was verified through actual Excel connector readback. There is <strong>no new 512-row workbook UI capture</strong> on this page.</p><div class="actions"><a href="images/live-workbook-compact.png">Open full-resolution historical capture</a><a href="workbook-validation-summary.json">Workbook evidence</a><a href="../agent/flows/search-export/RuntimeSearchResults.template.xlsx" download>Download the genuine blank template</a></div></div>
       </section>
     </div>
   </section>
 
-  <section class="section" id="agent" aria-labelledby="agent-title">
+  <section class="section dl-reveal" id="agent" aria-labelledby="agent-title">
     <div class="section-head"><div><p class="eyebrow">Inside Copilot Studio / Configuration and conversation</p><h2 id="agent-title">What the agent does.<br>What the flow enforces.</h2></div><p>This is a guided search assistant with a fixed execution path. The instructions constrain its behavior; the topic collects inputs; the native flow performs retrieval, verification and delivery.</p></div>
     <div class="contract">
       <article class="card"><span class="tag">Model and orchestration</span><h3>Classic orchestration for this topic-based test.</h3><p>Classic orchestration was chosen to keep this test topic-based and its execution easy to follow. The current source uses the <code>GPT5Chat</code> model hint and <code>GenerativeActionsEnabled: false</code>; this is a test choice, not a requirement of the search/export pattern.</p><p><strong>Generative orchestration is an alternative.</strong> Change the orchestration setting and update the agent instructions and topic/tool descriptions to route to the same guarded flow, then validate the resulting behavior. Keep instructions aligned with whichever orchestration approach you choose. The published package and recorded runs remain classic; a generative variant has not been tested here.</p><p>In this version, model knowledge, web browsing and file analysis are disabled. SharePoint Search REST supplies the search results, with no generated policy answer. Confirm target model availability rather than relying on the hint alone.</p><a href="https://learn.microsoft.com/en-us/microsoft-copilot-studio/advanced-generative-actions">Compare classic and generative orchestration</a></article>
@@ -528,14 +578,14 @@ details p, details li { color: var(--cp-text-muted); }
     <h3 class="flow-step">Follow the actual conversation</h3>
     <p>These genuine Studio captures show the earlier HR conversation and topic configuration. They are historical product screenshots, not current M365 rendering or a new execution of the 512-row test. The published-client gallery above shows the later output revisions.</p>
     <p><strong>Simple test inputs, not a fixed final UX.</strong> Both the department and search terms currently use free-text entry. The department answer is still checked against the configured areas, and search words retain their validation. Department buttons or a multiple-choice question could replace free-text entry if preferred, while passing the same validated scope to the flow.</p>
-    <figure class="shot-card inline-capture"><div class="shot-bar"><strong>1 / Start the guided search</strong><span class="status">Actual Studio capture</span></div><a class="image-link" href="images/styled-hr/entrypoint-and-trigger.png"><img src="images/styled-hr/entrypoint-and-trigger.png" width="1605" height="741" alt="Actual Studio conversation beginning with Search SharePoint, the topic introduction and the area question." loading="lazy"></a><figcaption><strong>Entry phrase: Search SharePoint.</strong> The <code>OnRecognizedIntent</code> topic also includes phrases such as Search the intranet and Find HR documents. The unmatched-request fallback routes to this same approved search topic instead of answering from general knowledge. Select the image to inspect it at full resolution.</figcaption></figure>
+    <figure class="shot-card inline-capture"><div class="shot-bar"><strong>1 / Start the guided search</strong><span class="status">Actual Studio capture</span></div><a class="image-link" href="images/styled-hr/entrypoint-and-trigger.png"><img src="images/styled-hr/entrypoint-and-trigger.png" width="1605" height="741" alt="Actual Studio conversation beginning with Search SharePoint, the topic introduction and the area question."></a><figcaption><strong>Entry phrase: Search SharePoint.</strong> The <code>OnRecognizedIntent</code> topic also includes phrases such as Search the intranet and Find HR documents. The unmatched-request fallback routes to this same approved search topic instead of answering from general knowledge. Select the image to inspect it at full resolution.</figcaption></figure>
     <div class="guide-grid">
-      <figure class="shot-card"><div class="shot-bar"><strong>2 / Free-text area and search words</strong></div><a class="image-link" href="images/styled-hr/area-and-query-inputs.png"><img src="images/styled-hr/area-and-query-inputs.png" width="690" height="741" alt="Actual free-text HR department and annual leave search terms in the Studio test conversation, immediately before submission." loading="lazy"></a><figcaption><strong>HR / annual leave.</strong> Both answers are typed text in this test. Department options could be presented as buttons or multiple choice instead; the same scope and query checks would still apply. This capture was taken before submission, not after search completion.</figcaption></figure>
-      <figure class="shot-card"><div class="shot-bar"><strong>3 / Return controlled rows and status</strong></div><a class="image-link" href="images/styled-hr/styled-result-rows-and-footer.png"><img src="images/styled-hr/styled-result-rows-and-footer.png" width="690" height="713" alt="Historical actual Studio result rows with separate date and tag columns and the export limits footer." loading="lazy"></a><figcaption><strong>Historical rows/footer crop.</strong> The heading and callout are above the viewport. The narrow Studio pane wraps columns differently from M365. The topic sends the flow's returned string, not a model-written reconstruction of the rows.</figcaption></figure>
+      <figure class="shot-card"><div class="shot-bar"><strong>2 / Free-text area and search words</strong></div><a class="image-link" href="images/styled-hr/area-and-query-inputs.png"><img src="images/styled-hr/area-and-query-inputs.png" width="690" height="741" alt="Actual free-text HR department and annual leave search terms in the Studio test conversation, immediately before submission."></a><figcaption><strong>HR / annual leave.</strong> Both answers are typed text in this test. Department options could be presented as buttons or multiple choice instead; the same scope and query checks would still apply. This capture was taken before submission, not after search completion.</figcaption></figure>
+      <figure class="shot-card"><div class="shot-bar"><strong>3 / Return controlled rows and status</strong></div><a class="image-link" href="images/styled-hr/styled-result-rows-and-footer.png"><img src="images/styled-hr/styled-result-rows-and-footer.png" width="690" height="713" alt="Historical actual Studio result rows with separate date and tag columns and the export limits footer."></a><figcaption><strong>Historical rows/footer crop.</strong> The heading and callout are above the viewport. The narrow Studio pane wraps columns differently from M365. The topic sends the flow's returned string, not a model-written reconstruction of the rows.</figcaption></figure>
     </div>
     <article class="card flow-step"><span class="tag">The topic's exact sequence</span><h3>Questions, validation, one flow call, then output.</h3><ol><li><code>chooseDepartment</code> asks: “Which area would you like to search? Enter All, CorpNet, HR, Finance, or IT.” <code>normalizeDepartment</code> trims/case-normalizes the answer; an unknown area ends the dialog without a search.</li><li><code>askKeywords</code> collects up to 12 plain words or <code>*</code>. <code>checkKeywords</code> rejects unsupported syntax and overly long input. It does not rewrite a policy question into keywords.</li><li><code>searchCount</code> is the single <code>InvokeFlowAction</code>: trimmed keywords become <code>query</code>, the normalized department becomes <code>scope</code>, and the returned string becomes <code>Topic.SearchResult</code>.</li><li><code>checkSearchResult</code> explicitly stops on an empty result. A contextual department card precedes the final <code>{Topic.SearchResult}</code> message. The card contains no result rows or success claim.</li></ol></article>
     <div class="guide-grid">
-      <figure class="shot-card"><div class="shot-bar"><strong>Actual topic-to-flow binding</strong></div><a class="image-link" href="images/styled-hr/topic-native-flow-binding.png"><img src="images/styled-hr/topic-native-flow-binding.png" width="560" height="766" alt="Actual Copilot Studio native-flow node with query and scope inputs and result bound to SearchResult." loading="lazy"></a><figcaption><strong>Two inputs, one output.</strong> This genuine historical designer capture illustrates the binding. The current portable source below uses a fictional flow ID; bind your imported flow rather than copying a live environment identifier.</figcaption></figure>
+      <figure class="shot-card"><div class="shot-bar"><strong>Actual topic-to-flow binding</strong></div><a class="image-link" href="images/styled-hr/topic-native-flow-binding.png"><img src="images/styled-hr/topic-native-flow-binding.png" width="560" height="766" alt="Actual Copilot Studio native-flow node with query and scope inputs and result bound to SearchResult."></a><figcaption><strong>Two inputs, one output.</strong> This genuine historical designer capture illustrates the binding. The current portable source below uses a fictional flow ID; bind your imported flow rather than copying a live environment identifier.</figcaption></figure>
       <article class="card"><span class="tag">Current topic source, not a screenshot</span><h3>The actual invocation block</h3><pre class="guide-source" tabindex="0" aria-label="Current topic flow binding"><code>    - kind: InvokeFlowAction
       id: searchCount
       input:
@@ -547,10 +597,10 @@ details p, details li { color: var(--cp-text-muted); }
           result: Topic.SearchResult
       flowId: 00000000-0000-4000-8000-000000000100</code></pre><p>The native trigger independently validates the same small contract. There is no input for an email recipient, directory identity, access token, site URL or raw KQL.</p><div class="actions"><a href="../agent/topics/SearchSharePoint.mcs.yml" download>Download complete topic YAML</a><a href="../agent/topics/Search.mcs.yml" download>Download fallback topic YAML</a></div></article>
     </div>
-    <figure class="shot-card inline-capture"><div class="shot-bar"><strong>Optional output styling example</strong><span class="status">Actual topic designer capture</span></div><a class="image-link" href="images/department-banners/topic-message-order.png"><img src="images/department-banners/topic-message-order.png" width="275" height="508" alt="Actual topic designer showing an optional department banner before the unchanged search result message." loading="lazy"></a><figcaption><strong>Basic customization to show different outputs—not required for search.</strong> Department artwork and the labelled SharePoint icon demonstrate how presentation can be customized. Keep, change or omit the banner to suit your own experience. The Adaptive Card precedes the existing Markdown result; it does not supply or change the verified rows. Its source-level <code>disabled</code> gate controls this optional message. Host rendering varies; Teams remains unverified.</figcaption></figure>
+    <figure class="shot-card inline-capture"><div class="shot-bar"><strong>Optional output styling example</strong><span class="status">Actual topic designer capture</span></div><a class="image-link" href="images/department-banners/topic-message-order.png"><img src="images/department-banners/topic-message-order.png" width="275" height="508" alt="Actual topic designer showing an optional department banner before the unchanged search result message."></a><figcaption><strong>Basic customization to show different outputs—not required for search.</strong> Department artwork and the labelled SharePoint icon demonstrate how presentation can be customized. Keep, change or omit the banner to suit your own experience. The Adaptive Card precedes the existing Markdown result; it does not supply or change the verified rows. Its source-level <code>disabled</code> gate controls this optional message. Host rendering varies; Teams remains unverified.</figcaption></figure>
   </section>
 
-  <section class="section" id="agent-instructions" aria-labelledby="instructions-title">
+  <section class="section dl-reveal" id="agent-instructions" aria-labelledby="instructions-title">
     <div class="section-head"><div><p class="eyebrow">Agent instructions / Complete source</p><h2 id="instructions-title">The actual instructions.<br>Not a generic prompt example.</h2></div><p>The block below is generated directly from <code>agent/agent.mcs.yml</code>. It preserves the full instruction text; it is source text, not a screenshot of the instruction editor.</p></div>
     <div class="contract">
       <article class="card"><span class="tag">Grounding and honest output</span><h3>Don't invent the answer or the operation.</h3><p>The instructions prohibit answers from general knowledge, invented titles/tags/counts, guessed spelling corrections and unsupported handoff claims. They require explicit failures, no-match outcomes and the flow's permission-checked response.</p><p>The corresponding implementation disables model knowledge/web browsing, routes to the approved topic and formats rows from current source reads. The prompt itself is not a permission boundary.</p></article>
@@ -649,7 +699,7 @@ template: default-2.1.0
 language: 1033</code></pre><a href="../agent/settings.mcs.yml" download>Download settings YAML</a></details>
   </section>
 
-  <section class="section" id="tools" aria-labelledby="tools-title">
+  <section class="section dl-reveal" id="tools" aria-labelledby="tools-title">
     <div class="section-head"><div><p class="eyebrow">Tools / What is actually called</p><h2 id="tools-title">One agent-facing flow.<br>Five connectors inside it.</h2></div><p>Yes, tools are used. The native search/export flow is the agent-facing capability. SharePoint, profile, storage, spreadsheet and mail operations are connector actions inside that flow—not five separate model-selected agent tools.</p></div>
     <div class="contract">
       <article class="card"><span class="tag">Explicit invocation in this test</span><h3>The topic calls the flow.</h3><p>The search topic calls the native flow through <code>InvokeFlowAction</code>. The solution also contains its registered native-flow tool binding, represented by <code>TaskDialog</code> / <code>InvokeFlowTaskAction</code>, with <code>mode: Invoker</code>.</p><p>Both refer to the same capability; this is not a second search operation. This classic, topic-based test invokes it explicitly. A generative-orchestration adaptation could select the same capability using updated instructions and descriptions; the flow's checks should remain in place.</p><pre class="guide-source" tabindex="0" aria-label="Actual portable registered native-flow tool source"><code>mcs.metadata:
@@ -687,7 +737,7 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     <div class="actions"><a class="button primary" href="#sharepoint-actions">Inspect all 12 SharePoint requests</a><a href="../agent/flows/search-export/definition.json" download>Download the complete flow JSON</a><a href="../solutions/deployment-settings.template.json" download>Download connection-binding template</a></div>
   </section>
 
-  <section class="section" id="sharepoint-actions" aria-labelledby="sp-title">
+  <section class="section dl-reveal" id="sharepoint-actions" aria-labelledby="sp-title">
     <div class="section-head"><div><p class="eyebrow">SharePoint connector / Request-by-request reference</p><h2 id="sp-title">The actual HTTP actions.<br>Endpoints, payloads and checks.</h2></div><p>All 12 SharePoint action definitions are documented below. Their request parameters and supporting expressions are generated from the current flow JSON, not transcribed from old screenshots.</p></div>
     <div class="contract">
       <article class="card"><span class="tag">Which designer action?</span><h3>Send an HTTP request to SharePoint</h3><p>Each uses <code>OpenApiConnection</code>, connector <code>shared_sharepointonline</code>, operation <code>HttpRequest</code>. The connector provides the selected caller's authentication; there is no token or Authorization header supplied by the user or model.</p><p><strong>Why not just Get files (properties only)?</strong> This design needs cross-collection indexed body search, explicit KQL scope, search sorting/paging, selected current file properties and report-item permission endpoints. One ordinary library listing is not equivalent to that workflow.</p><p>All twelve exported actions specify <code>retryPolicy: {"type":"none"}</code>. Loops may invoke an action many times, so twelve definitions does not mean twelve HTTP calls per search.</p></article>
@@ -1452,23 +1502,23 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     <div class="actions"><a class="button" href="../agent/flows/search-export/definition.json" download>Download the full current flow JSON</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/sharepoint-actions.md">Read the same action reference in GitHub</a><a href="#agent-flow">See the genuine designer screenshots</a></div>
   </section>
 
-  <section class="section" id="agent-flow" aria-labelledby="flow-title">
+  <section class="section dl-reveal" id="agent-flow" aria-labelledby="flow-title">
     <div class="section-head"><div><p class="eyebrow">Native agent flow / Actual designer screenshots</p><h2 id="flow-title">Open every important stage.<br>Follow the real actions.</h2></div><p>These genuine screenshots are displayed here, not only linked from a repository gallery. Select any image for its original full-resolution version. Action names connect each stage to the downloadable definition.</p></div>
     <aside class="notice"><strong>Historical designer structure, current source explanation.</strong> These reviewed designer captures predate the document-ID-only sort revision. They illustrate the actual flow structure, not a fresh execution or the latest request payload. Expression-backed designer controls can appear blank/default; the complete JSON and revision-scoped runtime evidence are authoritative. No screenshot is being presented as a full-flow export or as proof of the later 512-row completion.</aside>
     <nav class="guide-jumps" aria-label="Native flow walkthrough stages"><a href="#flow-start">1. Entry and identity</a><a href="#flow-search">2. Scoped search</a><a href="#flow-hydration">3. Current source</a><a href="#flow-preview">4. Preview</a><a href="#flow-paging">5. Paging</a><a href="#flow-workbook">6. Workbook</a><a href="#flow-privacy">7. Privacy</a><a href="#flow-delivery">8. Delivery</a></nav>
-    <figure class="shot-card"><div class="shot-bar"><strong>Actual native flow overview and run history</strong><span class="status">Historical, read-only capture</span></div><a class="image-link" href="images/styled-hr/native-flow-overview.png"><img src="images/styled-hr/native-flow-overview.png" width="1365" height="1106" alt="Actual native flow overview and historical run history in Copilot Studio." loading="lazy"></a><figcaption><strong>This is the product's flow overview, not an architecture mockup.</strong> Dates/times in this view are browser-local. Its run list predates the later scale proof. The separate architecture illustration explains the complete design; these captures show selected real designer surfaces.</figcaption></figure>
-    <article class="card flow-step" id="flow-start"><span class="tag">01 / Request and identity</span><h3>Accept two inputs. Establish the effective account.</h3><p>The <code>Request</code> trigger uses <code>kind: Skills</code>. <code>Start_search_export</code> enters the controlled path; <code>Valid_input</code> rejects unsupported input, and <code>Literal_query</code> constructs quoted terms. The user cannot inject a new site scope or an email destination through the trigger.</p><p><code>Selected_profile</code>, <code>SharePoint_profile</code>, <code>OneDrive_root</code> and related personal-site/directory reads establish the source and private destination context. <code>Accounts_aligned</code> gates the positive path. Selected connections must agree internally; this does not prove they equal the channel sign-in.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-flow-entry.png"><img src="images/styled-hr/native-flow-entry.png" width="930" height="1096" alt="Genuine native designer excerpt showing the agent-callable trigger and initial variables and processing stages." loading="lazy"></a><figcaption><strong>Actual trigger/initialization excerpt.</strong> This is a selected part of the designer, not a screenshot of the entire workflow or every identity condition.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-search"><span class="tag">02 / Approved SharePoint index search</span><h3>Search explicit collections AND the configured hub.</h3><p><code>Initial_search</code> submits <code>Initial_request</code> with <code>RowLimit: 100</code> and <code>StartRow: 0</code>. The query combines approved <code>SiteID</code> values, the configured hub <code>DepartmentId</code>, literal words and document/page restrictions. Business <code>Department</code> metadata is not the hub association property.</p><p>SharePoint's index can match body content inside supported files/pages as well as titles. Returned <code>SPWebUrl</code>, <code>SiteID</code>, <code>ListID</code> and <code>ListItemID</code> are locators for the next checks. Index metadata or the estimated count alone is not disclosure authorization.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-initial-search.png"><img src="images/styled-hr/native-initial-search.png" width="2165" height="1021" alt="Actual SharePoint initial-search designer parameters with 100-row limit, zero start row and selected source locator properties." loading="lazy"></a><figcaption><strong>Historical initial-search definition view.</strong> The later current source additionally sets <code>SortList</code> to document ID ascending, as shown in the paging step below. This older screenshot does not show that revision.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-hydration"><span class="tag">03 / Current source hydration</span><h3>Read the actual file or page before showing its metadata.</h3><p><code>Read_preview_item</code> performs a current source read using the caller's SharePoint connection, after locator validation. Export uses <code>Read_current_items</code> for its own checks. A stale index hit does not entitle the agent to display a title, link or tag.</p><p>Links come from the current source path. Tags are stored <code>TopicTags</code>, not inferred keywords. Created/modified timestamps come from <code>File.TimeCreated</code> and <code>File.TimeLastModified</code>, not crawl or export time. Missing values stay explicit. Fixture <code>PolicyStatus</code> and <code>ReviewDate</code> fields are not selected, exported or used as approval filters.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-source-metadata-read.png"><img src="images/styled-hr/native-source-metadata-read.png" width="2165" height="801" alt="Actual native current-source GET action with dynamic SharePoint site and metadata-field handling." loading="lazy"></a><figcaption><strong>Actual current-source metadata-read designer excerpt.</strong> Dynamic site/field expressions are implementation values; a blank/default-looking designer control is not evidence that the source is unscoped.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-preview"><span class="tag">04 / Private destination and initial response</span><h3>Return verified rows while the same flow continues.</h3><p>On a positive path, <code>Create_blank_report</code> prepares a real workbook; private-access checks run before the preview is returned. At most 20 preview candidates yield up to ten permission-checked rows. A no-match outcome creates no workbook or email.</p><p><code>Format_chat_result</code> builds the four-column Markdown response, and <code>Respond_to_agent</code> returns the single <code>result</code> string. <code>Continue_private_export</code> then executes in this same native run. “Export started” is not “Export complete,” and the department banner is not a success indicator.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-response-and-continuation.png"><img src="images/styled-hr/native-response-and-continuation.png" width="1150" height="826" alt="Actual flow graph showing result formatting, response to the agent and subsequent private-export continuation." loading="lazy"></a><figcaption><strong>Actual response/continuation graph excerpt.</strong> The sequence is visible; it is not a second queue, durable worker or separate agent invocation.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-paging"><span class="tag">05 / Beyond 100 matches</span><h3>Advance the page offset without changing the sort.</h3><p><code>Export_rows</code> drives bounded continuation. <code>Next_search_page</code> uses <code>PageStart</code> for the next <code>StartRow</code>, preserving scope and the 100-row limit. Both request builders now use this same sort:</p><pre><code>"SortList": [{ "Property": "[docid]", "Direction": 0 }]</code></pre><p>Relevance paging overlapped in the scale fixture, even with document ID as a secondary tie-break. Document-ID-only ascending returned six disjoint pages: <strong>100 + 100 + 100 + 100 + 100 + 12</strong>. This is offset paging, not IndexDocId keyset traversal or a transactional index snapshot.</p><p>Preview ordering is a stable traversal sample within approved batches, not the globally relevance-ranked best ten. Duplicate handling, current source checks and omission accounting still apply. Limits remain 1,000 exported rows, 2,000 candidates, 40 pages and 12 batches of up to 20 sites.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-paging-request.png"><img src="images/styled-hr/native-paging-request.png" width="2165" height="1021" alt="Genuine historical next-page designer request retaining RowLimit 100 and using PageStart for StartRow." loading="lazy"></a><figcaption><strong>Historical paging definition view, not execution proof.</strong> This capture predates the current sort shown above. The later 512-row native execution is documented separately in the completed-run evidence.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-workbook"><span class="tag">06 / Write and verify Excel</span><h3>Include the preview rows, then read the real workbook back.</h3><p><code>Replace_placeholder</code> and <code>Append_result</code> write verified values into the prepared workbook. The export includes previewed matches while they remain accessible, plus the remaining verified matches; it is not just the rows after the first ten. Current access or content can legitimately change between preview and export.</p><p>The <code>Results</code> worksheet has its result table at row 8 and freezes at B9. Visible fields include Title, Department, Tags, Type, URL and UTC calendar dates; hidden columns preserve full raw timestamps and source references. Full tags remain intact. The generic <strong>Open file</strong> link can lead to a page; Type distinguishes it.</p><p><code>Read_back_written_rows</code> uses <code>Read_written_page</code> to compare actual connector-returned rows with expected verified values before successful delivery. The 512-row run read back <strong>250 + 250 + 12</strong> rows. The export loop has a 45-minute ceiling and readback a five-minute ceiling; neither is a latency promise.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-excel-append.png"><img src="images/styled-hr/native-excel-append.png" width="2165" height="1031" alt="Actual Excel append action showing dynamic private workbook, SearchResults table, stored metadata fields and source hyperlink formula." loading="lazy"></a><figcaption><strong>Actual Excel append configuration.</strong> This shows the <code>SearchResults</code> table action, not the later readback execution or a 512-row Excel UI capture. The worksheet name and table name are distinct.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-privacy"><span class="tag">07 / Final delivery gate</span><h3>Recheck the destination after processing.</h3><p><code>Final_file_acl</code> reads the workbook's final access state; <code>Delivery_acl_verified</code> gates successful delivery. An initial private check is not enough when processing can take many minutes. No anonymous or organization-wide sharing link is created.</p><p>Changed access has explicit <code>Notify_changed_acl</code> / <code>Stop_changed_acl</code> paths. Unverified output and export failures also have explicit branches. Completion metadata must retain partial, capped, omitted and failed states rather than turning the earlier startup message into an unsupported success claim.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-delivery-guard.png"><img src="images/styled-hr/native-delivery-guard.png" width="1055" height="896" alt="Actual historical native-flow graph excerpt with final file ACL read and delivery access verification condition." loading="lazy"></a><figcaption><strong>Actual final-permission gate excerpt.</strong> This historical graph is structural evidence, not a new negative-permission test. The current JSON defines exact ordering and branches; the owner run separately verified final private access.</figcaption></figure></article>
-    <article class="card flow-step" id="flow-delivery"><span class="tag">08 / Verified-profile delivery</span><h3>Email the link only through the guarded branch.</h3><p><code>Send_private_workbook</code> uses the verified profile's nonempty directory mail, not a recipient typed into chat. The message links to the private workbook and reports the actual completion/omission state. The model is not allowed to choose another destination.</p><p>The demonstrated 512-row run completed in <strong>26m46s</strong>, with an exact workbook readback, final private ACL and one accepted delivery email. Outlook connector acceptance is not independently verified inbox receipt. The original chat crop still correctly says pending because it was captured earlier.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-verified-recipient-email.png"><img src="images/styled-hr/native-verified-recipient-email.png" width="2165" height="801" alt="Actual native email designer with dynamic verified-profile recipient, subject and private-workbook link body." loading="lazy"></a><figcaption><strong>Actual email action configuration after the privacy gate.</strong> Expression-backed recipient/subject/body fields are defined in the flow. This is not a screenshot of a delivered inbox message.</figcaption></figure></article>
+    <figure class="shot-card"><div class="shot-bar"><strong>Actual native flow overview and run history</strong><span class="status">Historical, read-only capture</span></div><a class="image-link" href="images/styled-hr/native-flow-overview.png"><img src="images/styled-hr/native-flow-overview.png" width="1365" height="1106" alt="Actual native flow overview and historical run history in Copilot Studio."></a><figcaption><strong>This is the product's flow overview, not an architecture mockup.</strong> Dates/times in this view are browser-local. Its run list predates the later scale proof. The separate architecture illustration explains the complete design; these captures show selected real designer surfaces.</figcaption></figure>
+    <article class="card flow-step" id="flow-start"><span class="tag">01 / Request and identity</span><h3>Accept two inputs. Establish the effective account.</h3><p>The <code>Request</code> trigger uses <code>kind: Skills</code>. <code>Start_search_export</code> enters the controlled path; <code>Valid_input</code> rejects unsupported input, and <code>Literal_query</code> constructs quoted terms. The user cannot inject a new site scope or an email destination through the trigger.</p><p><code>Selected_profile</code>, <code>SharePoint_profile</code>, <code>OneDrive_root</code> and related personal-site/directory reads establish the source and private destination context. <code>Accounts_aligned</code> gates the positive path. Selected connections must agree internally; this does not prove they equal the channel sign-in.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-flow-entry.png"><img src="images/styled-hr/native-flow-entry.png" width="930" height="1096" alt="Genuine native designer excerpt showing the agent-callable trigger and initial variables and processing stages."></a><figcaption><strong>Actual trigger/initialization excerpt.</strong> This is a selected part of the designer, not a screenshot of the entire workflow or every identity condition.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-search"><span class="tag">02 / Approved SharePoint index search</span><h3>Search explicit collections AND the configured hub.</h3><p><code>Initial_search</code> submits <code>Initial_request</code> with <code>RowLimit: 100</code> and <code>StartRow: 0</code>. The query combines approved <code>SiteID</code> values, the configured hub <code>DepartmentId</code>, literal words and document/page restrictions. Business <code>Department</code> metadata is not the hub association property.</p><p>SharePoint's index can match body content inside supported files/pages as well as titles. Returned <code>SPWebUrl</code>, <code>SiteID</code>, <code>ListID</code> and <code>ListItemID</code> are locators for the next checks. Index metadata or the estimated count alone is not disclosure authorization.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-initial-search.png"><img src="images/styled-hr/native-initial-search.png" width="2165" height="1021" alt="Actual SharePoint initial-search designer parameters with 100-row limit, zero start row and selected source locator properties."></a><figcaption><strong>Historical initial-search definition view.</strong> The later current source additionally sets <code>SortList</code> to document ID ascending, as shown in the paging step below. This older screenshot does not show that revision.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-hydration"><span class="tag">03 / Current source hydration</span><h3>Read the actual file or page before showing its metadata.</h3><p><code>Read_preview_item</code> performs a current source read using the caller's SharePoint connection, after locator validation. Export uses <code>Read_current_items</code> for its own checks. A stale index hit does not entitle the agent to display a title, link or tag.</p><p>Links come from the current source path. Tags are stored <code>TopicTags</code>, not inferred keywords. Created/modified timestamps come from <code>File.TimeCreated</code> and <code>File.TimeLastModified</code>, not crawl or export time. Missing values stay explicit. Fixture <code>PolicyStatus</code> and <code>ReviewDate</code> fields are not selected, exported or used as approval filters.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-source-metadata-read.png"><img src="images/styled-hr/native-source-metadata-read.png" width="2165" height="801" alt="Actual native current-source GET action with dynamic SharePoint site and metadata-field handling."></a><figcaption><strong>Actual current-source metadata-read designer excerpt.</strong> Dynamic site/field expressions are implementation values; a blank/default-looking designer control is not evidence that the source is unscoped.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-preview"><span class="tag">04 / Private destination and initial response</span><h3>Return verified rows while the same flow continues.</h3><p>On a positive path, <code>Create_blank_report</code> prepares a real workbook; private-access checks run before the preview is returned. At most 20 preview candidates yield up to ten permission-checked rows. A no-match outcome creates no workbook or email.</p><p><code>Format_chat_result</code> builds the four-column Markdown response, and <code>Respond_to_agent</code> returns the single <code>result</code> string. <code>Continue_private_export</code> then executes in this same native run. “Export started” is not “Export complete,” and the department banner is not a success indicator.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-response-and-continuation.png"><img src="images/styled-hr/native-response-and-continuation.png" width="1150" height="826" alt="Actual flow graph showing result formatting, response to the agent and subsequent private-export continuation."></a><figcaption><strong>Actual response/continuation graph excerpt.</strong> The sequence is visible; it is not a second queue, durable worker or separate agent invocation.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-paging"><span class="tag">05 / Beyond 100 matches</span><h3>Advance the page offset without changing the sort.</h3><p><code>Export_rows</code> drives bounded continuation. <code>Next_search_page</code> uses <code>PageStart</code> for the next <code>StartRow</code>, preserving scope and the 100-row limit. Both request builders now use this same sort:</p><pre><code>"SortList": [{ "Property": "[docid]", "Direction": 0 }]</code></pre><p>Relevance paging overlapped in the scale fixture, even with document ID as a secondary tie-break. Document-ID-only ascending returned six disjoint pages: <strong>100 + 100 + 100 + 100 + 100 + 12</strong>. This is offset paging, not IndexDocId keyset traversal or a transactional index snapshot.</p><p>Preview ordering is a stable traversal sample within approved batches, not the globally relevance-ranked best ten. Duplicate handling, current source checks and omission accounting still apply. Limits remain 1,000 exported rows, 2,000 candidates, 40 pages and 12 batches of up to 20 sites.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-paging-request.png"><img src="images/styled-hr/native-paging-request.png" width="2165" height="1021" alt="Genuine historical next-page designer request retaining RowLimit 100 and using PageStart for StartRow."></a><figcaption><strong>Historical paging definition view, not execution proof.</strong> This capture predates the current sort shown above. The later 512-row native execution is documented separately in the completed-run evidence.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-workbook"><span class="tag">06 / Write and verify Excel</span><h3>Include the preview rows, then read the real workbook back.</h3><p><code>Replace_placeholder</code> and <code>Append_result</code> write verified values into the prepared workbook. The export includes previewed matches while they remain accessible, plus the remaining verified matches; it is not just the rows after the first ten. Current access or content can legitimately change between preview and export.</p><p>The <code>Results</code> worksheet has its result table at row 8 and freezes at B9. Visible fields include Title, Department, Tags, Type, URL and UTC calendar dates; hidden columns preserve full raw timestamps and source references. Full tags remain intact. The generic <strong>Open file</strong> link can lead to a page; Type distinguishes it.</p><p><code>Read_back_written_rows</code> uses <code>Read_written_page</code> to compare actual connector-returned rows with expected verified values before successful delivery. The 512-row run read back <strong>250 + 250 + 12</strong> rows. The export loop has a 45-minute ceiling and readback a five-minute ceiling; neither is a latency promise.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-excel-append.png"><img src="images/styled-hr/native-excel-append.png" width="2165" height="1031" alt="Actual Excel append action showing dynamic private workbook, SearchResults table, stored metadata fields and source hyperlink formula."></a><figcaption><strong>Actual Excel append configuration.</strong> This shows the <code>SearchResults</code> table action, not the later readback execution or a 512-row Excel UI capture. The worksheet name and table name are distinct.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-privacy"><span class="tag">07 / Final delivery gate</span><h3>Recheck the destination after processing.</h3><p><code>Final_file_acl</code> reads the workbook's final access state; <code>Delivery_acl_verified</code> gates successful delivery. An initial private check is not enough when processing can take many minutes. No anonymous or organization-wide sharing link is created.</p><p>Changed access has explicit <code>Notify_changed_acl</code> / <code>Stop_changed_acl</code> paths. Unverified output and export failures also have explicit branches. Completion metadata must retain partial, capped, omitted and failed states rather than turning the earlier startup message into an unsupported success claim.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-delivery-guard.png"><img src="images/styled-hr/native-delivery-guard.png" width="1055" height="896" alt="Actual historical native-flow graph excerpt with final file ACL read and delivery access verification condition."></a><figcaption><strong>Actual final-permission gate excerpt.</strong> This historical graph is structural evidence, not a new negative-permission test. The current JSON defines exact ordering and branches; the owner run separately verified final private access.</figcaption></figure></article>
+    <article class="card flow-step" id="flow-delivery"><span class="tag">08 / Verified-profile delivery</span><h3>Email the link only through the guarded branch.</h3><p><code>Send_private_workbook</code> uses the verified profile's nonempty directory mail, not a recipient typed into chat. The message links to the private workbook and reports the actual completion/omission state. The model is not allowed to choose another destination.</p><p>The demonstrated 512-row run completed in <strong>26m46s</strong>, with an exact workbook readback, final private ACL and one accepted delivery email. Outlook connector acceptance is not independently verified inbox receipt. The original chat crop still correctly says pending because it was captured earlier.</p><figure class="shot-card"><a class="image-link" href="images/styled-hr/native-verified-recipient-email.png"><img src="images/styled-hr/native-verified-recipient-email.png" width="2165" height="801" alt="Actual native email designer with dynamic verified-profile recipient, subject and private-workbook link body."></a><figcaption><strong>Actual email action configuration after the privacy gate.</strong> Expression-backed recipient/subject/body fields are defined in the flow. This is not a screenshot of a delivered inbox message.</figcaption></figure></article>
     <div class="actions"><a class="button primary" href="../agent/flows/search-export/definition.json" download>Download full current flow definition</a><a class="button" href="#downloads">Get agent + topics + tool + flow solution</a><a href="styled-capture-provenance.json">Original designer/Studio capture provenance</a><a href="images/architecture.svg">Full architecture illustration</a></div>
   </section>
 
-  <section class="section" id="evidence" aria-labelledby="evidence-title">
+  <section class="section dl-reveal" id="evidence" aria-labelledby="evidence-title">
     <div class="section-head"><div><p class="eyebrow">04 / Verified native execution</p><h2 id="evidence-title">512 is the workbook count.<br>Not just the estimate.</h2></div><p>One owner-started published M365 run on 13 September 2026. Evidence inspection reused that run; it did not create another query, workbook or email.</p></div>
     <div class="evidence">
       <div class="evidence-banner"><div class="big">512 / 512</div><h3>Actual source-hydrated rows<br>matched actual Excel readback.</h3><p>499 documents + 13 pages across 10 collections. Zero omissions, duplicate index hits, raw-metadata mismatches or processing errors.</p><p><strong>25 final checks · 23 paging checks · 15 date/markup checks passed.</strong></p><div class="actions"><a class="button" href="scale-runtime-validation-summary.json">Inspect the safe JSON evidence</a></div></div>
@@ -1483,7 +1533,7 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     <aside class="notice"><strong>Revision evidence has a boundary.</strong> The canonical/management definition and workflow ETag were unchanged before, during and after the run, and actual requests used the expected sort. The API did not expose an immutable per-run definition payload. This is not a new-tenant import, Teams, negative-ACL or production-scale validation.</aside>
   </section>
 
-  <section class="section" id="contracts" aria-labelledby="contracts-title">
+  <section class="section dl-reveal" id="contracts" aria-labelledby="contracts-title">
     <div class="section-head"><div><p class="eyebrow">05 / Topic and tool contract</p><h2 id="contracts-title">Small interface.<br>Substantial verification.</h2></div><p>Classic Copilot Studio orchestration with a native agent-callable flow. The local Python builder generates source; it is not a hosted runtime service.</p></div>
     <div class="contract">
       <article class="card"><span class="tag">Input / Request · Skills</span><h3>Exactly <code>query</code> and <code>scope</code></h3><pre><code>{
@@ -1495,7 +1545,7 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     <div class="actions"><a href="#agent">See the actual topic-to-flow wiring above</a><a href="#tools">Tool and connector rationale</a><a href="../agent/flows/search-export/definition.json" download>Full portable native definition</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/scripts/build-search-export-flow.py">Flow builder ↗</a></div>
   </section>
 
-  <section class="section" id="setup" aria-labelledby="setup-title">
+  <section class="section dl-reveal" id="setup" aria-labelledby="setup-title">
     <div class="section-head"><div><p class="eyebrow">06 / Import and configure</p><h2 id="setup-title">Import the solution.<br>Set up your tenant before running.</h2></div><p>Import the actual agent and complete runtime flow, then configure them while inactive. Importing the ZIP does not create the hub, spokes, libraries, pages, metadata, permissions or index entries.</p></div>
     <aside class="notice"><strong>Exact downloadable ZIP: native Sandbox import succeeded.</strong> On 21 September 2026 UTC, the import completed with all 24 expected solution memberships and no extras. The 183-action flow was Off, agent publication fields/channels empty, and all five references unbound with Invoker behavior intact. A declaration-only bot metadata correction preserved every other archive payload; both earlier failed attempts remain in the <a href="../solutions/import-verification.json">sanitized verification record</a>. This was import-only: cross-tenant portability, configured runtime and effective UI/save editability remain unverified. No runtime test or publication followed.</aside>
     <div class="contract">
@@ -1537,7 +1587,7 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     <div class="actions"><a class="button" href="../agent/runtime/search-policy.json" download>Download the fictional policy template</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/setup.md#from-an-empty-sharepoint-tenant">Empty-tenant setup in GitHub ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/agent/README.md">Private source build/wiring guide ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/fixtures/corpnet-demo/README.md">Optional fixture guide ↗</a></div>
   </section>
 
-  <section class="section" id="downloads" aria-labelledby="downloads-title">
+  <section class="section dl-reveal" id="downloads" aria-labelledby="downloads-title">
     <div class="section-head"><div><p class="eyebrow">07 / Source and downloads</p><h2 id="downloads-title">Inspect it.<br>Rebuild it deliberately.</h2></div><p>Static downloads only. No sign-in, runtime service, analytics or external font dependency is attached to this page.</p></div>
     <div class="downloads">
       <article class="card download-main"><span class="tag">Actual unmanaged Power Platform package</span><h3>CorpNet Search Hub Reference</h3><p>One agent, 16 active bot components, one current native workflow and five unbound connection references. The complete search, preview, paging, private Excel export and email continuation are in this one flow. No second runtime solution is needed.</p><p>Import this ZIP directly, not the source archive below. No fixture seeder, populated workbook or source-tenant credentials are included. The four-site fictional policy requires setup before activation.</p><div class="actions"><a class="button primary" href="../solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip" download>Download solution ZIP ↓</a><a href="#setup">Import-then-setup guide</a></div><p class="small">Version 1.0.0.0 · <strong>64,130 bytes</strong> · native Sandbox import verified; cross-tenant/runtime unverified</p><span class="small">SHA-256</span><code class="checksum" id="solution-sha">c4e0fed185ded365d51fb676b588d162780a55b91c2f23494f52304321989dad</code><p class="small">18 package tests + 68 portable-agent tests; supported PAC roundtrip preserved 39 source files semantically and all 39 archive payloads byte-for-byte. Native import evidence is separate from those offline checks. Earlier failed bytes used the same filename/version: compare this checksum, not just the name.</p><div class="actions"><a href="../solutions/package-validation.json">Current package validation</a><a href="../solutions/import-verification.json">Native import and prior attempts</a><a href="../solutions/validation.json">Original historical snapshot</a><a href="../solutions/component-inventory.json">Component and archive inventory</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/README.md#import-then-set-up">Detailed import and setup ↗</a></div></article>
@@ -1549,10 +1599,35 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
         <a class="download-item" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/archive/refs/heads/main.zip"><span><strong>Full reference source</strong><small>GitHub source archive · not the importable solution ZIP</small></span><span class="arrow" aria-hidden="true">↗</span></a>
       </div>
     </div>
+    <article class="card flow-step"><span class="tag">Complete local download list</span><h3>Every packaged file copied by the site build</h3><p>GitHub Releases are not currently used for this repository; the site serves the reviewed files below from the built Pages artifact.</p><div class="table-wrap"><table class="download-table" id="download-catalogue"><thead><tr><th scope="col">File</th><th scope="col">What it is</th><th scope="col">Version / revision</th><th scope="col">Size</th></tr></thead><tbody><tr><th scope="row"><a href="../solutions/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip" download>Unmanaged solution ZIP</a></th><td>Importable Power Platform package</td><td>1.0.0.0</td><td>64,130 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/flows/search-export/definition.json" download>Search/export flow definition</a></th><td>Portable JSON source for inspection</td><td>current source</td><td>143,055 bytes</td></tr>
+<tr><th scope="row"><a href="../fixtures/corpnet-demo/scale-expected-results.example.json" download>512-item fixture blueprint</a></th><td>Fictional expected-result oracle</td><td>13 September 2026 evidence</td><td>311,186 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/flows/search-export/RuntimeSearchResults.template.xlsx" download>Blank workbook template</a></th><td>Runtime Excel template with no results</td><td>current source</td><td>10,638 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/deployment-settings.template.json" download>Deployment settings template</a></th><td>Unbound connection reference template</td><td>1.0.0.0</td><td>1,070 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/agent.mcs.yml" download>Agent source</a></th><td>Copilot Studio agent YAML</td><td>current source</td><td>5,057 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/settings.mcs.yml" download>Agent settings</a></th><td>Authentication/orchestration settings YAML</td><td>current source</td><td>536 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/topics/SearchSharePoint.mcs.yml" download>Search topic</a></th><td>Guided Search SharePoint topic YAML</td><td>current source</td><td>23,700 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/topics/Search.mcs.yml" download>Fallback topic</a></th><td>Routes unmatched requests to the search topic</td><td>current source</td><td>353 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/actions/SearchAndExport.mcs.yml" download>Registered native tool</a></th><td>SearchAndExport action YAML</td><td>current source</td><td>886 bytes</td></tr>
+<tr><th scope="row"><a href="../agent/runtime/search-policy.json" download>Fictional search policy</a></th><td>Reference inventory and tenant policy JSON</td><td>current source</td><td>1,071 bytes</td></tr>
+<tr><th scope="row"><a href="images/architecture.excalidraw" download>Editable architecture diagram</a></th><td>Excalidraw source</td><td>current source</td><td>38,945 bytes</td></tr>
+<tr><th scope="row"><a href="scale-runtime-validation-summary.json" download>512-row runtime evidence</a></th><td>Sanitized validation JSON</td><td>13 September 2026</td><td>3,276 bytes</td></tr>
+<tr><th scope="row"><a href="scale-source-validation-summary.json" download>Source/index evidence</a></th><td>Per-site coverage validation JSON</td><td>13 September 2026</td><td>3,874 bytes</td></tr>
+<tr><th scope="row"><a href="scale-512-capture-provenance.json" download>512 capture provenance</a></th><td>Screenshot provenance JSON</td><td>13 September 2026</td><td>2,114 bytes</td></tr>
+<tr><th scope="row"><a href="m365-validation-summary.json" download>M365 HR/no-match evidence</a></th><td>Sanitized validation JSON</td><td>12 September 2026</td><td>3,867 bytes</td></tr>
+<tr><th scope="row"><a href="table-polish-validation-summary.json" download>IT table-polish evidence</a></th><td>Sanitized validation JSON</td><td>12 September 2026</td><td>3,037 bytes</td></tr>
+<tr><th scope="row"><a href="workbook-validation-summary.json" download>Workbook evidence</a></th><td>Sanitized validation JSON</td><td>12 September 2026</td><td>1,374 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/package-validation.json" download>Package validation</a></th><td>Current solution package evidence</td><td>1.0.0.0</td><td>3,413 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/validation.json" download>Historical package snapshot</a></th><td>Previous archive evidence</td><td>1.0.0.0</td><td>3,919 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/component-inventory.json" download>Component inventory</a></th><td>Archive entry manifest</td><td>1.0.0.0</td><td>19,034 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/import-verification.json" download>Import verification</a></th><td>Sanitized native Sandbox import evidence</td><td>21 September 2026</td><td>6,650 bytes</td></tr>
+<tr><th scope="row"><a href="../NOTICE.md" download>Project notice</a></th><td>Community and third-party rights notice</td><td>current source</td><td>2,450 bytes</td></tr>
+<tr><th scope="row"><a href="../solutions/ASSET-NOTICE.md" download>Packaged asset notice</a></th><td>Solution asset rights notice</td><td>current source</td><td>2,107 bytes</td></tr>
+<tr><th scope="row"><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/releases">GitHub Releases</a></th><td>No repository releases are currently published; use the checked site downloads above.</td><td>None</td><td>n/a</td></tr></tbody></table></div></article>
     <details style="margin-top:24px"><summary>Revisions and reproducibility</summary><p>Native 512-run revision:</p><code class="checksum">80f131a2368450fa21ae6ebfe44db5192121032828da8ab41362a96253aff36a</code><p>Portable definition revision:</p><code class="checksum">5d327138cba45cb1b2151a151c314b6add85a5994e5e2c72fec83f59605efdb3</code><p>Tenant-neutral policy and workbook preparation account for the separate portable revision. The solution preserves one intrinsic workflow identity for valid internal references; it is not a tenant locator. Do not blanket-replace GUIDs.</p><p>The package snapshot predates the subsequent native 512-row execution. Use the <a href="scale-runtime-validation-summary.json">later runtime summary</a> for that run’s outcome; target-tenant import remains unverified. Static checks establish parity with the included portable source, not an independently reproduced original-export-to-demo provenance chain. No connected raw export is published here.</p></details>
   </section>
 
-  <section class="section" id="boundaries" aria-labelledby="boundaries-title">
+  <section class="section dl-reveal" id="boundaries" aria-labelledby="boundaries-title">
     <div class="section-head"><div><p class="eyebrow">08 / Explicit boundaries</p><h2 id="boundaries-title">Finite by design.<br>Honest about what is proven.</h2></div><p>This is an owner-validated demonstration and technical reference, not a production readiness certificate or a supported Microsoft product.</p></div>
     <div class="bounds" aria-label="Runtime bounds"><div class="bound"><strong>10 / 20</strong><span>preview rows / candidates checked</span></div><div class="bound"><strong>1,000 / 2,000</strong><span>export rows / candidates checked</span></div><div class="bound"><strong>100 / 40</strong><span>rows per source page / page cap</span></div><div class="bound"><strong>12 × 20</strong><span>maximum site batches / sites per batch</span></div></div>
     <div class="grid-3">
@@ -1562,8 +1637,23 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     </div>
     <div class="actions"><a class="button" href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/validation.md">Read the full evidence ledger ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/docs/public-release-checklist.md">Review release boundaries ↗</a><a href="https://ryanbowie.github.io/copilot-studio-powerbi-agent/">Explore the companion Power BI reference ↗</a></div>
   </section>
+
+  <!-- dl-series:start -->
+  <section class="dl-series dl-reveal" id="series" aria-label="More community projects">
+    <p class="eyebrow">Series</p><h2>More community projects</h2>
+    <div class="dl-series-grid">
+      <a class="dl-series-card" href="https://ryanbowie.github.io/custom-agent-reporting-architecture/"><strong>Custom Agent Reporting ? Architecture</strong><span>How a custom Power BI model can report on agents across Copilot Studio, Agent Builder and Microsoft Foundry. Documentation only.</span><span class="series-action">Open ?</span></a>
+      <a class="dl-series-card" href="https://ryanbowie.github.io/copilot-interaction-logging/"><strong>Copilot Interaction Logging</strong><span>Build guide: Copilot interaction records from the Purview audit log, collected into Dataverse by two Power Automate flows.</span><span class="series-action">Open ?</span></a>
+      <a class="dl-series-card" href="https://ryanbowie.github.io/copilot-studio-powerplatform-solution-reviewer-site/"><strong>Power Platform Solution Reviewer</strong><span>A Copilot Studio agent that reviews Power Platform solutions, with a real canvas-app walkthrough, detailed output and setup guidance.</span><span class="series-action">Open ?</span></a>
+      <a class="dl-series-card" href="#top" aria-current="page"><strong>SharePoint Search Hub</strong><span>Hub-and-spoke SharePoint search in Copilot Studio, with caller-checked results, a private Excel export and a verified 512-item demo.</span><span class="series-action">You are here</span></a>
+      <a class="dl-series-card" href="https://ryanbowie.github.io/copilot-studio-powerbi-agent/"><strong>Power BI Agent</strong><span>A standard Copilot Studio agent that writes DAX and queries Power BI semantic models as the signed-in user.</span><span class="series-action">Open ?</span></a>
+      <a class="dl-series-card" href="https://ryanbowie.github.io/copilot-studio-documentation-builder/"><strong>Documentation Builder</strong><span>Template-aligned Word and PowerPoint documents from Copilot Studio, comparing the Standard and GitHub Copilot harnesses.</span><span class="series-action">Open ?</span></a>
+    </div>
+  </section>
+  <!-- dl-series:end -->
 </main>
 <footer class="footer"><div class="wrap footer-grid"><div><p><strong>Public reference—not an open-source license grant.</strong> Public visibility and downloads do not themselves grant a permissive project license. Microsoft retains rights in its product UI, trademarks and unmodified integration icon. This site’s identity is original text, not the SharePoint product mark. Review the notices before reuse or redistribution.</p><p>No cookies, analytics, remote scripts, runtime calls or sign-in flows. Screenshots contain fictional demonstration content and retain their documented revision limits.</p></div><div class="footer-links"><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub">Source ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/NOTICE.md">Rights notice ↗</a><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/blob/main/solutions/ASSET-NOTICE.md">Asset terms ↗</a><a href="#main">Back to top ↑</a></div></div></footer>
+<!-- design-layer-js:start -->
 <script>
 (() => {
   const themeButton = document.getElementById("theme-toggle");
@@ -1572,45 +1662,55 @@ modelDescription: &quot;Search approved hub/spoke sites; show up to ten verified
     themeButton.textContent = `${next === "dark" ? "Dark" : "Light"} theme`;
     themeButton.setAttribute("aria-label", `Switch to ${next} theme`);
   };
-  themeButton.hidden = false;
-  updateThemeLabel();
-  themeButton.addEventListener("click", () => {
-    const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    const url = new URL(window.location.href);
-    url.searchParams.set("scoutTheme", next);
-    try { window.history.replaceState(null, "", url); } catch (_) { /* file previews may restrict history updates */ }
-    updateThemeLabel();
-  });
+  if (themeButton) {
+    themeButton.hidden = false; updateThemeLabel();
+    themeButton.addEventListener("click", () => {
+      const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = next;
+      const url = new URL(window.location.href); url.searchParams.set("scoutTheme", next);
+      try { window.history.replaceState(null, "", url); } catch (_) { }
+      updateThemeLabel();
+    });
+  }
   document.querySelectorAll("[data-tabset]").forEach(set => {
-    const list = set.querySelector('[role="tablist"]');
+    const list = set.querySelector('[role="tablist"]'); if (!list) return;
     const tabs = [...list.querySelectorAll('[role="tab"]')];
     const panels = tabs.map(tab => document.getElementById(tab.getAttribute("aria-controls")));
-    const activate = index => {
-      tabs.forEach((tab, i) => {
-        tab.setAttribute("aria-selected", String(i === index));
-        tab.tabIndex = i === index ? 0 : -1;
-        panels[i].hidden = i !== index;
-      });
-    };
+    const activate = index => { tabs.forEach((tab, i) => { tab.setAttribute("aria-selected", String(i === index)); tab.tabIndex = i === index ? 0 : -1; if (panels[i]) panels[i].hidden = i !== index; }); };
     tabs.forEach((tab, index) => {
       tab.addEventListener("click", () => activate(index));
       tab.addEventListener("keydown", event => {
         let next;
         if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % tabs.length;
         if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index + tabs.length - 1) % tabs.length;
-        if (event.key === "Home") next = 0;
-        if (event.key === "End") next = tabs.length - 1;
-        if (next === undefined) return;
-        event.preventDefault();
-        activate(next);
-        tabs[next].focus();
+        if (event.key === "Home") next = 0; if (event.key === "End") next = tabs.length - 1;
+        if (next === undefined) return; event.preventDefault(); activate(next); tabs[next].focus();
       });
     });
-    list.hidden = false;
-    activate(0);
+    list.hidden = false; activate(0);
   });
+  const progress = document.getElementById("dl-progress");
+  const updateProgress = () => {
+    const doc = document.scrollingElement;
+    const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+    progress.style.transform = `scaleX(${Math.min(1, Math.max(0, doc.scrollTop / max))})`;
+  };
+  addEventListener("scroll", updateProgress, { passive: true }); addEventListener("resize", updateProgress); updateProgress();
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.documentElement.classList.add("dl-motion");
+    const revealNow = () => document.querySelectorAll(".dl-reveal:not(.dl-in)").forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight * 0.98) el.classList.add("dl-in"); });
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("dl-in"); }), { threshold: 0.01, rootMargin: "0px 0px -5% 0px" });
+    document.querySelectorAll(".dl-reveal").forEach(el => observer.observe(el));
+    addEventListener("scroll", revealNow, { passive: true }); addEventListener("resize", revealNow); revealNow();
+  } else { document.querySelectorAll(".dl-reveal").forEach(el => el.classList.add("dl-in")); }
+  const navLinks = [...document.querySelectorAll(".chipnav a")];
+  const targets = navLinks.map(a => document.querySelector(a.getAttribute("href"))).filter(Boolean);
+  const navObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (!entry.isIntersecting) return; navLinks.forEach(a => a.removeAttribute("aria-current")); const active = navLinks.find(a => a.getAttribute("href") === `#${entry.target.id}`); if (active) active.setAttribute("aria-current", "true"); });
+  }, { rootMargin: "-35% 0px -55% 0px" });
+  targets.forEach(target => navObserver.observe(target));
 })();
 </script>
+<!-- design-layer-js:end -->
 </body>
 </html>

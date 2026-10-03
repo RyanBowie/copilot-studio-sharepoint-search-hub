@@ -9,8 +9,8 @@ Future additions still require privacy and rights review before publication.
 
 - [x] Confirm the owner approves public distribution of every included source
       file and generated artifact.
-- [x] Document the deliberate absence of a project-wide open-source license,
-      matching the companion Power BI reference. See [rights notice](../NOTICE.md).
+- [x] Document the MIT licence, community support boundary and third-party asset rights.
+      See [rights notice](../NOTICE.md).
 - [x] Review third-party notices and retain required attribution.
 - [x] Review the Microsoft Fabric Assets License and visual guidelines for the
       separately labelled SharePoint icon. It is not an agent logo and is not
@@ -74,7 +74,7 @@ Future additions still require privacy and rights review before publication.
       Only the curated static build is published; the two staging control files
       are not counted as user downloads.
 - [x] Retain an honest support statement and known limitations. This is a public
-      reference, not a production-certified release or an open-source license grant.
+      reference, not a production-certified or Microsoft-supported release.
 
 No item on this list should be inferred complete from the existence of the
 repository alone. See the [source/artifact review record](publication-review.json);

@@ -5,11 +5,7 @@ documentation site on 13 September 2026. This is a demonstration and technical
 reference, not an official Microsoft product, endorsement, production support
 commitment or independently certified deployment.
 
-No project-wide open-source license is granted. Public visibility and download
-availability do not themselves grant a permissive license to the project or
-third-party assets. This follows the companion
-[Power BI reference](https://github.com/RyanBowie/copilot-studio-powerbi-agent),
-which likewise has no project-wide license.
+The project is shared under the MIT licence in the repository root. This is a community project provided as is, without warranty, support commitment or service level agreement. Test in a non-production environment first and obtain appropriate organisational approvals before importing any solution into an environment that holds real data. The Adaptive Card schema retains its own upstream MIT licence as described below.
 
 ## Included material
 

@@ -460,6 +460,6 @@ in another tenant or Teams. Non-owner behavior, inbox receipt and production sca
 remain independent validation work.
 
 Read [`ASSET-NOTICE.md`](ASSET-NOTICE.md). Microsoft retains rights in its unmodified
-product icon. This public reference grants no project-wide open-source license;
+product icon. This public reference is shared under the repository MIT licence;
 the [rights notice](../NOTICE.md) and upstream terms apply. Packing or publicly
 hosting an asset does not broaden its license.

@@ -48,6 +48,7 @@ ASSETS = {
     "package-inventory": ("solutions/component-inventory.json", "evidence/solution-component-inventory.json"),
     "import-proof": ("solutions/import-verification.json", "evidence/solution-import-verification.json"),
     "notice": ("NOTICE.md", "NOTICE.md"),
+    "og": ("docs/og.png", "og.png"),
     "asset-notice": ("solutions/ASSET-NOTICE.md", "ASSET-NOTICE.md"),
     "agent-source": ("agent/agent.mcs.yml", "downloads/agent.mcs.yml"),
     "agent-settings": ("agent/settings.mcs.yml", "downloads/settings.mcs.yml"),
@@ -206,6 +207,7 @@ def render(staged):
         "COVERAGE_DEPARTMENTS": coverage_rows(coverage["departments"], include_sites=True),
         "COVERAGE_SITES": coverage_rows(coverage["sites"]),
         "SHAREPOINT_ACTIONS": sharepoint_reference_html(sharepoint),
+        "DOWNLOAD_ROWS": download_rows(staged),
     }
 
     def substitute(match):
@@ -333,6 +335,46 @@ def load_sharepoint_reference():
     kql = actions["Approved_scopes"][1]["inputs"]["All"][0]["Kql"]
     return {"entries": entries, "kql": kql}
 
+
+
+def download_rows(staged):
+    labels = {
+        "solution": ("Unmanaged solution ZIP", "Importable Power Platform package", "1.0.0.0"),
+        "definition": ("Search/export flow definition", "Portable JSON source for inspection", "current source"),
+        "blueprint": ("512-item fixture blueprint", "Fictional expected-result oracle", "13 September 2026 evidence"),
+        "workbook": ("Blank workbook template", "Runtime Excel template with no results", "current source"),
+        "settings": ("Deployment settings template", "Unbound connection reference template", "1.0.0.0"),
+        "agent-source": ("Agent source", "Copilot Studio agent YAML", "current source"),
+        "agent-settings": ("Agent settings", "Authentication/orchestration settings YAML", "current source"),
+        "topic-source": ("Search topic", "Guided Search SharePoint topic YAML", "current source"),
+        "fallback-source": ("Fallback topic", "Routes unmatched requests to the search topic", "current source"),
+        "tool-source": ("Registered native tool", "SearchAndExport action YAML", "current source"),
+        "search-policy": ("Fictional search policy", "Reference inventory and tenant policy JSON", "current source"),
+        "editable": ("Editable architecture diagram", "Excalidraw source", "current source"),
+        "scale-proof": ("512-row runtime evidence", "Sanitized validation JSON", "13 September 2026"),
+        "source-proof": ("Source/index evidence", "Per-site coverage validation JSON", "13 September 2026"),
+        "scale-provenance": ("512 capture provenance", "Screenshot provenance JSON", "13 September 2026"),
+        "hr-proof": ("M365 HR/no-match evidence", "Sanitized validation JSON", "12 September 2026"),
+        "it-proof": ("IT table-polish evidence", "Sanitized validation JSON", "12 September 2026"),
+        "workbook-proof": ("Workbook evidence", "Sanitized validation JSON", "12 September 2026"),
+        "package-proof": ("Package validation", "Current solution package evidence", "1.0.0.0"),
+        "historical-package-proof": ("Historical package snapshot", "Previous archive evidence", "1.0.0.0"),
+        "package-inventory": ("Component inventory", "Archive entry manifest", "1.0.0.0"),
+        "import-proof": ("Import verification", "Sanitized native Sandbox import evidence", "21 September 2026"),
+        "notice": ("Project notice", "Community and third-party rights notice", "current source"),
+        "asset-notice": ("Packaged asset notice", "Solution asset rights notice", "current source"),
+    }
+    rows = []
+    for key, (name, description, version) in labels.items():
+        source, destination = ASSETS[key]
+        href = destination if staged else (source.removeprefix("docs/") if source.startswith("docs/") else "../" + source)
+        size = source_path(source).stat().st_size
+        rows.append(
+            f'<tr><th scope="row"><a href="{html.escape(href, quote=True)}" download>{html.escape(name)}</a></th>'
+            f'<td>{html.escape(description)}</td><td>{html.escape(version)}</td><td>{size:,} bytes</td></tr>'
+        )
+    rows.append('<tr><th scope="row"><a href="https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub/releases">GitHub Releases</a></th><td>No repository releases are currently published; use the checked site downloads above.</td><td>None</td><td>n/a</td></tr>')
+    return "\n".join(rows)
 
 def sharepoint_reference_html(reference):
     escape = html.escape

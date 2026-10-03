@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en-GB" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SharePoint Search Hub social card</title>
+<style>
+:root { color-scheme: dark; --cp-bg: #171717; --cp-bg-elevated: #222222; --cp-surface: #1f1f1f; --cp-surface-soft: #262626; --cp-border: #3b3b3b; --cp-border-strong: #858585; --cp-text: #f2f2f2; --cp-text-muted: #bdbdbd; --cp-accent: #c3a0ef; --cp-accent-hover: #debeff; --cp-accent-soft: #2b2b2b; --cp-accent-fg: #181818; --cp-link: #80baff; --cp-chart-blue: #69aeff; --cp-chart-purple: #bc98ed; --cp-chart-magenta: #ed8fea; --cp-transparent: transparent; }
+* { box-sizing: border-box; }
+body { margin: 0; width: 1280px; height: 640px; overflow: hidden; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; }
+.card { position: relative; width: 1280px; height: 640px; padding: 72px 80px; background: radial-gradient(circle at 78% 14%, var(--cp-accent-soft), var(--cp-transparent) 34%), linear-gradient(135deg, var(--cp-bg-elevated), var(--cp-bg)); }
+.kicker { display: inline-flex; padding: 8px 18px; border: 1px solid var(--cp-border-strong); border-radius: 999px; color: var(--cp-accent); font-size: 24px; font-weight: 700; }
+h1 { width: 850px; margin: 28px 0 0; font-size: 76px; line-height: 1.02; letter-spacing: -.045em; font-weight: 650; background: linear-gradient(105deg, var(--cp-chart-blue), var(--cp-chart-purple) 56%, var(--cp-chart-magenta)); background-clip: text; color: var(--cp-transparent); }
+p { width: 770px; margin: 28px 0 0; color: var(--cp-text-muted); font-size: 30px; line-height: 1.28; }
+.diagram { position: absolute; right: 70px; bottom: 66px; width: 360px; height: 245px; border: 1px solid var(--cp-border); border-radius: 28px; background: var(--cp-surface); padding: 24px; }
+.node { fill: var(--cp-surface-soft); stroke: var(--cp-border-strong); stroke-width: 2; }
+.hot { fill: var(--cp-accent-soft); stroke: var(--cp-accent); stroke-width: 3; }
+.path { fill: none; stroke: var(--cp-accent); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 14 10; }
+text { fill: var(--cp-text); font-family: Consolas, "Courier New", Courier, monospace; font-size: 18px; font-weight: 700; }
+.footer { position: absolute; left: 80px; bottom: 54px; color: var(--cp-text-muted); font-size: 22px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="kicker">Community project / MIT licence / As-is</div>
+  <h1>SharePoint Search Hub</h1>
+  <p>Hub-and-spoke SharePoint search in Copilot Studio, with caller-checked results and a private Excel export.</p>
+  <svg class="diagram" viewBox="0 0 360 245" role="img" aria-labelledby="og-title og-desc">
+    <title id="og-title">SharePoint Search Hub path</title>
+    <desc id="og-desc">Scope and query pass through a native flow to approved sites, caller checks and private export.</desc>
+    <path class="path" d="M74 64 C145 28 214 28 286 64"/>
+    <path class="path" d="M180 82 L180 156"/>
+    <rect class="hot" x="18" y="28" width="112" height="58" rx="14"/><text x="74" y="64" text-anchor="middle">Topic</text>
+    <rect class="node" x="124" y="144" width="112" height="58" rx="14"/><text x="180" y="180" text-anchor="middle">Checks</text>
+    <rect class="hot" x="230" y="28" width="112" height="58" rx="14"/><text x="286" y="64" text-anchor="middle">Sites</text>
+  </svg>
+  <div class="footer">ryanbowie.github.io/copilot-studio-sharepoint-search-hub</div>
+</div>
+</body>
+</html>

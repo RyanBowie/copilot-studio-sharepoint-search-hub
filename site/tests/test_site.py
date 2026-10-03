@@ -332,7 +332,7 @@ class SiteTests(unittest.TestCase):
 
     def test_all_reviewed_site_pngs_are_embedded_with_visible_flow_walkthrough(self):
         images = {attrs["src"] for tag, attrs in self.document.elements if tag == "img"}
-        expected = {destination for _, destination in BUILD.ASSETS.values() if destination.endswith(".png")}
+        expected = {destination for key, (_, destination) in BUILD.ASSETS.items() if destination.endswith(".png") and key != "og"}
         self.assertEqual(images, expected)
         self.assertEqual(len(images), 21)
         flow = self.html.split('id="agent-flow"', 1)[1].split('id="evidence"', 1)[0]
@@ -464,7 +464,7 @@ class SiteTests(unittest.TestCase):
         scripts = re.findall(r"<script>(.*?)</script>", self.html, flags=re.S)
         self.assertIn('const param = new URLSearchParams(window.location.search).get("scoutTheme");', scripts[0])
         self.assertIn('const theme = param === "light" ? "light" : "dark";', scripts[0])
-        self.assertIn('explicit === "light" || explicit === "dark"', scripts[1])
+        self.assertIn('document.documentElement.classList.add("js")', scripts[1])
         self.assertIn('url.searchParams.set("scoutTheme", next)', self.html)
         self.assertIn('"Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif', self.html)
         self.assertIn('Consolas, "Courier New", Courier, monospace', self.html)
@@ -473,6 +473,8 @@ class SiteTests(unittest.TestCase):
         self.assertNotRegex(components, r"#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(")
         self.assertNotIn("color: var(--cp-text-soft)", components)
         self.assertNotRegex(self.html, r"<script[^>]+src=|<iframe|<form|@import|localStorage|document\.cookie|fetch\(|XMLHttpRequest")
+        self.assertIn('summary_large_image', self.html)
+        self.assertIn('https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/og.png', self.html)
         self.assertIn("connect-src 'none'", self.html)
         self.assertIn("prefers-reduced-motion", self.html)
 
@@ -498,7 +500,7 @@ class SiteTests(unittest.TestCase):
 
         styles = re.search(r"<style>(.*?)</style>", self.html, flags=re.S).group(1)
         blocks = re.findall(r'(^:root|^html\[data-theme="dark"\]) \{(.*?)\}', styles, flags=re.S | re.M)
-        self.assertEqual(len(blocks), 4)
+        self.assertEqual(len(blocks), 2)
         light, dark = {}, {}
         for selector, block in blocks:
             target = light if selector == ":root" else dark

@@ -218,7 +218,7 @@ with controlled formulas and no source data. This package contains no run record
 populated layout examples, screenshots, connected deployment manifests or deployment
 scripts. Native flow registration and connection rebinding remain product tasks.
 
-This is a public reference, with no project-wide open-source license grant.
+This is a public reference shared under the repository MIT licence.
 See the [rights notice](../NOTICE.md). Configuration, multi-user access,
 accessibility, performance and target-deployment validation remain each
 adopter's responsibility; public documentation is not production certification.
