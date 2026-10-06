@@ -5,6 +5,8 @@ button and explicit `?scoutTheme=light` / `?scoutTheme=dark` choices remain avai
 
 **One Copilot Studio agent. Multiple approved SharePoint sites. Source-linked results and a private Excel export.**
 
+> **Community project, built with GitHub Copilot, under the [MIT licence](LICENSE).** Not a Microsoft product and not supported by Microsoft; provided as is, without warranty.
+
 [Download solution ZIP](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip) ·
 [Import and configure](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup) ·
 [View repository](https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub)
@@ -482,7 +484,7 @@ themes and the icon. Teams remains untested.
 
 ## Licence and support
 
-This community project is shared under the [MIT licence](LICENSE). It is not a Microsoft product and is not supported by Microsoft. It is provided as is, without warranty or SLA. Test in a non-production environment first and get your organisation's approvals before importing a solution into an environment that holds real data.
+This community project, built with GitHub Copilot, is shared under the [MIT licence](LICENSE). It is not a Microsoft product and is not supported by Microsoft. It is provided as is, without warranty or SLA. Test in a non-production environment first and get your organisation's approvals before importing a solution into an environment that holds real data.
 
 ## Important boundaries
 

@@ -14,7 +14,7 @@ Future additions still require privacy and rights review before publication.
 - [x] Review third-party notices and retain required attribution.
 - [x] Review the Microsoft Fabric Assets License and visual guidelines for the
       separately labelled SharePoint icon. It is not an agent logo and is not
-      covered by any future project license; original banner artwork is separate.
+      covered by the repository's MIT licence; original banner artwork is separate.
 - [x] Confirm every example is synthetic and not real company guidance.
 - [x] Remove internal hostnames, emails, tenant/environment/agent/site/flow/
       connection identifiers, local paths and organization-specific details.

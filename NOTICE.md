@@ -5,7 +5,7 @@ documentation site on 13 September 2026. This is a demonstration and technical
 reference, not an official Microsoft product, endorsement, production support
 commitment or independently certified deployment.
 
-The project is shared under the MIT licence in the repository root. This is a community project provided as is, without warranty, support commitment or service level agreement. Test in a non-production environment first and obtain appropriate organisational approvals before importing any solution into an environment that holds real data. The Adaptive Card schema retains its own upstream MIT licence as described below.
+The project is shared under the MIT licence in the repository root. This is a community project, built with GitHub Copilot, provided as is, without warranty, support commitment or service level agreement. Test in a non-production environment first and obtain appropriate organisational approvals before importing any solution into an environment that holds real data. The Adaptive Card schema retains its own upstream MIT licence as described below.
 
 ## Included material
 

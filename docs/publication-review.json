@@ -2,7 +2,7 @@
   "date": "2026-09-13",
   "scope": "Public-reference source, artifact, history and image review; not a production security certification.",
   "ownerAuthorizedPublicRepositoryAndPages": true,
-  "projectLicense": "No project-wide open-source license grant; upstream licenses and rights notices retained.",
+  "projectLicense": "MIT licence (repository root) for project-authored material, added on 2026-10-03 after this review; upstream licenses and Microsoft rights notices retained.",
   "initialHistoryReview": {
     "head": "5dccce6555c94c17f892e2f66c6a475796b15517",
     "commits": 12,
@@ -70,6 +70,6 @@
     "Pattern scans and visual review do not establish absence of every possible vulnerability.",
     "Website and anonymous-download verification establish static publication, not target-tenant import or runtime behavior.",
     "New-tenant solution import/runtime, negative non-owner access and Teams remain unverified.",
-    "Public reference availability is not a production support or licensing grant."
+    "Public reference availability is not a production support commitment, and the MIT licence does not extend to Microsoft product UI, trademarks or the unmodified SharePoint icon."
   ]
 }
