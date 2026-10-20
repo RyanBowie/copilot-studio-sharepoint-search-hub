@@ -472,7 +472,10 @@ class SiteTests(unittest.TestCase):
         components = css[css.index("* { box-sizing:"):]
         self.assertNotRegex(components, r"#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(")
         self.assertNotIn("color: var(--cp-text-soft)", components)
-        self.assertNotRegex(self.html, r"<script[^>]+src=|<iframe|<form|@import|localStorage|document\.cookie|fetch\(|XMLHttpRequest")
+        self.assertNotRegex(self.html, r"<script[^>]+src=|<iframe|<form|@import|document\.cookie|fetch\(|XMLHttpRequest")
+        # The only permitted storage use is the cursor-effects preference.
+        self.assertEqual(set(re.findall(r"localStorage\.\w+\(([^,)]+)", self.html)), {"KEY"})
+        self.assertIn('"fx-cursor"', self.html)
         self.assertIn('summary_large_image', self.html)
         self.assertIn('https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/og.png', self.html)
         self.assertIn("connect-src 'none'", self.html)
