@@ -423,7 +423,24 @@ class SiteTests(unittest.TestCase):
         group = self.html.split('data-group="copilot-studio"', 1)[1].split('data-group="governance"', 1)[0]
         self.assertEqual(len([attrs for tag, attrs in Document(group).elements
                               if tag == "a" and attrs.get("class") == "cm-card"]), 5)
-        self.assertIn("Planned companion", group)
+        self.assertIn("Companion project", group)
+
+    def test_companion_publication_status_does_not_claim_live_deployment_or_matched_testing(self):
+        section = self.html.split('id="harness-comparison"', 1)[1].split("</section>", 1)[0]
+        texts = [(ROOT / "README.md").read_text(encoding="utf-8"),
+                 (ROOT / BUILD.ASSETS["harness-comparison"][0]).read_text(encoding="utf-8"),
+                 section]
+        for text in texts:
+            normalized = " ".join(text.split())
+            self.assertIn("8ea5798b521a4e98d99d4240816d32eb796b6c22", normalized)
+            self.assertIn("PUBLIC", normalized)
+            self.assertIn("Pages is configured", normalized)
+            self.assertIn("a live Pages deployment has not yet been verified", normalized)
+            self.assertIn("not a matched head-to-head", normalized)
+            self.assertNotRegex(normalized, r"(?i)planned companion|planned publication targets|publication target, not a verified deployment")
+        group = self.html.split('data-group="copilot-studio"', 1)[1].split('data-group="governance"', 1)[0]
+        self.assertIn("Public repository; Pages configured, live deployment not yet verified", group)
+        self.assertNotIn("Planned companion", group)
 
     def test_public_comparison_guide_is_allowlisted_and_contains_no_private_locators(self):
         source, destination = BUILD.ASSETS["harness-comparison"]

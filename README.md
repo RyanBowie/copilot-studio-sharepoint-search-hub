@@ -15,12 +15,15 @@ button and explicit `?scoutTheme=light` / `?scoutTheme=dark` choices remain avai
 
 **For a new large, unstructured-document review, start by evaluating the
 Microsoft Copilot-harness [Engineering Evidence example](https://github.com/RyanBowie/copilot-studio-engineering-evidence)
-([planned companion site](https://ryanbowie.github.io/copilot-studio-engineering-evidence/)).**
+([companion showcase](https://ryanbowie.github.io/copilot-studio-engineering-evidence/)).**
 Its adaptive orchestration, larger context and native file workspace are a
 better architectural fit for requirement/exception extraction, conflict
 analysis and evidence-file creation than extending this literal search flow.
-Those links are publication targets for the companion update, not a claim
-that its deployment has already been verified.
+Publication evidence supplied **15 November 2026** identifies the repository
+as **PUBLIC** at commit
+[`8ea5798b521a4e98d99d4240816d32eb796b6c22`](https://github.com/RyanBowie/copilot-studio-engineering-evidence/commit/8ea5798b521a4e98d99d4240816d32eb796b6c22).
+Pages is configured at the showcase URL; a live Pages deployment has not yet
+been verified.
 
 **Keep Search Hub for literal allowlisted SharePoint search, caller-hydrated
 metadata, a predictable bounded preview and an explicitly engineered private
