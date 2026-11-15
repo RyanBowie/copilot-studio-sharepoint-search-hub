@@ -19,9 +19,10 @@ and [companion Pages site](https://ryanbowie.github.io/copilot-studio-engineerin
 Publication evidence supplied **15 November 2026** identifies the repository
 as **PUBLIC** at commit
 [`8ea5798b521a4e98d99d4240816d32eb796b6c22`](https://github.com/RyanBowie/copilot-studio-engineering-evidence/commit/8ea5798b521a4e98d99d4240816d32eb796b6c22).
-Pages is configured at the linked URL; a live Pages deployment has not yet
-been verified. This publication status does not establish a new agent test or
-a matched benchmark.
+Pages is published at the linked URL. Supplied verification confirms a
+successful Pages build for that commit and byte-for-byte matches for all
+21 served site/asset/download files against the public package. This verified
+publication does not establish a new agent test or a matched benchmark.
 
 It is a better architectural starting point for extracting requirements and
 exceptions, analysing conflicts across manuals, and creating native evidence
