@@ -1,9 +1,7 @@
 # Search Hub or Engineering Evidence?
 
-**Documentation comparison prepared 15 November 2026. No live agents were run
-for this update, and no matched head-to-head run exists.**
-
-This is a historical evidence comparison, not a matched head-to-head test.
+**Comparison: 15 November 2026.** Historical results from different workloads,
+not a matched head-to-head test.
 
 This community reference is shared as is under the [MIT licence](../LICENSE),
 not as a Microsoft product or a production-readiness certificate. Demonstration
@@ -16,13 +14,6 @@ For a **new large, unstructured-document reasoning workload**, evaluate the
 **Microsoft Copilot-harness Engineering Evidence example first**:
 [companion repository](https://github.com/RyanBowie/copilot-studio-engineering-evidence)
 and [companion Pages site](https://ryanbowie.github.io/copilot-studio-engineering-evidence/).
-Publication evidence supplied **15 November 2026** identifies the repository
-as **PUBLIC** at commit
-[`8ea5798b521a4e98d99d4240816d32eb796b6c22`](https://github.com/RyanBowie/copilot-studio-engineering-evidence/commit/8ea5798b521a4e98d99d4240816d32eb796b6c22).
-Pages is published at the linked URL. Supplied verification confirms a
-successful Pages build for that commit and byte-for-byte matches for all
-21 served site/asset/download files against the public package. This verified
-publication does not establish a new agent test or a matched benchmark.
 
 It is a better architectural starting point for extracting requirements and
 exceptions, analysing conflicts across manuals, and creating native evidence
@@ -63,7 +54,7 @@ Word/Excel/PowerPoint/PDF and filesystem workflow.
 
 | Evidence | Search Hub | Engineering Evidence |
 |---|---|---|
-| Build/source provenance | Portable agent source first committed **12 September 2026** (`c161974`); this is not the original live build timestamp. Reference solution version **1.0.0.0**. | Initial build evidenced **6 November 2026**. Published version **8.0** status recorded **8 November 2026**. Public copies prepared **15 November 2026**. |
+| Build/source dates | Portable agent source first recorded **12 September 2026**; the original live build date is unknown. Reference solution version **1.0.0.0**. | Initial build evidenced **6 November 2026**. Published version **8.0** status recorded **8 November 2026**. |
 | Configured model | Source hint **`GPT5Chat`**; earlier **12 September** validation records describe GPT-5 Chat conversations. | Saved build model **Claude Opus 5.5**, series **`claude-opus-5-5`**. |
 | Actual execution model | Exact model/version for the **13 September 512-row run** not retained. The source hint and earlier records do not independently identify that run. | Exact execution models/versions for the six later tests not retained or independently verified. **`GPT-ENG` names describe the GPT-compatible requested prompt ladder, not proof of GPT runtime.** |
 | Run/report timing | **13 September 2026**, native run **10:42:24–11:09:10 UTC**, observed **26m46s**; full timestamps in the local safe runtime summary. | Six results **reported 13 November 2026**, not exact starts/ends. Native Studio screenshots captured **13 November, 20:10 UTC**. No comparable end-to-end latency retained. |
@@ -91,9 +82,8 @@ Local Search Hub evidence:
 [validation and limitations](validation.md),
 [portable model source](../agent/agent.mcs.yml),
 [current package evidence](../solutions/package-validation.json).
-Engineering facts are a companion historical evidence summary supplied for
-this update; its files and audits are owned by the companion publication, not
-copied or independently rerun in this repository.
+See the [Engineering Evidence showcase](https://ryanbowie.github.io/copilot-studio-engineering-evidence/)
+for its screenshots, reports and detailed results.
 
 ## Indicative test credits, not a low-cost or price claim
 
@@ -153,8 +143,7 @@ winner without equivalent engineering latency and an equivalent workload.
    Pre-register scoring **without an expected winner**; recommend by observed
    task fit, fidelity, coverage, access/export correctness, usage and latency.
 
-No runtime agent, solution or flow was modified for this documentation update.
-This protocol needs separately authorised testing; it is not a test result.
+This is a proposed test plan, not a completed benchmark.
 
 ## Official capability references
 

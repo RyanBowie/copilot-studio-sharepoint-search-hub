@@ -425,19 +425,18 @@ class SiteTests(unittest.TestCase):
                               if tag == "a" and attrs.get("class") == "cm-card"]), 5)
         self.assertIn("Companion project", group)
 
-    def test_companion_publication_status_distinguishes_live_publication_from_matched_testing(self):
+    def test_public_comparison_links_to_examples_without_publication_handover(self):
         section = self.html.split('id="harness-comparison"', 1)[1].split("</section>", 1)[0]
         texts = [(ROOT / "README.md").read_text(encoding="utf-8"),
                  (ROOT / BUILD.ASSETS["harness-comparison"][0]).read_text(encoding="utf-8"),
                  section]
         for text in texts:
             normalized = " ".join(text.split())
-            self.assertIn("8ea5798b521a4e98d99d4240816d32eb796b6c22", normalized)
-            self.assertIn("PUBLIC", normalized)
-            self.assertIn("Pages is published", normalized)
-            self.assertIn("successful Pages build for that commit", normalized)
-            self.assertIn("21 served site/asset/download files", normalized)
-            self.assertIn("byte-for-byte matches", normalized)
+            self.assertIn("https://ryanbowie.github.io/copilot-studio-engineering-evidence/", normalized)
+            self.assertNotRegex(normalized, r"\b[0-9a-f]{40}\b")
+            for internal_note in ("Publication evidence supplied", "successful Pages build",
+                                  "byte-for-byte matches", "served site/asset/download files"):
+                self.assertNotIn(internal_note, normalized)
             self.assertIn("not a matched head-to-head", normalized)
             self.assertNotRegex(normalized, r"(?i)planned companion|planned publication targets|publication target, not a verified deployment")
             self.assertNotIn("Pages is configured", normalized)

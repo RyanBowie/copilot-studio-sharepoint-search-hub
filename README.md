@@ -19,13 +19,6 @@ Microsoft Copilot-harness [Engineering Evidence example](https://github.com/Ryan
 Its adaptive orchestration, larger context and native file workspace are a
 better architectural fit for requirement/exception extraction, conflict
 analysis and evidence-file creation than extending this literal search flow.
-Publication evidence supplied **15 November 2026** identifies the repository
-as **PUBLIC** at commit
-[`8ea5798b521a4e98d99d4240816d32eb796b6c22`](https://github.com/RyanBowie/copilot-studio-engineering-evidence/commit/8ea5798b521a4e98d99d4240816d32eb796b6c22).
-Pages is published at the showcase URL. Supplied verification confirms a
-successful Pages build for that commit and byte-for-byte matches for all
-21 served site/asset/download files against the public package. Publication
-verification is not a matched agent benchmark.
 
 **Keep Search Hub for literal allowlisted SharePoint search, caller-hydrated
 metadata, a predictable bounded preview and an explicitly engineered private
