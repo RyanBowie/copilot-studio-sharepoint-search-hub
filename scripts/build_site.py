@@ -70,6 +70,7 @@ ASSETS = {
     "flow-email": ("docs/images/styled-hr/native-verified-recipient-email.png", "images/styled-hr/native-verified-recipient-email.png"),
     "flow-provenance": ("docs/styled-capture-provenance.json", "evidence/styled-capture-provenance.json"),
     "search-policy": ("agent/runtime/search-policy.json", "downloads/search-policy.json"),
+    "harness-comparison": ("docs/harness-comparison.md", "guides/harness-comparison.md"),
 }
 
 
@@ -363,6 +364,7 @@ def download_rows(staged):
         "import-proof": ("Import verification", "Sanitized native Sandbox import evidence", "21 September 2026"),
         "notice": ("Project notice", "Community and third-party rights notice", "current source"),
         "asset-notice": ("Packaged asset notice", "Solution asset rights notice", "current source"),
+        "harness-comparison": ("Harness comparison guide", "Historical evidence and proposed matched protocol; not a live test", "15 November 2026"),
     }
     rows = []
     for key, (name, description, version) in labels.items():

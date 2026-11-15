@@ -11,6 +11,45 @@ button and explicit `?scoutTheme=light` / `?scoutTheme=dark` choices remain avai
 [Import and configure](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#setup) ·
 [View repository](https://github.com/RyanBowie/copilot-studio-sharepoint-search-hub)
 
+## Choose the pattern for the task
+
+**For a new large, unstructured-document review, start by evaluating the
+Microsoft Copilot-harness [Engineering Evidence example](https://github.com/RyanBowie/copilot-studio-engineering-evidence)
+([planned companion site](https://ryanbowie.github.io/copilot-studio-engineering-evidence/)).**
+Its adaptive orchestration, larger context and native file workspace are a
+better architectural fit for requirement/exception extraction, conflict
+analysis and evidence-file creation than extending this literal search flow.
+Those links are publication targets for the companion update, not a claim
+that its deployment has already been verified.
+
+**Keep Search Hub for literal allowlisted SharePoint search, caller-hydrated
+metadata, a predictable bounded preview and an explicitly engineered private
+Excel export.** Its complexity implements scope, paging, current-source reads,
+workbook readback and destination-access checks; it is not redundant merely
+because a newer harness can create files.
+
+This is a **historical evidence comparison, not a matched head-to-head test**.
+Search Hub verified **512 matches across ten sites** on **13 September 2026**;
+the engineering review's Level 6 retained **44 complete clause records from
+five manuals**, with **132 of 176 candidates still pending**. Matches and
+clauses are different units, and neither proves a universal winner.
+
+| Provenance / indicative usage | Search Hub — Standard harness | Engineering Evidence — Microsoft Copilot harness |
+|---|---|---|
+| Build/source dates | Portable source first committed **12 September 2026**; original build timestamp not established. | Initial build evidenced **6 November 2026**; published version **8.0** status recorded **8 November**; public copies prepared **15 November**. |
+| Model attribution | Source hint **`GPT5Chat`**; earlier 12 September records describe GPT-5 Chat. Exact execution model/version for the 13 September 512-row run was not retained. | Saved build: **Claude Opus 5.5**, series **`claude-opus-5-5`**. Exact execution models/versions for the six later tests were not retained or independently verified; `GPT-ENG` prompt names do not establish a GPT runtime. |
+| Test dates and credits | 512-row run: **13 September 2026, 10:42:24–11:09:10 UTC**. Credits/cost unknown. | Six results **reported 13 November 2026**, not exact run timestamps. **20.37–290.00 user-reported credits/test**, **738.50 total**; indicative historical usage, not a price, invoice or matched Standard baseline. |
+
+Native sandbox/file handling does not remove user permissions, authoritative
+source validation, coverage ledgers or destination/export access checks.
+Standard also has a structured CSV/Excel Python code-interpreter capability;
+file analysis is disabled in **this** Search Hub build, not absent from the
+Standard harness.
+
+[Full comparison, limitations and fair future test protocol](docs/harness-comparison.md) ·
+[On-page harness comparison](https://ryanbowie.github.io/copilot-studio-sharepoint-search-hub/#harness-comparison) ·
+[Official harness selection guidance](https://learn.microsoft.com/microsoft-copilot-studio/guidance/choose-harness)
+
 | Copilot Studio agent prompt | Same agent's output |
 |---|---|
 | ![Copilot Studio agent in the Microsoft 365 Copilot channel: Search SharePoint, IT, devices typed before submission](docs/images/table-polish/published-m365-it-devices-inputs.png) | ![The same published Copilot Studio agent's four-result IT devices output with verified source links, dates and tags](docs/images/table-polish/published-m365-polished-table-100.png) |
@@ -403,6 +442,7 @@ record the crop boundaries.
 | [`docs/screenshots.md`](docs/screenshots.md) | Genuine cropped chat, native-tool binding and topic-response captures, with their evidence limits. |
 | [`docs/setup.md`](docs/setup.md) | Environment preparation and safe adaptation to a different tenant. |
 | [`docs/validation.md`](docs/validation.md) | What was observed, what remains unproven and how to repeat the checks. |
+| [`docs/harness-comparison.md`](docs/harness-comparison.md) | Scenario-specific Standard/Microsoft harness recommendation, dated historical evidence, indicative credits and a matched future test protocol. |
 | [`docs/public-release-checklist.md`](docs/public-release-checklist.md) | Review gates before changing visibility or enabling a public site. |
 | [`site/`](site/) and [`scripts/build_site.py`](scripts/build_site.py) | Static website template, dependency-free build/tests and isolated local preview. |
 
@@ -428,8 +468,8 @@ The shared `--cp-*` foundation in `site/index.template.html` is followed by the
 [Cowork benchmark](https://ryanbowie.github.io/copilot-cowork-app-benchmark/#overview)
 palette overrides: purple accents, neutral surfaces and an editorial gradient
 title. Edit the template, then rebuild the tracked `docs/index.html`; do not edit
-generated HTML by hand. System preference selects the initial theme unless
-`?scoutTheme=light` or `?scoutTheme=dark` is supplied. The theme button preserves
+generated HTML by hand. Dark is the initial theme regardless of system preference;
+`?scoutTheme=light` explicitly selects light. The theme button preserves
 the other query parameters and the current section. Evidence images retain
 their original colours.
 

@@ -392,6 +392,52 @@ class SiteTests(unittest.TestCase):
         self.assertNotIn("built-in Microsoft 365 Copilot assistant", self.html)
         self.assertNotIn("Actual published M365 Copilot", self.html)
 
+    def test_harness_comparison_is_prominent_and_keeps_evidence_boundaries(self):
+        section = self.html.split('id="harness-comparison"', 1)[1].split("</section>", 1)[0]
+        text = " ".join(" ".join(Document(section).text).split())
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        guide = (ROOT / BUILD.ASSETS["harness-comparison"][0]).read_text(encoding="utf-8")
+        self.assertLess(self.html.index('id="harness-comparison"'), self.html.index('id="coverage"'))
+        self.assertIn('href="#harness-comparison"', self.html.split('id="showcase"', 1)[1].split("</section>", 1)[0])
+        self.assertIn("Choose the pattern for the task", readme)
+        for public_text in (text, " ".join(guide.split())):
+            for required in ("not a matched head-to-head", "GPT5Chat", "claude-opus-5-5",
+                             "13 September 2026", "6 November 2026", "15 November",
+                             "reported 13 November 2026", "GPT-ENG", "132 pending",
+                             "738.50", "290.56", "not implemented"):
+                self.assertIn(required, public_text)
+            self.assertIn("512", public_text)
+            self.assertIn("44", public_text)
+        self.assertIn("Exact execution models/versions", text)
+        self.assertIn("user permissions", text)
+        self.assertIn("authoritative source validation", text)
+        self.assertIn("destination/export access checks", text)
+        self.assertIn("without an expected winner", text)
+        self.assertIn("full response absent", text)
+        self.assertIn("Python CSV/Excel", text)
+        for url in ("https://github.com/RyanBowie/copilot-studio-engineering-evidence",
+                    "https://ryanbowie.github.io/copilot-studio-engineering-evidence/"):
+            self.assertIn(url, section)
+            self.assertIn(url, readme)
+            self.assertIn(url, guide)
+        group = self.html.split('data-group="copilot-studio"', 1)[1].split('data-group="governance"', 1)[0]
+        self.assertEqual(len([attrs for tag, attrs in Document(group).elements
+                              if tag == "a" and attrs.get("class") == "cm-card"]), 5)
+        self.assertIn("Planned companion", group)
+
+    def test_public_comparison_guide_is_allowlisted_and_contains_no_private_locators(self):
+        source, destination = BUILD.ASSETS["harness-comparison"]
+        self.assertEqual((ROOT / source).read_bytes(), (self.output / destination).read_bytes())
+        self.assertIn('href="' + destination + '" download', self.html)
+        texts = [(ROOT / source).read_text(encoding="utf-8"),
+                 self.html.split('id="harness-comparison"', 1)[1].split("</section>", 1)[0],
+                 (ROOT / "README.md").read_text(encoding="utf-8").split("## Choose the pattern", 1)[1]
+                 .split("| Copilot Studio agent prompt", 1)[0]]
+        for text in texts:
+            self.assertNotRegex(text, r"(?i)[a-z]:\\|[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}")
+            self.assertNotRegex(text, r"(?i)\b[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\b")
+            self.assertNotRegex(text, r"(?i)https?://[^/\s\"<>)]*\.sharepoint\.com")
+
     def test_all_sharepoint_requests_and_helpers_match_the_actual_definition(self):
         reference = BUILD.load_sharepoint_reference()
         self.assertEqual(len(reference["entries"]), 12)

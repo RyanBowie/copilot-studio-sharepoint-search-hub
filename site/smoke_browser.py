@@ -149,6 +149,7 @@ def main():
                 assert response.status == 200
                 assert page.locator("html").get_attribute("data-theme") == "light"
                 assert page.locator("main > section").first.get_attribute("id") == "showcase"
+                assert page.locator("main > section").nth(1).get_attribute("id") == "harness-comparison"
                 assert page.locator("#primary-actions a").all_text_contents() == [
                     "Download solution ZIP", "Import and configure", "View repository"]
                 for image in page.locator("#showcase img").all():
@@ -204,6 +205,10 @@ def main():
                 results["galleryButtons"] = 4
                 results["keyboardTabsPassed"] = True
                 results["settingsDisclosurePassed"] = True
+                comparison_guide = page.request.get(base + "guides/harness-comparison.md")
+                assert comparison_guide.status == 200
+                assert comparison_guide.body() == (ROOT / "docs" / "harness-comparison.md").read_bytes()
+                results["comparisonGuideExactHttpBytesPassed"] = True
                 package = page.request.get(base + "downloads/CorpNetSearchHubReference_1_0_0_0_unmanaged.zip")
                 assert package.status == 200
                 digest = hashlib.sha256(package.body()).hexdigest()
@@ -233,6 +238,19 @@ def main():
                         assert page.locator("html").get_attribute("data-theme") == theme
                         results["computedThemes"].append({"width": width, **check_theme(page, theme)})
                         assert page.get_by_role("heading", level=1).is_visible()
+                        comparison = page.locator("#harness-comparison")
+                        comparison.scroll_into_view_if_needed()
+                        page.wait_for_function("""() => {
+                            const section = document.querySelector('#harness-comparison');
+                            return getComputedStyle(section).opacity === '1';
+                        }""")
+                        assert comparison.get_by_role("heading", level=2).is_visible()
+                        assert "not a matched head-to-head test" in comparison.text_content()
+                        assert page.locator("#harness-evidence tbody tr").count() == 5
+                        assert page.locator("#harness-credits tbody tr").count() == 6
+                        assert page.evaluate("() => document.documentElement.scrollWidth <= window.innerWidth")
+                        if width in (1440, 390):
+                            comparison.screenshot(path=str(artifacts / (f"comparison-{width}-{theme}.png")))
                         assert page.locator("#instruction-source code").text_content() == expected
                         page.keyboard.press("Tab")
                         check_keyboard_focus(page, ".skip", theme)
@@ -254,6 +272,7 @@ def main():
                                 page.locator("#" + section).screenshot(
                                     path=str(artifacts / (section + "-mobile-" + theme + ".png")))
                 results["noHorizontalOverflowAtWidthsBothThemes"] = [1440, 1024, 768, 390, 320]
+                results["comparisonVisibleBothThemesAtAllWidthsPassed"] = True
                 for theme in ("light", "dark"):
                     page.emulate_media(color_scheme=theme)
                     for query in ("", "?scoutTheme=invalid"):
@@ -286,6 +305,8 @@ def main():
                 page = nojs.new_page()
                 assert page.goto(base).status == 200
                 assert page.locator("#instruction-source code").text_content() == expected
+                assert page.locator("#harness-comparison").is_visible()
+                assert page.locator('#harness-comparison a[download]').get_attribute("href") == "guides/harness-comparison.md"
                 assert page.locator("#agent-flow img").count() == 9
                 assert page.locator(".sp-action").count() == 12
                 assert page.locator("#setup .setup > li").count() == 10
