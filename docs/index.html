@@ -668,9 +668,14 @@ html.rb .rb-hidden-toggle { display: none !important; }
 
   var theme = store.get('rb-theme') === 'dark' ? 'dark' : 'light';
   var accent = ACCENTS.indexOf(store.get('rb-accent')) > -1 ? store.get('rb-accent') : 'green';
+  // opened inside the main site's project explorer (an iframe): no bar or footer of our own
+  var embedded = false;
+  try { embedded = window.self !== window.top; } catch (e) { embedded = true; }
+  var refreshLabel = function () {};
 
   function apply() {
     d.classList.add('rb');
+    if (embedded) d.classList.add('rb-embedded');
     d.setAttribute('data-rb-theme', theme);
     d.setAttribute('data-rb-accent', accent);
     if (d.getAttribute('data-theme') !== theme) d.setAttribute('data-theme', theme);
@@ -682,14 +687,40 @@ html.rb .rb-hidden-toggle { display: none !important; }
     if (d.getAttribute('data-theme') !== theme) d.setAttribute('data-theme', theme);
   }).observe(d, { attributes: true, attributeFilter: ['data-theme'] });
 
+  // a theme or accent change on the main site (or another tab) applies here straight away
+  window.addEventListener('storage', function (e) {
+    if (e.key !== 'rb-theme' && e.key !== 'rb-accent') return;
+    theme = store.get('rb-theme') === 'dark' ? 'dark' : 'light';
+    var a = store.get('rb-accent');
+    accent = ACCENTS.indexOf(a) > -1 ? a : 'green';
+    apply(); refreshLabel();
+  });
+
   // the repo is the first path segment: ryanbow230.com/<repo>/...
   var repo = (location.pathname.split('/').filter(Boolean)[0] || '').replace(/[^\w.-]/g, '');
   var ARROW = '<svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
 
   function el(html) { var t = document.createElement('template'); t.innerHTML = html.trim(); return t.content.firstChild; }
 
+  // links: old github.io addresses go to the same page on this domain; inside the explorer panel,
+  // links that leave this project open in the whole window rather than inside the panel
+  function fixLink(a) {
+    var href = a.getAttribute('href') || '';
+    if (/^https?:\/\/ryanbowie\.github\.io\//i.test(href)) a.setAttribute('href', href.replace(/^https?:\/\/ryanbowie\.github\.io\//i, location.origin + '/'));
+    if (!embedded || (a.target && a.target !== '_self')) return;
+    var u; try { u = new URL(a.href, location.href); } catch (e) { return; }
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return;
+    if (u.origin === location.origin && (u.pathname.split('/')[1] || '') === repo) return;   // stays in this project
+    a.target = '_top';
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest && e.target.closest('a[href]');
+    if (a) fixLink(a);
+  }, true);
+
   function inject() {
-    if (document.querySelector('.rb-bar')) return;
+    Array.prototype.forEach.call(document.querySelectorAll('a[href]'), fixLink);
+    if (embedded || document.querySelector('.rb-bar')) { retire(); return; }
 
     var bar = el(
       '<nav class="rb-bar" aria-label="ryanbow230.com">' +
@@ -708,6 +739,7 @@ html.rb .rb-hidden-toggle { display: none !important; }
 
     var themeBtn = bar.querySelector('[data-rb="theme"]');
     var label = function () { themeBtn.textContent = theme === 'dark' ? 'Light' : 'Dark'; };
+    refreshLabel = label;
     label();
     themeBtn.addEventListener('click', function () {
       theme = theme === 'dark' ? 'light' : 'dark';
@@ -730,7 +762,12 @@ html.rb .rb-hidden-toggle { display: none !important; }
     );
     document.body.appendChild(foot);
 
-    // retire the old theme switches: one switch, in the shared bar
+    retire();
+  }
+
+  // retire the old per-site theme switches (one switch: in the shared bar, or on the main site when embedded)
+  // and use one favicon across the domain
+  function retire() {
     var candidates = document.querySelectorAll('#theme-toggle, .theme-toggle, [data-theme-toggle], button, a[href*="scoutTheme"]');
     Array.prototype.forEach.call(candidates, function (b) {
       if (b.closest('.rb-bar')) return;
@@ -744,6 +781,7 @@ html.rb .rb-hidden-toggle { display: none !important; }
     var icon = document.querySelector('link[rel~="icon"]') || document.head.appendChild(document.createElement('link'));
     icon.rel = 'icon';
     icon.href = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230a0c0b'/%3E%3Crect x='18' y='6' width='8' height='8' fill='%235fed83'/%3E%3C/svg%3E";
+  
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', inject);
